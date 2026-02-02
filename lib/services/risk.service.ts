@@ -1,98 +1,176 @@
 import { sql } from "@/lib/db";
-import { evaluateRisk } from "@/lib/engine/risk-engine";
-import { RiskSignal, Notification } from "@/lib/domain/risk";
+import { 
+  RiskEvaluation, 
+  RiskSignal, 
+  RiskSeverity, 
+  RiskLevel 
+} from "@/lib/domain/risk";
 
 /**
- * SERVICIO DE RIESGO
- * Orquestación de snapshots de riesgo y notificaciones de WhatsApp.
+ * SERVICIO DE RIESGO (SOURCE OF TRUTH)
+ * Conexión directa a Neon DB. 
+ * Estricto: Sin 'any', todo mapeado a interfaces del dominio.
+ */
+
+// 1. Definición estricta del JSONB 'financial_context'
+export interface FinancialContext {
+  human_capital_index?: number;
+  financial_stability_index?: number;
+  burn_rate?: number;
+  runway_months?: number;
+  [key: string]: number | string | undefined; // Flexibilidad controlada para métricas extra
+}
+
+// 2. Tipado de la fila cruda de base de datos
+interface RiskSnapshotRow {
+  id: string;
+  client_id: string;
+  client_name: string;
+  segment: string;
+  global_score: number;
+  risk_level: string; // Se validará contra el tipo RiskLevel
+  scenario_description: string;
+  recommendation_text: string;
+  recommendation_type: string;
+  signals: RiskSignal[]; 
+  financial_context: FinancialContext;
+  created_at: Date;
+}
+
+interface NotificationRow {
+  id: string;
+  message: string;
+  severity: string;
+  status: string;
+  created_at: Date;
+  notification_type: string;
+}
+
+// Interfaz de retorno para estadísticas
+interface StatsRow {
+  pending_count: string; // Postgres COUNT devuelve string (bigint)
+}
+
+/**
+ * Obtiene el dashboard completo basado en el segmento (rubro).
  */
 export async function getRiskDashboardBySegment(segment: string) {
   try {
-    // 1. Obtener el último snapshot mediante el segmento del cliente
-    const snapshots = await sql`
+    // 1. Consulta Principal (Snapshot)
+    const snapshotResult = await sql`
       SELECT 
+        rs.id,
+        rs.client_id,
+        c.name as client_name,
+        c.segment,
         rs.global_score,
+        rs.risk_level,
+        rs.scenario_description,
+        rs.recommendation_text,
+        rs.recommendation_type,
         rs.signals,
         rs.financial_context,
-        rs.scenario_description,
-        rs.action_status,
-        rs.client_id,
-        c.segment
+        rs.created_at
       FROM risk_snapshots rs
       JOIN clients c ON rs.client_id = c.id
-      WHERE c.segment = ${segment} OR ${segment} = 'Todos los rubros'
+      WHERE (${segment} = 'Todos los rubros' OR c.segment = ${segment})
       ORDER BY rs.created_at DESC
       LIMIT 1
     `;
 
-    const snapshot = snapshots[0];
-    if (!snapshot) return null;
+    if (snapshotResult.length === 0) {
+      return null;
+    }
 
-    // 2. Obtener historial de notificaciones (Canal WhatsApp)
-    const notificationsRaw = await sql`
-      SELECT id, priority, title, message, status, created_at
+    // Casting seguro a la interfaz definida (Sin 'any')
+    const row = snapshotResult[0] as unknown as RiskSnapshotRow;
+
+    // 2. Consulta de Notificaciones
+    const notificationsResult = await sql`
+      SELECT 
+        id, 
+        message, 
+        severity, 
+        status, 
+        created_at, 
+        notification_type
       FROM notifications
-      WHERE client_id = ${snapshot.client_id}
-      AND type = 'whatsapp'
+      WHERE client_id = ${row.client_id}
       ORDER BY created_at DESC
-      LIMIT 10
+      LIMIT 50
     `;
 
-    const notifications: Notification[] = notificationsRaw.map(n => ({
-      id: n.id,
-      type: 'whatsapp',
-      priority: n.priority as any,
-      title: n.title,
-      message: n.message,
-      status: n.status,
-      createdAt: n.created_at
-    }));
+    // 3. Consulta de Estadísticas
+    const statsResult = await sql`
+      SELECT COUNT(*) as pending_count
+      FROM notifications
+      WHERE client_id = ${row.client_id} AND status = 'pending'
+    `;
+    
+    const statsRow = statsResult[0] as unknown as StatsRow;
 
-    // 3. Mapeo de señales al dominio
-    const domainSignals: RiskSignal[] = (snapshot.signals || []).map((s: any) => ({
-      code: s.code,
-      label: s.label,
-      value: Number(s.value || 0),
-      severity: s.severity,
-      impact_description: s.impact_description,
-      context: s.context
-    }));
-
-    // 4. Evaluación vía Risk Engine
-    const evaluation = evaluateRisk(domainSignals);
-
+    // 4. Mapeo a Dominio (Validación de tipos en tiempo de ejecución si es necesario)
     return {
-      evaluation,
-      signals: domainSignals,
-      metrics: snapshot.financial_context || {},
-      notifications,
-      stats: {
-        resolved: 0, 
-        pending: notifications.filter(n => n.status !== 'read').length
-      },
       clientContext: {
-        segment: snapshot.segment,
-        clientId: snapshot.client_id
+        clientId: row.client_id,
+        clientName: row.client_name,
+        segment: row.segment
+      },
+      evaluation: {
+        score: Number(row.global_score),
+        // Asumimos que la DB guarda strings compatibles con RiskLevel ('low'|'medium'|'high'|'critical')
+        level: row.risk_level as RiskLevel, 
+        summary: row.scenario_description,
+        recommendations: [row.recommendation_text],
+        color: mapScoreToColor(Number(row.global_score))
+      } as RiskEvaluation,
+      signals: (row.signals || []) as RiskSignal[],
+      // Aquí está la clave: metrics ahora es FinancialContext, no any
+      metrics: row.financial_context || {},
+      notifications: notificationsResult.map((n) => {
+        const notif = n as unknown as NotificationRow;
+        return {
+          id: notif.id,
+          message: notif.message,
+          priority: notif.severity as RiskSeverity,
+          status: notif.status as 'pending' | 'read' | 'delivered',
+          createdAt: notif.created_at,
+          type: notif.notification_type
+        };
+      }),
+      stats: {
+        pending: Number(statsRow.pending_count)
       }
     };
+
   } catch (error) {
     console.error("RISK_SERVICE_ERROR:", error);
-    throw new Error("Error al procesar los datos desde Neon.");
+    throw error;
   }
 }
 
-/**
- * Persistencia: Actualiza el estado de lectura en la DB
- */
-export async function updateNotificationStatus(id: string, status: 'read' | 'delivered') {
+export async function updateNotificationStatus(notificationId: string, status: string) {
   try {
     await sql`
       UPDATE notifications
-      SET status = ${status}, updated_at = NOW()
-      WHERE id = ${id}
+      SET 
+        status = ${status},
+        read_at = CASE WHEN ${status} = 'read' THEN NOW() ELSE read_at END,
+        updated_at = NOW()
+      WHERE id = ${notificationId}
     `;
+    return true;
   } catch (error) {
-    console.error("SERVICE_PERSISTENCE_ERROR:", error);
+    console.error("UPDATE_NOTIFICATION_ERROR:", error);
     throw error;
   }
+}
+
+// --- Helpers Privados ---
+
+function mapScoreToColor(score: number): string {
+  if (score >= 80) return "text-red-500";
+  if (score >= 50) return "text-orange-500";
+  if (score >= 30) return "text-yellow-500";
+  return "text-emerald-500";
 }

@@ -1,43 +1,30 @@
 // lib/data.ts
+// RUBROS: Segmentos de clientes disponibles en Neon DB
+// CONFIGURACIONES DE COLOR PARA EL GAUGE
 
-import { db } from "@/lib/db";
-import { RiskSignal } from "@/lib/domain/risk";
+import { RiskLevel } from '@/lib/domain/risk'
 
-/**
- * Obtiene las señales de riesgo desde el ÚLTIMO snapshot
- * de un cliente.
- *
- * Fuente de verdad: risk_snapshots.signals (JSONB)
- */
-export async function getRiskSignalsForClient(
-  clientId: string
-): Promise<RiskSignal[]> {
-  const rows = await db.query(
-    `
-    SELECT
-      signals
-    FROM risk_snapshots
-    WHERE client_id = $1
-    ORDER BY created_at DESC
-    LIMIT 1
-    `,
-    [clientId]
-  );
-
-  if (!rows || rows.length === 0) {
-    return [];
-  }
-
-  const signals = rows[0].signals as any[];
-
-  if (!Array.isArray(signals)) {
-    return [];
-  }
-
-  // 🔁 ADAPTADOR: JSONB → RiskSignal[]
-  return signals.map((signal) => ({
-    axis: String(signal.code || signal.label || "unknown"),
-    score: Number(signal.value),
-    // impact todavía no está normalizado → se deja para v2
-  }));
+export type Rubro = {
+  id: string
+  label: string
+  segment: string
 }
+
+export const RUBROS: Rubro[] = [
+  { id: 'all', label: 'Todos los rubros', segment: 'all' },
+  { id: 'retail', label: 'Retail', segment: 'retail' },
+  { id: 'manufacturing', label: 'Manufactura', segment: 'manufacturing' },
+  { id: 'services', label: 'Servicios', segment: 'services' },
+  { id: 'technology', label: 'Tecnologia', segment: 'technology' },
+  { id: 'finance', label: 'Finanzas', segment: 'finance' },
+] as const
+
+export type RubroKey = typeof RUBROS[number]['id']
+
+export const RISK_COLORS: Record<RiskLevel, string> = {
+  critico: '#ef4444',
+  alto: '#f97316',
+  moderado: '#eab308',
+  bajo: '#3b82f6',
+  estable: '#22c55e',
+} as const

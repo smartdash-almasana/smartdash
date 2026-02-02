@@ -1,125 +1,123 @@
-'use client'
+"use client"
 
-import React from "react"
-
-import { useState } from 'react'
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
-  AlertTriangle,
-  TrendingUp,
-  Users,
+  MessageSquare,
+  PieChart,
   Settings,
-  HelpCircle,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { currentClient } from '@/lib/data'
+  Users,
+  Activity,
+  LogOut,
+  ShieldAlert
+} from "lucide-react"
 
-interface NavItem {
-  icon: React.ElementType
-  label: string
-  href: string
-  active?: boolean
+// Datos estáticos definidos localmente para evitar dependencias circulares
+const currentClient = {
+  name: "Usuario Demo",
+  role: "Admin",
+  initials: "UD"
 }
 
-const navItems: NavItem[] = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '#', active: true },
-  { icon: AlertTriangle, label: 'Alertas', href: '#' },
-  { icon: TrendingUp, label: 'Análisis', href: '#' },
-  { icon: Users, label: 'Equipo', href: '#' },
-]
-
-const bottomItems: NavItem[] = [
-  { icon: Settings, label: 'Configuración', href: '#' },
-  { icon: HelpCircle, label: 'Ayuda', href: '#' },
+const navItems = [
+  {
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    href: "/",
+  },
+  {
+    label: "Riesgos",
+    icon: ShieldAlert,
+    href: "/risks",
+  },
+  {
+    label: "Métricas",
+    icon: PieChart,
+    href: "/metrics",
+  },
+  {
+    label: "Mensajes",
+    icon: MessageSquare,
+    href: "/messages",
+  },
+  {
+    label: "Clientes",
+    icon: Users,
+    href: "/clients",
+  },
+  {
+    label: "Configuración",
+    icon: Settings,
+    href: "/settings",
+  },
 ]
 
 export function DashboardSidebar() {
-  const [collapsed, setCollapsed] = useState(false)
+  const pathname = usePathname()
 
   return (
-    <aside
-      className={cn(
-        'relative flex flex-col border-r border-border bg-card/50 backdrop-blur-sm transition-all duration-300',
-        collapsed ? 'w-16' : 'w-64'
-      )}
-    >
-      {/* Logo */}
-      <div className="flex h-16 items-center gap-3 border-b border-border px-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-          SD
-        </div>
-        {!collapsed && (
-          <div className="flex flex-col">
-            <span className="font-semibold text-foreground">SmartDash</span>
+    <div className="flex h-full flex-col justify-between bg-card py-4 transition-all duration-300">
+      <div className="px-3 py-2">
+        {/* Logo Area */}
+        <div className="mb-8 flex items-center justify-center lg:justify-start px-2 h-10">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Activity className="h-5 w-5" />
           </div>
-        )}
-      </div>
-
-      {/* Client Info */}
-      {!collapsed && (
-        <div className="border-b border-border px-4 py-3">
-          <p className="text-xs text-muted-foreground">Cliente:</p>
-          <p className="text-sm font-medium text-foreground truncate">
-            {currentClient.name}
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Segmento:{' '}
-            <span className="capitalize text-foreground">
-              {currentClient.segment}
-            </span>
-          </p>
+          <span className="ml-3 text-lg font-bold tracking-tight text-foreground hidden lg:inline opacity-0 lg:opacity-100 transition-opacity duration-300">
+            SmartDash
+          </span>
         </div>
-      )}
 
-      {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-2">
-        {navItems.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            className={cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
-              item.active
-                ? 'bg-primary/10 text-primary'
-                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-            )}
-          >
-            <item.icon className="h-5 w-5 shrink-0" />
-            {!collapsed && <span>{item.label}</span>}
-          </a>
-        ))}
-      </nav>
-
-      {/* Bottom Navigation */}
-      <div className="border-t border-border p-2">
-        {bottomItems.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            <item.icon className="h-5 w-5 shrink-0" />
-            {!collapsed && <span>{item.label}</span>}
-          </a>
-        ))}
+        {/* Navigation Items */}
+        <nav className="space-y-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href
+            return (
+              <Link key={item.href} href={item.href} className="block group">
+                <div
+                  className={cn(
+                    "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                    isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+                    "justify-center lg:justify-start" // Icon centered on md, left on lg
+                  )}
+                >
+                  <item.icon className={cn("h-5 w-5 shrink-0", isActive ? "text-primary" : "")} />
+                  <span className="ml-3 hidden lg:inline truncate transition-all">
+                    {item.label}
+                  </span>
+                  
+                  {/* Tooltip fake for icon-only mode */}
+                  <span className="sr-only">{item.label}</span>
+                </div>
+              </Link>
+            )
+          })}
+        </nav>
       </div>
 
-      {/* Collapse Toggle */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute -right-3 top-20 h-6 w-6 rounded-full border border-border bg-card shadow-sm"
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {collapsed ? (
-          <ChevronRight className="h-3 w-3" />
-        ) : (
-          <ChevronLeft className="h-3 w-3" />
-        )}
-      </Button>
-    </aside>
+      {/* User Footer */}
+      <div className="px-3 py-2 mt-auto border-t border-border pt-4">
+        <div className="mb-2 flex items-center gap-3 rounded-lg border border-border bg-muted/30 p-2 lg:p-3 justify-center lg:justify-start">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">
+            {currentClient.initials}
+          </div>
+          <div className="hidden lg:block overflow-hidden max-w-[120px]">
+            <p className="truncate text-sm font-medium text-foreground">
+              {currentClient.name}
+            </p>
+            <p className="truncate text-[10px] text-muted-foreground uppercase">
+              {currentClient.role}
+            </p>
+          </div>
+        </div>
+        
+        <button className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10 justify-center lg:justify-start">
+          <LogOut className="h-5 w-5 shrink-0" />
+          <span className="ml-3 hidden lg:inline">Salir</span>
+        </button>
+      </div>
+    </div>
   )
 }
