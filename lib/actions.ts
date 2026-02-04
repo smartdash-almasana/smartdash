@@ -1,89 +1,162 @@
 'use server';
 
-import { neon } from '@neondatabase/serverless';
 import { revalidatePath } from 'next/cache';
+import { sql } from '@/lib/db';
 
-// FV: Conexión estricta a Neon
-const sql = neon(process.env.DATABASE_URL!);
-
-// Blindaje contra "Object as React Child" y Nulos
-const v_json = (d: any, fb: any = []) => {
-  if (!d) return fb;
-  return (typeof d === 'object') ? d : JSON.parse(d);
+/**
+ * Normaliza jsonb proveniente de Neon
+ */
+const normalizeJson = <T>(value: unknown, fallback: T): T => {
+  if (value === null || value === undefined) return fallback;
+  return value as T;
 };
 
-// 1. ESCENARIOS - Usando Vista v_latest_risks (FV Confirmada)
+/**
+ * 1. ESCENARIOS
+ * Vista: v_latest_risks
+ */
 export async function getScenariosFromDB(clientId: string) {
   try {
-    const data = await sql`
+    const rows = await sql`
       SELECT 
-        id, scenario_id, vertical,
-        scenario_description as description, 
-        global_score as score,
-        risk_level, signals, financial_context,
-        recommendation_text, action_status as status,
+        id,
+        scenario_id,
+        vertical,
+        scenario_description AS description,
+        global_score AS score,
+        risk_level,
+        signals,
+        financial_context,
+        recommendation_text,
+        action_status AS status,
         created_at
       FROM v_latest_risks
       WHERE client_id = ${clientId}
       ORDER BY created_at DESC
     `;
-    return data.map(r => ({
+
+    return rows.map(r => ({
       ...r,
-      signals: v_json(r.signals),
-      financial_context: v_json(r.financial_context, {})
+      signals: normalizeJson(r.signals, []),
+      financial_context: normalizeJson(r.financial_context, {}),
     }));
-  } catch (e) { console.error("Error FV-SQL:", e); return []; }
+  } catch (error) {
+    console.error('❌ getScenariosFromDB:', error);
+    return [];
+  }
 }
 
-// 2. DASHBOARD - Usando Vista v_client_risk_summary
+/**
+ * 2. DASHBOARD
+ * Vista: v_client_risk_summary
+ */
 export async function getDashboardData() {
   try {
     return await sql`
       SELECT 
-        client_id, name as client_name, company, segment,
-        critical_risks, high_risks, avg_risk_score
+        client_id,
+        name AS client_name,
+        company,
+        segment,
+        critical_risks,
+        high_risks,
+        avg_risk_score
       FROM v_client_risk_summary
       ORDER BY critical_risks DESC
     `;
-  } catch (e) { return []; }
+  } catch (error) {
+    console.error('❌ getDashboardData:', error);
+    return [];
+  }
 }
 
-// 3. HISTORIAL - Corrección: risk_snapshots NO tiene mitigation_plan
+/**
+ * 3. HISTORIAL
+ * Tabla real: capturas_riesgo
+ */
 export async function getHistoryFromDB(clientId: string) {
   try {
-    const data = await sql`
-      SELECT 
-        id, global_score, risk_level, 
-        scenario_description, signals, created_at
-      FROM risk_snapshots 
+    const rows = await sql`
+      SELECT
+        id,
+        scenario_description,
+        global_score,
+        risk_level,
+        signals,
+        created_at
+      FROM capturas_riesgo
       WHERE client_id = ${clientId}
       ORDER BY created_at DESC
     `;
-    return data.map(r => ({ ...r, signals: v_json(r.signals) }));
-  } catch (e) { return []; }
+
+    return rows.map(r => ({
+      ...r,
+      signals: normalizeJson(r.signals, []),
+    }));
+  } catch (error) {
+    console.error('❌ getHistoryFromDB:', error);
+    return [];
+  }
 }
 
-// 4. PERSISTENCIA - Mapeo exacto a 'capturas_riesgo'
-export async function saveRiskAnalysis(data: any) {
+/**
+ * 4. PERSISTENCIA
+ * Tabla: capturas_riesgo (nombres EXACTOS)
+ */
+export async function saveRiskAnalysis(data: {
+  client_id: string;
+  scenario_id: string;
+  scenario_description: string;
+  global_score: number;
+  risk_level: string;
+  signals: unknown[];
+  financial_context: Record<string, unknown>;
+  recommendation_text: string;
+  recommendation_type?: string;
+  score_version?: string;
+  client_name?: string;
+  client_company?: string;
+  client_segment?: string;
+}) {
   try {
-    // FV: Usamos los nombres exactos: descripcion_escenario, puntaje_global, estado_accion
     await sql`
       INSERT INTO capturas_riesgo (
-        client_id, scenario_id, descripcion_escenario, vertical,
-        puntaje_global, nivel_riesgo, signals, financial_context,
-        mitigation_plan, texto_recomendacion, estado_accion
+        client_id,
+        scenario_id,
+        scenario_description,
+        global_score,
+        risk_level,
+        signals,
+        financial_context,
+        recommendation_text,
+        recommendation_type,
+        score_version,
+        client_name,
+        client_company,
+        client_segment,
+        action_status
       ) VALUES (
-        ${data.client_id}, ${data.scenario_id}, ${data.description}, 
-        ${data.vertical}, ${data.score}, ${data.risk_level}, 
-        ${data.signals}, ${data.financial_context}, 
-        ${data.mitigation_plan}, ${data.recommendation_text},
+        ${data.client_id},
+        ${data.scenario_id},
+        ${data.scenario_description},
+        ${data.global_score},
+        ${data.risk_level},
+        ${data.signals},
+        ${data.financial_context},
+        ${data.recommendation_text},
+        ${data.recommendation_type ?? 'manual'},
+        ${data.score_version ?? 'v1'},
+        ${data.client_name ?? null},
+        ${data.client_company ?? null},
+        ${data.client_segment ?? null},
         'pending'
       )
     `;
+
     revalidatePath('/dashboard');
     return { success: true };
-  } catch (e) { 
-    console.error("Error persistencia FV:", e); 
-    return { success: false }; 
+  } catch (error) {
+    console.error('❌ saveRiskAnalysis:', error);
+    return { success: false };
   }
 }
