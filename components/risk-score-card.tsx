@@ -20,36 +20,35 @@ type RiskVisualConfig = {
 function getRiskVisualConfig(score: number): RiskVisualConfig {
   if (score >= 80)
     return {
-      gradientFrom: "rgb(239 68 68)",
-      gradientTo: "rgb(185 28 28)",
+      gradientFrom: "hsl(var(--destructive))",
+      gradientTo: "hsl(var(--destructive-foreground))",
       badgeClass: "bg-destructive/10 text-destructive",
       label: "Crítico",
     };
 
   if (score >= 60)
     return {
-      gradientFrom: "rgb(249 115 22)",
-      gradientTo: "rgb(194 65 12)",
-      badgeClass: "bg-orange-500/10 text-orange-600",
+      gradientFrom: "hsl(var(--warning))",
+      gradientTo: "hsl(var(--warning-foreground))",
+      badgeClass: "bg-warning/10 text-warning",
       label: "Alto",
     };
 
   if (score >= 40)
     return {
-      gradientFrom: "rgb(234 179 8)",
-      gradientTo: "rgb(161 98 7)",
-      badgeClass: "bg-yellow-500/10 text-yellow-700",
+      gradientFrom: "hsl(var(--accent))",
+      gradientTo: "hsl(var(--accent-foreground))",
+      badgeClass: "bg-accent/20 text-accent-foreground",
       label: "Medio",
     };
 
   return {
-    gradientFrom: "rgb(34 197 94)",
-    gradientTo: "rgb(21 128 61)",
-    badgeClass: "bg-emerald-500/10 text-emerald-700",
+    gradientFrom: "hsl(var(--primary))",
+    gradientTo: "hsl(var(--primary-foreground))",
+    badgeClass: "bg-primary/10 text-primary",
     label: "Bajo",
   };
 }
-
 export function RiskScoreCard({ score, impact, evaluation }: RiskScoreCardProps) {
   const config = getRiskVisualConfig(score);
 
