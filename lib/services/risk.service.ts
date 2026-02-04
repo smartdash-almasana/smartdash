@@ -1,71 +1,69 @@
-// lib/services/risk.service.ts
-import { sql } from '@/lib/db';
-import { RiskSnapshot } from '@/lib/domain/risk';
+/**
+ * Risk domain model.
+ *
+ * This interface represents the stable domain contract used by
+ * services, engine logic, server actions and UI components.
+ *
+ * IMPORTANT:
+ * - Database column names (snake_case) are translated in services.
+ * - This domain model MUST NOT depend on DB naming conventions.
+ */
 
-export class RiskService {
-  /**
-   * Obtiene el último snapshot real de la DB.
-   * Maneja nulos y conversiones de tipo.
-   */
-  static async getLatestSnapshot(clientId?: string): Promise<RiskSnapshot | null> {
-    try {
-      if (!sql) {
-        console.warn("⚠️ RiskService: Sin conexión SQL.");
-        return null;
-      }
+export interface RiskSnapshot {
+  /** Unique snapshot identifier */
+  id: string;
 
-      // Query optimizada: Trae solo 1, ordenado por fecha
-      // El filtro de clientId es opcional por ahora para que la demo siempre muestre algo
-      const rows = await sql`
-        SELECT 
-          id, client_id, global_score, risk_level, 
-          scenario_description, recommendation_text, recommendation_type,
-          signals, financial_context, action_status, created_at
-        FROM risk_snapshots
-        ORDER BY created_at DESC
-        LIMIT 1
-      `;
+  /** Client identifier */
+  clientId: string;
 
-      if (!rows || rows.length === 0) return null;
+  /** Scenario identifier */
+  scenarioId: string;
 
-      const row = rows[0];
+  /** Human-readable scenario description */
+  scenarioDescription: string;
 
-      // Mapping defensivo (DB -> Dominio)
-      return {
-        id: row.id,
-        client_id: row.client_id,
-        global_score: Number(row.global_score) || 0, // CRÍTICO: Convertir a number
-        risk_level: row.risk_level,
-        scenario_description: row.scenario_description,
-        recommendation_text: row.recommendation_text,
-        recommendation_type: row.recommendation_type,
-        signals: (row.signals as any[]) || [],
-        financial_context: (row.financial_context as any) || {},
-        action_status: row.action_status || 'pending',
-        created_at: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString()
-      };
+  /** Client business vertical */
+  vertical: string;
 
-    } catch (error) {
-      console.error("❌ RiskService Error:", error);
-      return null;
-    }
-  }
+  /** Global risk score (normalized number) */
+  globalScore: number;
 
-  /**
-   * Marca una acción como completada en la DB
-   */
-  static async completeAction(snapshotId: string): Promise<boolean> {
-      try {
-          if(!sql) return false;
-          await sql`
-            UPDATE risk_snapshots 
-            SET action_status = 'completed' 
-            WHERE id = ${snapshotId}
-          `;
-          return true;
-      } catch (e) {
-          console.error("Error updating status:", e);
-          return false;
-      }
-  }
+  /** Risk level label (e.g. low, medium, high, critical) */
+  riskLevel: string;
+
+  /** Financial context associated with the risk */
+  financialContext: Record<string, unknown>;
+
+  /** Signals used to compute the risk */
+  signals: unknown[];
+
+  /** Recommendation category */
+  recommendationType: string;
+
+  /** Recommendation text shown to the user */
+  recommendationText: string;
+
+  /** Optional deadline to take action */
+  actionDeadline: string | null;
+
+  /** Current action status */
+  actionStatus: 'pending' | 'completed' | string;
+
+  /** Risk score version used for this snapshot */
+  scoreVersion: string;
+
+  /** Snapshot creation timestamp (ISO 8601) */
+  createdAt: string;
+
+  /** Snapshot last update timestamp (ISO 8601) */
+  updatedAt: string;
+
+  /** Client display name */
+  clientName: string;
+
+  /** Client company or organization */
+  clientCompany: string;
+
+  /** Client segmentation label */
+  clientSegment: string;
 }
