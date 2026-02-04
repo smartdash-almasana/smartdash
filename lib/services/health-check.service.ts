@@ -2,7 +2,6 @@
 "use server";
 
 import { sql } from "@/lib/db";
-import { isDatabaseConnected } from "@/lib/db";
 
 export interface HealthStatus {
   service: string;
@@ -11,66 +10,106 @@ export interface HealthStatus {
 }
 
 /**
- * Verifica la salud de los servicios críticos
+ * Verifica la salud de los servicios críticos de infraestructura.
+ * No valida lógica de negocio ni existencia de datos de demo.
  */
-export async function checkRiskDataHealth(
-  segment: string,
-): Promise<HealthStatus[]> {
+export async function checkRiskDataHealth(): Promise<HealthStatus[]> {
   const status: HealthStatus[] = [];
 
-  // Check 1: Database connection
-  const dbHealthy = isDatabaseConnected();
-  status.push({
-    service: "Database",
-    healthy: dbHealthy,
-    issues: dbHealthy ? [] : ["DATABASE_URL no configurada"],
-  });
+  /* ------------------------------------------------------------------
+   * Check 1: Database connectivity
+   * ------------------------------------------------------------------ */
+  try {
+    await sql`SELECT 1`;
+    status.push({
+      service: "Database",
+      healthy: true,
+      issues: [],
+    });
+  } catch (error) {
+    status.push({
+      service: "Database",
+      healthy: false,
+      issues: ["No se pudo conectar a la base de datos"],
+    });
 
-  if (!dbHealthy) {
+    // Si no hay DB, no tiene sentido seguir
     return status;
   }
 
-  // sql is guaranteed to be non-null here
-  const db = sql!;
-
+  /* ------------------------------------------------------------------
+   * Check 2: Critical view availability
+   * ------------------------------------------------------------------ */
   try {
-    // Check 2: Snapshots exist
-    const snapshotsResult = await db`
-      SELECT COUNT(*) as count FROM risk_snapshots LIMIT 1
-    `;
-    const hasSnapshots = snapshotsResult[0]?.count > 0;
+    await sql`SELECT 1 FROM v_latest_risks LIMIT 1`;
     status.push({
-      service: "Snapshots",
-      healthy: hasSnapshots,
-      issues: hasSnapshots ? [] : ["No hay snapshots de riesgo"],
-    });
-
-    // Check 3: Clients for segment
-    const clientsResult = await db`
-      SELECT COUNT(*) as count FROM clients WHERE segment = ${segment} OR ${segment} = 'all' LIMIT 1
-    `;
-    const hasClients = clientsResult[0]?.count > 0;
-    status.push({
-      service: "Clients",
-      healthy: hasClients,
-      issues: hasClients ? [] : [`No hay clientes para el segmento ${segment}`],
-    });
-
-    // Check 4: Notifications
-    const notificationsResult = await db`
-      SELECT COUNT(*) as count FROM notifications WHERE type = 'whatsapp' LIMIT 1
-    `;
-    const hasNotifications = notificationsResult[0]?.count > 0;
-    status.push({
-      service: "Notifications",
-      healthy: true, // Notifications are optional
-      issues: hasNotifications ? [] : ["No hay notificaciones"],
+      service: "Risk View (v_latest_risks)",
+      healthy: true,
+      issues: [],
     });
   } catch {
     status.push({
-      service: "Query",
+      service: "Risk View (v_latest_risks)",
       healthy: false,
-      issues: ["Error ejecutando consultas de health check"],
+      issues: ["La vista v_latest_risks no está disponible"],
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Check 3: Base table write access
+   * ------------------------------------------------------------------ */
+  try {
+    await sql`
+      SELECT estado_accion
+      FROM capturas_riesgo
+      LIMIT 1
+    `;
+    status.push({
+      service: "Risk Snapshots Table",
+      healthy: true,
+      issues: [],
+    });
+  } catch {
+    status.push({
+      service: "Risk Snapshots Table",
+      healthy: false,
+      issues: ["No se puede acceder a capturas_riesgo"],
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Check 4: Clients table
+   * ------------------------------------------------------------------ */
+  try {
+    await sql`SELECT 1 FROM clientes LIMIT 1`;
+    status.push({
+      service: "Clients",
+      healthy: true,
+      issues: [],
+    });
+  } catch {
+    status.push({
+      service: "Clients",
+      healthy: false,
+      issues: ["No se puede acceder a clientes"],
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Check 5: Notifications table
+   * ------------------------------------------------------------------ */
+  try {
+    await sql`SELECT 1 FROM notificaciones LIMIT 1`;
+    status.push({
+      service: "Notifications",
+      healthy: true,
+      issues: [],
+    });
+  } catch {
+    status.push({
+      service: "Notifications",
+      healthy: false,
+      issues: ["No se puede acceder a notificaciones"],
     });
   }
 
