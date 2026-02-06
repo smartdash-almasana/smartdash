@@ -1,26 +1,32 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useState } from "react";
+import { Sidebar } from "../sidebar";
+import { cn } from "@/lib/utils";
 
 interface DashboardLayoutProps {
   children: ReactNode;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  return (
-    <div className="flex min-h-[calc(100vh-64px)]"> {/* Restamos header */}
-      
-      {/* Sidebar */}
-      <aside className="w-64 bg-card border-r border-border p-4 hidden md:block">
-        <h2 className="text-lg font-semibold mb-4">Dashboard</h2>
-        <ul className="space-y-2">
-          <li className="hover:text-primary cursor-pointer">Inicio</li>
-          <li className="hover:text-primary cursor-pointer">Riesgos</li>
-          <li className="hover:text-primary cursor-pointer">Reportes</li>
-          <li className="hover:text-primary cursor-pointer">Configuración</li>
-        </ul>
-      </aside>
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-      {/* Main content */}
-      <main className="flex-1 p-6 bg-background">
+  return (
+    <div className="flex min-h-screen bg-[#FDFDFF]">
+      {/* Sidebar */}
+      <Sidebar
+        isCollapsed={isCollapsed}
+        onToggle={() => setIsCollapsed(!isCollapsed)}
+      />
+
+      {/* Main content with dynamic margin */}
+      <main
+        className={cn(
+          "flex-1 transition-all duration-300 ease-in-out",
+          "w-full",
+          isCollapsed ? "lg:ml-20" : "lg:ml-64" // Alignment with sidebar width
+        )}
+      >
         {children}
       </main>
     </div>

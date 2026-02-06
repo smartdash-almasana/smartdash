@@ -1,70 +1,68 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Store, ShoppingCart, Video, Rocket } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { Store, ShoppingCart, Video, Rocket, ArrowRight } from "lucide-react";
+import { RUBRO_TO_SEGMENT } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 type RubroConfig = {
   id: string;
   label: string;
   description: string;
   icon: any;
-  iconClass: string;
-  hoverClass: string;
+  theme: {
+    bg: string;
+    text: string;
+    border: string;
+    accent: string;
+  };
 };
 
 const RUBROS: RubroConfig[] = [
   {
     id: "Pyme",
     label: "PYME / Local",
-    description: "Logística, RRHH y flujo de caja minorista.",
+    description: "Gestión de logística, recursos humanos y optimización de flujo de caja minorista.",
     icon: Store,
-    iconClass: "text-primary",
-    hoverClass: "hover:border-primary/40 hover:bg-primary/5",
+    theme: { bg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-100", accent: "bg-emerald-500" },
   },
   {
     id: "E-commerce",
     label: "E-commerce",
-    description: "Stock, pasarelas de pago y experiencia de usuario.",
+    description: "Control de stock, pasarelas de pago y mejora de la experiencia de usuario digital.",
     icon: ShoppingCart,
-    iconClass: "text-accent-foreground",
-    hoverClass: "hover:border-accent/40 hover:bg-accent/10",
+    theme: { bg: "bg-blue-50", text: "text-blue-600", border: "border-blue-100", accent: "bg-blue-500" },
   },
   {
     id: "Creadores",
     label: "Creadores",
-    description: "Reputación, algoritmos y gestión de contratos.",
+    description: "Protección de reputación, análisis de algoritmos y gestión inteligente de contratos.",
     icon: Video,
-    iconClass: "text-secondary-foreground",
-    hoverClass: "hover:border-secondary/40 hover:bg-secondary/40",
+    theme: { bg: "bg-purple-50", text: "text-purple-600", border: "border-purple-100", accent: "bg-purple-500" },
   },
   {
     id: "Startups",
     label: "Startups",
-    description: "Runway, métricas SaaS y crecimiento acelerado.",
+    description: "Monitorización de runway, métricas SaaS y estrategias de crecimiento acelerado.",
     icon: Rocket,
-    iconClass: "text-primary",
-    hoverClass: "hover:border-primary/40 hover:bg-primary/10",
+    theme: { bg: "bg-orange-50", text: "text-orange-600", border: "border-orange-100", accent: "bg-orange-500" },
   },
 ];
 
 export function RubroSelector() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="mx-auto max-w-6xl px-6 py-20 animate-in fade-in slide-in-from-bottom-8 duration-1000">
       {/* Header */}
-      <div className="mb-16 text-center">
-        <h1 className="mb-4 text-5xl font-black tracking-tight text-foreground">
-          SmartDash <span className="text-primary">FV</span>
+      <div className="mb-20 text-center space-y-4">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl">
+          Protocolo de Auditoría
+        </div>
+        <h1 className="text-6xl font-black tracking-tighter text-slate-900 leading-none">
+          SmartDash <span className="text-orange-600">FV</span>
         </h1>
-        <p className="mx-auto max-w-2xl text-xl font-medium text-muted-foreground">
-          Selecciona un rubro para verificar los riesgos activos detectados por la
-          Fuente de la Verdad.
+        <p className="mx-auto max-w-2xl text-lg font-medium text-slate-500 leading-relaxed">
+          Selecciona un segmento para verificar los riesgos activos detectados por el motor de la <span className="text-slate-900 font-bold">Fuente de la Verdad</span>.
         </p>
       </div>
 
@@ -79,26 +77,33 @@ export function RubroSelector() {
               href={`/?rubro=${rubro.id}`}
               className="group block"
             >
-              <Card
-                className={`h-full border border-border bg-card transition-all duration-300
-                shadow-sm hover:-translate-y-1 hover:shadow-lg ${rubro.hoverClass}`}
-              >
-                <CardHeader className="flex flex-row items-center gap-5 pb-2">
-                  <div
-                    className={`rounded-2xl border border-border bg-background p-4 shadow-sm transition-transform group-hover:scale-110 ${rubro.iconClass}`}
-                  >
-                    <Icon size={32} />
+              <Card className={cn(
+                "h-full border-slate-100 bg-white transition-all duration-500 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-orange-200/30 rounded-[3rem] overflow-hidden p-8 border-2 hover:border-orange-200",
+                "relative flex flex-col justify-between"
+              )}>
+                <div>
+                  <div className={cn(
+                    "w-16 h-16 rounded-[1.5rem] flex items-center justify-center mb-8 transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-inner",
+                    rubro.theme.bg, rubro.theme.text
+                  )}>
+                    <Icon size={32} strokeWidth={2.5} />
                   </div>
-                  <CardTitle className="text-2xl font-bold text-foreground">
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-4 group-hover:text-orange-600 transition-colors">
                     {rubro.label}
-                  </CardTitle>
-                </CardHeader>
-
-                <CardContent>
-                  <CardDescription className="text-base font-medium text-muted-foreground">
+                  </h2>
+                  <p className="text-slate-500 font-medium leading-relaxed mb-8">
                     {rubro.description}
-                  </CardDescription>
-                </CardContent>
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between pt-8 border-t border-slate-50">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                    Ver Escenarios Activos
+                  </span>
+                  <div className="p-3 bg-slate-50 rounded-full text-slate-400 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                    <ArrowRight size={20} />
+                  </div>
+                </div>
               </Card>
             </Link>
           );
@@ -107,3 +112,4 @@ export function RubroSelector() {
     </div>
   );
 }
+

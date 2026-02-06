@@ -8,6 +8,7 @@ interface RadialGaugeProps {
   size?: number;
   strokeWidth?: number;
   label?: string;
+  color?: string;
 }
 
 export function RadialGauge({
@@ -16,12 +17,13 @@ export function RadialGauge({
   size = 200,
   strokeWidth = 15,
   label = "RIESGO",
+  color: externalColor,
 }: RadialGaugeProps) {
   // 1. Sanitización de Inputs (El Blindaje)
   // Si value es undefined, null o NaN, usamos 0.
   const safeValue = Number.isFinite(value) ? value : 0;
   const safeMax = Number.isFinite(maxValue) && maxValue > 0 ? maxValue : 100;
-  
+
   // 2. Matemáticas del Gauge
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
@@ -40,7 +42,7 @@ export function RadialGauge({
     return "#10b981"; // Emerald
   };
 
-  const color = getColor(safeValue);
+  const color = externalColor || getColor(safeValue);
   const rotation = progress * 360;
 
   return (
@@ -65,9 +67,9 @@ export function RadialGauge({
           stroke={color}
           strokeWidth={strokeWidth}
           strokeDasharray={`${circumference} ${circumference}`}
-          style={{ 
-            strokeDashoffset: safeOffset, 
-            transition: "stroke-dashoffset 1s ease-in-out" 
+          style={{
+            strokeDashoffset: safeOffset,
+            transition: "stroke-dashoffset 1s ease-in-out"
           }}
           strokeLinecap="round"
           fill="transparent"
@@ -86,18 +88,18 @@ export function RadialGauge({
           {label}
         </span>
       </div>
-      
+
       {/* Needle (Aguja Decorativa) */}
-      <div 
+      <div
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
         style={{ transform: `rotate(${rotation}deg)`, transition: "transform 1s ease-out" }}
       >
-        <div 
-            className="w-1.5 h-4 absolute bg-slate-800 dark:bg-white rounded-full shadow-md" 
-            style={{ 
-                left: 'calc(50% - 3px)', 
-                top: strokeWidth - 4 // Ajuste visual para que la aguja "flote" sobre el anillo
-            }} 
+        <div
+          className="w-1.5 h-4 absolute bg-slate-800 dark:bg-white rounded-full shadow-md"
+          style={{
+            left: 'calc(50% - 3px)',
+            top: strokeWidth - 4 // Ajuste visual para que la aguja "flote" sobre el anillo
+          }}
         />
       </div>
     </div>

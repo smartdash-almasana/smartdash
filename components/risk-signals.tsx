@@ -1,150 +1,202 @@
 "use client";
 
+// components/risk-signals.tsx
+// Componente de señales críticas con soporte para SignalCard normalizada
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import * as LucideIcons from "lucide-react";
 import {
   TrendingUp,
   TrendingDown,
-  Activity,
+  Minus,
   AlertCircle,
-  DollarSign,
-  Users,
-  Zap,
+  BarChart3,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { getRiskToken } from "@/lib/ui/risk-tokens";
+import type { NivelRiesgo } from "@/lib/domain/risk";
+import type { SignalCard } from "@/lib/data/normalize-signals";
 
-/**
- * Traducción técnica → label humano
- */
-const SIGNAL_LABELS: Record<string, string> = {
-  CASH_FLOW: "Flujo de Caja",
-  TAX_LIMIT: "Límite Fiscal",
-  REVENUE_RISK: "Riesgo de Ingresos",
-  RUNWAY: "Runway Financiero",
-  BURNOUT: "Agotamiento Laboral",
-  WORKLOAD: "Carga de Trabajo",
-  STOCK_LEVEL: "Nivel de Stock",
-  DELAY: "Retraso en Proyecto",
-  CHURN: "Tasa de Cancelación",
-  NPS_DROP: "Caída de NPS",
-  REACH: "Alcance Orgánico",
-  UX_FAIL: "Falla de UX",
-};
-
-/**
- * Iconos por dominio
- */
-const SIGNAL_ICONS: Record<string, any> = {
-  financial: DollarSign,
-  human: Users,
-  operational: Zap,
-  reputation: Activity,
-};
-
-/**
- * 🎯 MAPEO A TOKENS SEMÁNTICOS
- * No colores explícitos. El theme decide.
- */
-const SIGNAL_TOKENS: Record<string, string> = {
-  financial: "bg-primary/10 text-primary border-primary/20",
-  human: "bg-accent/20 text-accent-foreground border-accent/30",
-  operational: "bg-warning/15 text-warning border-warning/30",
-  reputation: "bg-destructive/10 text-destructive border-destructive/20",
-};
-
-interface RiskSignal {
-  type: string;
-  code: string;
-  value: string | number;
-  description: string;
-}
-
+// Props: ahora recibe SignalCard[] del normalize-signals
 interface RiskSignalsProps {
-  signals: RiskSignal[];
+  signals: SignalCard[];
+  className?: string;
 }
 
-export function RiskSignals({ signals }: RiskSignalsProps) {
-  if (!signals || signals.length === 0) return null;
+/**
+ * Mapea peso numérico (1-10) a NivelRiesgo español
+ */
+function pesoToNivel(peso?: number): NivelRiesgo {
+  if (!peso) return "Medio";
+  if (peso >= 8) return "Crítico";
+  if (peso >= 6) return "Alto";
+  if (peso >= 4) return "Medio";
+  return "Bajo";
+}
+
+/**
+ * Obtiene el componente de ícono dinámicamente por nombre kebab-case
+ * Ej: "fuel" -> Fuel, "alert-triangle" -> AlertTriangle
+ */
+function getDynamicIcon(iconName: string): LucideIcons.LucideIcon {
+  // Convertir kebab-case a PascalCase
+  const pascalCase = iconName
+    .split('-')
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+
+  // Buscar en lucide-react
+  const IconComponent = (LucideIcons as Record<string, unknown>)[pascalCase];
+
+  if (IconComponent && typeof IconComponent === 'function') {
+    return IconComponent as LucideIcons.LucideIcon;
+  }
+
+  // Fallback: AlertCircle
+  return AlertCircle;
+}
+
+/**
+ * Tema visual basado en el icono/tipo de señal
+ */
+function getSignalTheme(iconName: string): { accent: string; iconBg: string; iconText: string } {
+  // Mapeo de iconos a temas
+  const themeMap: Record<string, { accent: string; iconBg: string; iconText: string }> = {
+    'fuel': { accent: 'border-l-amber-500', iconBg: 'bg-amber-50', iconText: 'text-amber-600' },
+    'battery-low': { accent: 'border-l-red-500', iconBg: 'bg-red-50', iconText: 'text-red-600' },
+    'trending-down': { accent: 'border-l-red-500', iconBg: 'bg-red-50', iconText: 'text-red-600' },
+    'alert-triangle': { accent: 'border-l-orange-500', iconBg: 'bg-orange-50', iconText: 'text-orange-600' },
+    'alert-circle': { accent: 'border-l-yellow-500', iconBg: 'bg-yellow-50', iconText: 'text-yellow-600' },
+    'credit-card-off': { accent: 'border-l-emerald-500', iconBg: 'bg-emerald-50', iconText: 'text-emerald-600' },
+    'package-x': { accent: 'border-l-purple-500', iconBg: 'bg-purple-50', iconText: 'text-purple-600' },
+    'package-open': { accent: 'border-l-purple-500', iconBg: 'bg-purple-50', iconText: 'text-purple-600' },
+    'star-off': { accent: 'border-l-blue-500', iconBg: 'bg-blue-50', iconText: 'text-blue-600' },
+    'users-round': { accent: 'border-l-cyan-500', iconBg: 'bg-cyan-50', iconText: 'text-cyan-600' },
+    'handshake': { accent: 'border-l-teal-500', iconBg: 'bg-teal-50', iconText: 'text-teal-600' },
+    'truck': { accent: 'border-l-indigo-500', iconBg: 'bg-indigo-50', iconText: 'text-indigo-600' },
+    'scale': { accent: 'border-l-slate-500', iconBg: 'bg-slate-50', iconText: 'text-slate-600' },
+    'computer': { accent: 'border-l-gray-500', iconBg: 'bg-gray-50', iconText: 'text-gray-600' },
+    'file-badge': { accent: 'border-l-pink-500', iconBg: 'bg-pink-50', iconText: 'text-pink-600' },
+    'file-warning': { accent: 'border-l-rose-500', iconBg: 'bg-rose-50', iconText: 'text-rose-600' },
+    'link': { accent: 'border-l-sky-500', iconBg: 'bg-sky-50', iconText: 'text-sky-600' },
+    'message-circle-warning': { accent: 'border-l-orange-500', iconBg: 'bg-orange-50', iconText: 'text-orange-600' },
+    'server-crash': { accent: 'border-l-red-500', iconBg: 'bg-red-50', iconText: 'text-red-600' },
+  };
+
+  return themeMap[iconName] || { accent: 'border-l-slate-500', iconBg: 'bg-slate-50', iconText: 'text-slate-600' };
+}
+
+/**
+ * Icono de tendencia
+ */
+function TrendIcon({ trend }: { trend: 'up' | 'down' | 'neutral' }) {
+  switch (trend) {
+    case 'up':
+      return <TrendingUp size={12} className="text-red-500" />;
+    case 'down':
+      return <TrendingDown size={12} className="text-emerald-500" />;
+    default:
+      return <Minus size={12} className="text-slate-400" />;
+  }
+}
+
+export function RiskSignals({ signals, className }: RiskSignalsProps) {
+  // Manejo defensivo de datos incompletos
+  const safeSignals = signals ?? [];
+
+  if (safeSignals.length === 0) {
+    return null;
+  }
+
+  // Ya vienen ordenadas por peso desde normalize-signals, pero aseguramos orden
+  const sortedSignals = [...safeSignals].sort((a, b) => (b.peso ?? 0) - (a.peso ?? 0));
 
   return (
-    <div className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-200">
-      {/* Header */}
+    <div className={cn("space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700", className)}>
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
-          <Activity size={18} className="text-primary" />
-          Señales Detectadas
+        <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
+          <BarChart3 size={22} className="text-orange-600" />
+          Señales Críticas
         </h3>
-        <Badge variant="outline" className="text-xs text-muted-foreground">
-          Fuente: SmartDash Engine
-        </Badge>
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+          Fuente: Auditoría Real-time
+        </span>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {signals.map((signal, idx) => {
-          const Icon = SIGNAL_ICONS[signal.type] || AlertCircle;
-          const colorClass =
-            SIGNAL_TOKENS[signal.type] ??
-            "bg-muted text-muted-foreground border-border";
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {sortedSignals.map((signal, idx) => {
+          const Icon = getDynamicIcon(signal.icono);
+          const theme = getSignalTheme(signal.icono);
 
-          const translatedLabel =
-            SIGNAL_LABELS[signal.code] || signal.code;
+          // Usar token centralizado para el nivel de riesgo basado en peso
+          const nivel = pesoToNivel(signal.peso);
+          const riskToken = getRiskToken(nivel);
 
           return (
             <Card
-              key={idx}
-              className="relative overflow-hidden border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
+              key={signal.id ?? idx}
+              className={cn(
+                "group relative overflow-hidden bg-white p-6 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50 rounded-[2rem] border-l-4",
+                theme.accent,
+                "border-slate-100"
+              )}
             >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-4">
-                <div
-                  className={`p-2.5 rounded-xl border ${colorClass}`}
-                >
-                  <Icon size={22} />
+              <div className="flex items-center justify-between mb-5">
+                <div className={cn("p-2.5 rounded-2xl border transition-colors", theme.iconBg, theme.iconText, "border-slate-100")}>
+                  <Icon size={20} strokeWidth={2.5} />
                 </div>
 
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground bg-muted px-3 py-1 rounded-full border border-border">
-                  {translatedLabel}
-                </span>
+                {/* Badge con nivel de riesgo usando token centralizado */}
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "text-[9px] font-black uppercase tracking-widest py-1 px-3",
+                    riskToken.bg,
+                    riskToken.text,
+                    riskToken.border
+                  )}
+                >
+                  {riskToken.icon} {riskToken.label}
+                </Badge>
               </div>
 
-              {/* Body */}
               <div className="space-y-4">
-                <h4 className="font-bold text-foreground text-lg leading-snug">
-                  {signal.description}
+                {/* Título de la señal */}
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                  <TrendIcon trend={signal.tendencia} />
+                  {signal.titulo}
+                </div>
+
+                {/* Descripción */}
+                <h4 className="font-black text-slate-900 text-base leading-tight group-hover:text-orange-600 transition-colors">
+                  {signal.descripcion || "Sin descripción disponible"}
                 </h4>
 
-                <div className="flex items-center gap-3 text-sm">
-                  {typeof signal.value === "number" && (
-                    <Badge
-                      variant="secondary"
-                      className="flex items-center gap-2 font-mono"
-                    >
-                      {signal.value > 0 ? (
-                        <TrendingDown
-                          size={16}
-                          className="text-destructive"
-                        />
-                      ) : (
-                        <TrendingUp
-                          size={16}
-                          className="text-primary"
-                        />
-                      )}
-                      Impacto: {Math.abs(signal.value)}%
-                    </Badge>
-                  )}
+                {/* Indicadores */}
+                {signal.indicadores && signal.indicadores.length > 0 && (
+                  <ul className="space-y-1.5">
+                    {signal.indicadores.slice(0, 3).map((indicador, i) => (
+                      <li
+                        key={i}
+                        className="text-xs text-slate-500 flex items-start gap-2"
+                      >
+                        <span className="text-orange-400 mt-0.5">•</span>
+                        {indicador}
+                      </li>
+                    ))}
+                    {signal.indicadores.length > 3 && (
+                      <li className="text-[10px] text-slate-400 italic pl-4">
+                        +{signal.indicadores.length - 3} indicadores más...
+                      </li>
+                    )}
+                  </ul>
+                )}
 
-                  {typeof signal.value === "string" && (
-                    <Badge
-                      variant="secondary"
-                      className="font-semibold"
-                    >
-                      Estado:{" "}
-                      <span className="text-foreground ml-1">
-                        {signal.value}
-                      </span>
-                    </Badge>
-                  )}
+                {/* Peso visual */}
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-50 text-slate-600 text-[10px] font-black uppercase tracking-widest border border-slate-100">
+                    Peso: {signal.peso}/10
+                  </div>
                 </div>
               </div>
             </Card>

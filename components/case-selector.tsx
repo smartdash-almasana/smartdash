@@ -1,144 +1,159 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowRight,
-  Activity,
   AlertTriangle,
-  Zap,
+  Scale,
   Users,
+  Shield,
+  TrendingDown,
+  Truck,
+  Settings,
   DollarSign,
+  ArrowRight
 } from "lucide-react";
-import { ScenarioCard } from "@/lib/actions";
+import { cn } from "@/lib/utils";
+import { ScenarioCardData } from "@/lib/actions";
 
-/* Iconos por eje */
-const AXIS_ICONS: Record<string, any> = {
-  Financiero: DollarSign,
-  Humano: Users,
-  Operativo: Zap,
-  Reputación: Activity,
-  Legal: AlertTriangle,
-  Fiscal: DollarSign,
+// Mapeo de iconos según el vertical de la DB
+const VERTICAL_ICONS: Record<string, typeof AlertTriangle> = {
+  "Fiscal": Scale,
+  "Legal": Shield,
+  "RRHH": Users,
+  "Reputación": TrendingDown,
+  "Supply Chain": Truck,
+  "Operaciones": Settings,
+  "Financiero": DollarSign,
 };
 
-/* Urgencia = semántica visual (permitido fuera de tokens) */
-const URGENCY_STYLES: Record<string, string> = {
-  critical: "border-l-red-500 bg-red-50/20 hover:border-red-400",
-  high: "border-l-orange-500 bg-orange-50/20 hover:border-orange-400",
-  medium: "border-l-yellow-500 bg-yellow-50/20 hover:border-yellow-400",
-  low: "border-l-emerald-500 bg-emerald-50/20 hover:border-emerald-400",
+// Temas de color según nivel de riesgo - Keys en ESPAÑOL (contrato DashboardRisk)
+const RISK_THEMES: Record<string, {
+  hoverBorder: string;
+  badgeBg: string;
+  badgeText: string;
+  iconBg: string;
+  iconColor: string;
+}> = {
+  'Crítico': {
+    hoverBorder: "hover:border-red-400",
+    badgeBg: "bg-red-100",
+    badgeText: "text-red-700",
+    iconBg: "bg-red-50",
+    iconColor: "text-red-600"
+  },
+  'Alto': {
+    hoverBorder: "hover:border-orange-400",
+    badgeBg: "bg-orange-100",
+    badgeText: "text-orange-700",
+    iconBg: "bg-orange-50",
+    iconColor: "text-orange-600"
+  },
+  'Medio': {
+    hoverBorder: "hover:border-yellow-400",
+    badgeBg: "bg-yellow-100",
+    badgeText: "text-yellow-700",
+    iconBg: "bg-yellow-50",
+    iconColor: "text-yellow-600"
+  },
+  'Bajo': {
+    hoverBorder: "hover:border-green-400",
+    badgeBg: "bg-green-100",
+    badgeText: "text-green-700",
+    iconBg: "bg-green-50",
+    iconColor: "text-green-600"
+  },
 };
 
-export function CaseSelector({
-  currentRubro,
-  scenarios,
-}: {
-  currentRubro: string;
-  scenarios: ScenarioCard[];
-}) {
+export function CaseSelector({ currentRubro, scenarios }: { currentRubro: string; scenarios: ScenarioCardData[] }) {
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="max-w-7xl mx-auto px-6 py-12 space-y-8">
       {/* Header */}
-      <div className="mb-8 text-center lg:text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs font-bold uppercase tracking-wider mb-4">
-          <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
-          Simulación en curso
-        </div>
-
-        <h2 className="text-3xl lg:text-4xl font-black text-foreground tracking-tight mb-3">
-          Selecciona un problema en{" "}
-          <span className="text-orange-600 underline decoration-orange-200 decoration-4 underline-offset-4">
-            {currentRubro}
-          </span>
-        </h2>
-
-        <p className="text-muted-foreground text-lg max-w-2xl">
-          Elige una de las situaciones detectadas por SmartDash para analizar,
-          cuantificar y mitigar el riesgo en tiempo real.
+      <div className="space-y-3">
+        <h1 className="text-4xl font-black text-gray-900 tracking-tight">
+          Escenarios en <span className="text-orange-600">{currentRubro}</span>
+        </h1>
+        <p className="text-lg text-gray-600 max-w-3xl">
+          Selecciona un caso para analizar el diagnóstico detallado y las acciones de mitigación recomendadas.
         </p>
       </div>
 
-      {/* Grid */}
+      {/* Grid de Tarjetas */}
       {scenarios.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {scenarios.map((scenario) => {
-            const Icon = AXIS_ICONS[scenario.axis] || Activity;
-            const urgencyClass =
-              URGENCY_STYLES[scenario.urgency] || URGENCY_STYLES.low;
+            // Usa nivel_riesgo directamente (español) - fallback a 'Bajo'
+            const theme = RISK_THEMES[scenario.nivel_riesgo] || RISK_THEMES['Bajo'];
+            const IconComponent = VERTICAL_ICONS[scenario.vertical] || AlertTriangle;
 
             return (
               <Link
                 key={scenario.id}
                 href={`/?rubro=${currentRubro}&scenario=${scenario.id}`}
-                className="group block h-full"
+                className="group block"
               >
                 <Card
-                  className={`h-full border border-border border-l-[6px] bg-card text-card-foreground shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden ${urgencyClass}`}
+                  className={cn(
+                    "relative bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-300",
+                    "hover:shadow-lg",
+                    theme.hoverBorder
+                  )}
                 >
-                  {/* Icono decorativo */}
-                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <Icon size={80} className="text-foreground" />
+                  {/* Badge de Riesgo - Esquina Superior Derecha */}
+                  <div className="absolute top-4 right-4">
+                    <Badge
+                      className={cn(
+                        "text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full",
+                        theme.badgeBg,
+                        theme.badgeText
+                      )}
+                    >
+                      {scenario.nivel_riesgo}
+                    </Badge>
                   </div>
 
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start mb-3">
-                      <Badge
-                        variant="outline"
-                        className="bg-card/80 backdrop-blur text-[10px] font-bold uppercase tracking-wider text-muted-foreground border-border"
-                      >
-                        {scenario.axis}
-                      </Badge>
+                  {/* Icono Grande - Lado Izquierdo */}
+                  <div className={cn(
+                    "w-16 h-16 rounded-full flex items-center justify-center mb-4",
+                    theme.iconBg
+                  )}>
+                    <IconComponent className={cn("w-8 h-8", theme.iconColor)} strokeWidth={2.5} />
+                  </div>
 
-                      {scenario.urgency === "critical" && (
-                        <span className="flex h-3 w-3 relative">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
-                        </span>
-                      )}
-                    </div>
+                  {/* Título */}
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-snug min-h-[3.5rem]">
+                    {scenario.scenario_description}
+                  </h3>
 
-                    <CardTitle className="text-xl font-bold text-foreground group-hover:text-orange-600 transition-colors leading-tight">
-                      {scenario.title}
-                    </CardTitle>
-                  </CardHeader>
+                  {/* Vertical */}
+                  <p className="text-sm text-gray-500 mb-4">
+                    {scenario.vertical}
+                  </p>
 
-                  <CardContent>
-                    <CardDescription className="text-muted-foreground font-medium leading-relaxed">
-                      {scenario.description}
-                    </CardDescription>
-                  </CardContent>
-
-                  <CardFooter className="mt-auto pt-4 flex items-center text-sm font-bold text-muted-foreground group-hover:text-orange-600 transition-colors">
-                    Simular este caso
-                    <ArrowRight
-                      size={16}
-                      className="ml-2 group-hover:translate-x-1 transition-transform"
-                    />
-                  </CardFooter>
+                  {/* Footer - Enlace Sutil */}
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <span className="text-sm text-gray-400 group-hover:text-blue-600 transition-colors font-medium">
+                      Analizar Caso
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                  </div>
                 </Card>
               </Link>
             );
           })}
         </div>
       ) : (
-        /* Empty state */
-        <div className="p-12 border-2 border-dashed border-border rounded-3xl text-center bg-muted">
-          <Activity className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
-          <h3 className="text-lg font-medium text-foreground">
-            No hay casos disponibles
+        // Estado Vacío
+        <div className="border-2 border-dashed border-gray-200 rounded-2xl p-16 text-center bg-gray-50/50">
+          <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+            <AlertTriangle className="w-10 h-10 text-gray-300" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">
+            No hay casos disponibles para este rubro
           </h3>
-          <p className="text-muted-foreground">
-            Verifica que los seeds se hayan ejecutado para el rubro{" "}
-            {currentRubro}.
+          <p className="text-gray-500 max-w-md mx-auto">
+            No se encontraron escenarios de riesgo para <span className="font-semibold">{currentRubro}</span> en la base de datos.
           </p>
         </div>
       )}

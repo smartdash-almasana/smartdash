@@ -1,45 +1,102 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { sql } from '@/lib/db';
+import { getDashboardRisks, saveRiskSnapshot } from '@/lib/data/risks';
+import { normalizeSenales, type SignalCard } from '@/lib/data/normalize-signals';
+import type { NivelRiesgo } from '@/lib/domain/risk';
 
 /**
- * Normaliza jsonb proveniente de Neon
+ * Interfaces para la UI - Usando enums en español del contrato DashboardRisk
  */
-const normalizeJson = <T>(value: unknown, fallback: T): T => {
-  if (value === null || value === undefined) return fallback;
-  return value as T;
-};
+export interface ScenarioDetail {
+  id: string;
+  client_id: string;
+  scenario_id: string;
+  scenario_description: string;
+  vertical: string;
+  global_score: number;
+  nivel_riesgo: string; // ES: 'Bajo' | 'Medio' | 'Alto' | 'Crítico'
+  financial_context: any;
+  signals: any[];
+  recommendation_text: string;
+  recommendation_type: string;
+  estado_accion: string; // ES: 'Pendiente' | 'En Proceso' | 'Completado' | 'Descartado'
+  created_at: string;
+  notifications?: Notification[];
+}
+
+export interface Notification {
+  id: string;
+  mensaje: string;
+  severidad: string;
+  tipo_notificacion: string;
+  created_at: string;
+}
+
+export interface ScenarioCardData {
+  id: string;
+  scenario_description: string;
+  vertical: string;
+  nivel_riesgo: string; // ES: 'Bajo' | 'Medio' | 'Alto' | 'Crítico'
+  global_score: number;
+}
+
+export interface DashboardData {
+  id: string;
+  client_id: string;
+  scenario_id: string;
+  evaluation: string;
+  impact: string;
+  score: number;
+  nivel_riesgo: string; // ES: 'Bajo' | 'Medio' | 'Alto' | 'Crítico'
+  signals: SignalCard[]; // Señales normalizadas con peso y tendencia
+  financial_context: any;
+  mitigationSteps: MitigationStep[];
+  notifications: {
+    id: string;
+    text: string;
+    type: 'incoming' | 'system';
+    timestamp: string;
+    severity: string;
+  }[];
+}
+
+export interface MitigationStep {
+  step_number: number;
+  title: string;
+  description: string;
+  estado: string; // ES: 'Pendiente' | 'En Proceso' | 'Completado' | 'Descartado'
+}
+
+export interface HistoryItem {
+  id: string;
+  scenario_description: string;
+  global_score: number;
+  nivel_riesgo: string; // ES: 'Bajo' | 'Medio' | 'Alto' | 'Crítico'
+  created_at: string;
+  mitigation_plan: any;
+}
 
 /**
- * 1. ESCENARIOS
- * Vista: v_latest_risks
+ * 1. ESCENARIOS (Pantalla 2)
+ * Fuente de la Verdad: vista_dashboard_riesgos_api
+ * Pasa nivel_riesgo TAL CUAL viene de la DB (español)
  */
-export async function getScenariosFromDB(clientId: string) {
+export async function getScenariosFromDB(segment: string): Promise<ScenarioCardData[]> {
   try {
-    const rows = await sql`
-      SELECT 
-        id,
-        scenario_id,
-        vertical,
-        scenario_description AS description,
-        global_score AS score,
-        risk_level,
-        signals,
-        financial_context,
-        recommendation_text,
-        action_status AS status,
-        created_at
-      FROM v_latest_risks
-      WHERE client_id = ${clientId}
-      ORDER BY created_at DESC
-    `;
+    const risks = await getDashboardRisks();
 
-    return rows.map(r => ({
-      ...r,
-      signals: normalizeJson(r.signals, []),
-      financial_context: normalizeJson(r.financial_context, {}),
-    }));
+    // Filtrar por segmento y limitar a 6 como la query original
+    return risks
+      .filter(r => r.segmento === segment)
+      .slice(0, 6)
+      .map(r => ({
+        id: r.captura_id,
+        scenario_description: r.escenario,
+        vertical: r.vertical,
+        nivel_riesgo: r.nivel_riesgo, // Sin mapeo - valor directo de DB
+        global_score: Number(r.puntaje_global)
+      }));
   } catch (error) {
     console.error('❌ getScenariosFromDB:', error);
     return [];
@@ -47,52 +104,78 @@ export async function getScenariosFromDB(clientId: string) {
 }
 
 /**
- * 2. DASHBOARD
- * Vista: v_client_risk_summary
+ * 2. DASHBOARD DATA (Pantalla 3)
+ * Orquestador que consume la vista API
+ * Pasa nivel_riesgo y estado_accion TAL CUAL vienen de la DB (español)
  */
-export async function getDashboardData() {
+export async function getDashboardData(scenarioRecordId: string): Promise<DashboardData | null> {
   try {
-    return await sql`
-      SELECT 
-        client_id,
-        name AS client_name,
-        company,
-        segment,
-        critical_risks,
-        high_risks,
-        avg_risk_score
-      FROM v_client_risk_summary
-      ORDER BY critical_risks DESC
-    `;
+    const risks = await getDashboardRisks();
+    const s = risks.find(r => r.captura_id === scenarioRecordId);
+
+    if (!s) return null;
+
+    // Mapeo al formato que esperan los componentes del dashboard
+    // Sin transformaciones ES→EN - valores directos de la DB
+    // Señales normalizadas usando la función centralizada
+    const normalizedSignals = normalizeSenales(
+      s.signals,
+      s.nivel_riesgo as NivelRiesgo
+    );
+
+    return {
+      id: s.captura_id,
+      client_id: s.cliente_id,
+      scenario_id: s.escenario_id,
+      evaluation: s.escenario,
+      impact: s.vertical,
+      score: Number(s.puntaje_global),
+      nivel_riesgo: s.nivel_riesgo, // Sin mapeo - valor directo de DB
+      signals: normalizedSignals, // Señales normalizadas con peso para ordenar por prioridad
+      financial_context: s.financial_context || {},
+      mitigationSteps: [
+        {
+          step_number: 1,
+          title: "Acción Prioritaria",
+          description: s.recomendacion || "Revisión manual requerida.",
+          estado: s.estado_accion // Sin mapeo - valor directo de DB
+        },
+        {
+          step_number: 2,
+          title: "Monitoreo Continuo",
+          description: "Activar alertas de señales para variaciones > 5% en tiempo real.",
+          estado: 'Pendiente'
+        }
+      ],
+      notifications: [] // No existe tabla de notificaciones en Supabase actualmente
+    };
   } catch (error) {
     console.error('❌ getDashboardData:', error);
-    return [];
+    return null;
   }
 }
 
 /**
  * 3. HISTORIAL
- * Tabla real: capturas_riesgo
+ * Fuente de la Verdad: vista_dashboard_riesgos_api
+ * Pasa nivel_riesgo TAL CUAL viene de la DB (español)
  */
-export async function getHistoryFromDB(clientId: string) {
+export async function getHistoryFromDB(segment: string): Promise<HistoryItem[]> {
   try {
-    const rows = await sql`
-      SELECT
-        id,
-        scenario_description,
-        global_score,
-        risk_level,
-        signals,
-        created_at
-      FROM capturas_riesgo
-      WHERE client_id = ${clientId}
-      ORDER BY created_at DESC
-    `;
+    const risks = await getDashboardRisks();
 
-    return rows.map(r => ({
-      ...r,
-      signals: normalizeJson(r.signals, []),
-    }));
+    // Filtramos por segmento y retornamos los últimos 10
+    return risks
+      .filter(r => r.segmento === segment)
+      .slice(0, 10)
+      .map(r => ({
+        id: r.captura_id,
+        scenario_description: r.escenario,
+        global_score: Number(r.puntaje_global),
+        nivel_riesgo: r.nivel_riesgo, // Sin mapeo - valor directo de DB
+        created_at: r.fecha_deteccion,
+        mitigation_plan: null // No implementado en la vista consolidada v1
+      }));
   } catch (error) {
     console.error('❌ getHistoryFromDB:', error);
     return [];
@@ -101,62 +184,99 @@ export async function getHistoryFromDB(clientId: string) {
 
 /**
  * 4. PERSISTENCIA
- * Tabla: capturas_riesgo (nombres EXACTOS)
+ * Coordina con la capa de datos de Supabase
  */
 export async function saveRiskAnalysis(data: {
   client_id: string;
   scenario_id: string;
   scenario_description: string;
   global_score: number;
-  risk_level: string;
-  signals: unknown[];
-  financial_context: Record<string, unknown>;
+  nivel_riesgo: string; // ES: 'Bajo' | 'Medio' | 'Alto' | 'Crítico'
+  signals: any[];
+  financial_context: any;
   recommendation_text: string;
-  recommendation_type?: string;
-  score_version?: string;
-  client_name?: string;
-  client_company?: string;
-  client_segment?: string;
+  vertical?: string;
 }) {
   try {
-    await sql`
-      INSERT INTO capturas_riesgo (
-        client_id,
-        scenario_id,
-        scenario_description,
-        global_score,
-        risk_level,
-        signals,
-        financial_context,
-        recommendation_text,
-        recommendation_type,
-        score_version,
-        client_name,
-        client_company,
-        client_segment,
-        action_status
-      ) VALUES (
-        ${data.client_id},
-        ${data.scenario_id},
-        ${data.scenario_description},
-        ${data.global_score},
-        ${data.risk_level},
-        ${data.signals},
-        ${data.financial_context},
-        ${data.recommendation_text},
-        ${data.recommendation_type ?? 'manual'},
-        ${data.score_version ?? 'v1'},
-        ${data.client_name ?? null},
-        ${data.client_company ?? null},
-        ${data.client_segment ?? null},
-        'pending'
-      )
-    `;
+    const result = await saveRiskSnapshot({
+      client_id: data.client_id,
+      scenario_id: data.scenario_id,
+      global_score: data.global_score,
+      risk_level: data.nivel_riesgo,
+      signals: data.signals,
+      financial_context: data.financial_context,
+      recommendation_text: data.recommendation_text,
+      estado_accion: 'Pendiente'
+    });
 
-    revalidatePath('/dashboard');
-    return { success: true };
+    if (result.success) {
+      revalidatePath('/');
+    }
+
+    return result;
   } catch (error) {
     console.error('❌ saveRiskAnalysis:', error);
     return { success: false };
   }
 }
+
+// ============================================================================
+// 5. PANTALLA 1A: CLIENTES
+// Server Action para obtener clientes desde Client Components
+// NOTA: Los tipos ClienteCard y CasoTestigoCard deben importarse desde @/lib/types/welcome
+// ============================================================================
+
+import { getClientes, getAllCasosTestigo } from '@/lib/data/risks';
+import type { ClienteCard, CasoTestigoCard } from '@/lib/types/welcome';
+
+/**
+ * Server Action: Obtener todos los clientes.
+ * Fuente de la Verdad: tabla clientes
+ */
+export async function getClientesAction(): Promise<ClienteCard[]> {
+  try {
+    return await getClientes();
+  } catch (error) {
+    console.error('❌ getClientesAction:', error);
+    return [];
+  }
+}
+
+// ============================================================================
+// 6. PANTALLA 1B: CASOS TESTIGO
+// Server Action para obtener casos testigo desde Client Components
+// ============================================================================
+
+/**
+ * Server Action: Obtener todos los casos testigo agrupados por segmento.
+ * Fuente de la Verdad: vista_dashboard_riesgos_api
+ */
+export async function getAllCasosTestigoAction(
+  limitePorSegmento: number = 4
+): Promise<Record<string, CasoTestigoCard[]>> {
+  try {
+    return await getAllCasosTestigo(limitePorSegmento);
+  } catch (error) {
+    console.error('❌ getAllCasosTestigoAction:', error);
+    return {};
+  }
+}
+
+/**
+ * Server Action: Obtener casos testigo filtrados por segmento.
+ * Útil para la navegación dinámica (/demo?segmento=X)
+ */
+import { getCasosTestigoBySegmento } from '@/lib/data/risks';
+
+export async function getCasosTestigoBySegmentoAction(
+  segmento: string,
+  limite: number = 4 // Se puede aumentar si es vista completa
+): Promise<CasoTestigoCard[]> {
+  try {
+    return await getCasosTestigoBySegmento(segmento, limite);
+  } catch (error) {
+    console.error('❌ getCasosTestigoBySegmentoAction:', error);
+    return [];
+  }
+}
+

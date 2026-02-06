@@ -75,7 +75,7 @@ Devuelve EXCLUSIVAMENTE un JSON válido con la siguiente estructura exacta:
             },
           ],
         }),
-        { signal: AbortSignal.timeout(6000) },
+        signal: AbortSignal.timeout(6000),
       },
     );
 
