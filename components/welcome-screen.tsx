@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ClientesGrid } from "@/components/clientes-grid";
 import { CasosGrid } from "@/components/casos-grid";
-import { getClientesFromDB } from "@/lib/actions";
 import type { ClienteCard, CasoTestigoCard } from "@/lib/types/welcome";
 import { AlertCircle, ArrowRight, Shield, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -32,33 +31,12 @@ export function WelcomeScreen({
     segmento,
     serverError
 }: WelcomeScreenProps) {
-    const [clientes, setClientes] = useState<ClienteCard[]>(initialClientes);
-    const [casos, setCasos] = useState<CasoTestigoCard[]>(initialCasos);
-    // Solo mostramos loading si estamos en modo clientes y no hay datos iniciales (paso client-side por defecto)
-    const [loading, setLoading] = useState(!initialClientes.length && initialMode === 'clientes');
-    const [error, setError] = useState<string | null>(serverError || null);
+    const [clientes] = useState<ClienteCard[]>(initialClientes);
+    const [casos] = useState<CasoTestigoCard[]>(initialCasos);
+    const [loading] = useState(false);
+    const [error] = useState<string | null>(serverError || null);
 
     const isCasosMode = initialMode === 'casos';
-
-    // Carga de datos Client-Side (Legacy/Fallback) para Clientes
-    useEffect(() => {
-        if (initialMode === 'clientes' && clientes.length === 0 && !serverError) {
-            async function loadData() {
-                try {
-                    setLoading(true);
-                    setError(null);
-                    const clientesData = await getClientesFromDB();
-                    setClientes(clientesData);
-                } catch (err) {
-                    console.error("❌ Error cargando datos de bienvenida:", err);
-                    setError("Error al cargar los clientes. Por favor, recarga la página.");
-                } finally {
-                    setLoading(false);
-                }
-            }
-            loadData();
-        }
-    }, [initialMode, clientes.length, serverError]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
