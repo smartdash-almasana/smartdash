@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ClientesGrid } from "@/components/clientes-grid";
 import { CasosGrid } from "@/components/casos-grid";
-import { getClientesAction } from "@/lib/actions";
+import { getClientesFromDB } from "@/lib/actions";
 import type { ClienteCard, CasoTestigoCard } from "@/lib/types/welcome";
 import { AlertCircle, ArrowRight, Shield, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -47,7 +47,7 @@ export function WelcomeScreen({
                 try {
                     setLoading(true);
                     setError(null);
-                    const clientesData = await getClientesAction();
+                    const clientesData = await getClientesFromDB();
                     setClientes(clientesData);
                 } catch (err) {
                     console.error("❌ Error cargando datos de bienvenida:", err);

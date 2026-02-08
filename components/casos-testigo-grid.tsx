@@ -1,336 +1,240 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, TrendingDown, DollarSign } from "lucide-react";
-import type { CasoTestigoCard } from "@/lib/types/welcome";
-
-// ============================================================================
-// PANTALLA 1B: Cards de Casos Testigo (Indicadores de Riesgo)
-// Fuente de la Verdad: vista_dashboard_riesgos_api
-// ============================================================================
+import { getRiskToken } from "@/lib/ui/risk-tokens";
 
 /**
- * Tokens de color por nivel de riesgo según el blueprint:
- * - Crítico → rojo
- * - Alto → naranja  
- * - Medio → amarillo
- * - Bajo → verde
+ * Campos requeridos por FV para render de Caso Testigo.
+ * - cliente_nombre_comercial: clientes.nombre_comercial
+ * - logo_url: clientes.img_clientes
+ * - escenario: escenarios_riesgo.titulo
+ * - vertical: verticales_negocio.nombre (mapeado desde escenario.vertical_id)
+ * - nivel_riesgo: capturas_riesgo.nivel_riesgo_actual
+ * - puntaje_global: capturas_riesgo.puntaje_global
+ * - descripcion_base: escenarios_riesgo.descripcion_base
+ * - monto_en_riesgo: capturas_riesgo.monto_en_riesgo (si aplica)
+ * - captura_id: capturas_riesgo.id
+ * - moneda: capturas_riesgo.contexto_financiero?.moneda (si aplica)
  */
-const RIESGO_TOKENS: Record<string, {
-    bg: string;
-    bgCard: string;
-    text: string;
-    border: string;
-    badge: string;
-    icon: string;
-}> = {
-    Crítico: {
-        bg: "bg-red-500",
-        bgCard: "bg-gradient-to-br from-red-50 to-red-100/50",
-        text: "text-red-600",
-        border: "border-red-200",
-        badge: "bg-red-100 text-red-700 border-red-300",
-        icon: "text-red-500"
-    },
-    Alto: {
-        bg: "bg-orange-500",
-        bgCard: "bg-gradient-to-br from-orange-50 to-amber-100/50",
-        text: "text-orange-600",
-        border: "border-orange-200",
-        badge: "bg-orange-100 text-orange-700 border-orange-300",
-        icon: "text-orange-500"
-    },
-    Medio: {
-        bg: "bg-yellow-500",
-        bgCard: "bg-gradient-to-br from-yellow-50 to-amber-50",
-        text: "text-yellow-700",
-        border: "border-yellow-200",
-        badge: "bg-yellow-100 text-yellow-800 border-yellow-300",
-        icon: "text-yellow-600"
-    },
-    Bajo: {
-        bg: "bg-green-500",
-        bgCard: "bg-gradient-to-br from-green-50 to-emerald-50",
-        text: "text-green-600",
-        border: "border-green-200",
-        badge: "bg-green-100 text-green-700 border-green-300",
-        icon: "text-green-500"
-    }
-};
-
-/**
- * Tokens de color por segmento (para etiqueta sutil).
- */
-const SEGMENTO_COLORS: Record<string, string> = {
-    Pyme: "text-emerald-500",
-    "E-commerce": "text-blue-500",
-    Startup: "text-orange-500",
-    Creador: "text-purple-500"
-};
-
-/**
- * Formatea un monto con su moneda.
- */
-function formatMonto(monto: number | null, moneda: string | null): string {
-    if (monto === null || monto === undefined) return "Sin datos";
-
-    const formatted = new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(monto);
-
-    const symbol = moneda === 'MXN' ? 'MXN $'
-        : moneda === 'EUR' ? '€'
-            : moneda === 'USD' ? 'USD $'
-                : `${moneda || ''} $`;
-
-    return `${symbol}${formatted}`;
+export interface CasoTestigoCardUI {
+  captura_id: string;
+  cliente_nombre_comercial: string;
+  logo_url: string | null;
+  escenario: string;
+  vertical: string;
+  nivel_riesgo: "Bajo" | "Medio" | "Alto" | "Crítico";
+  puntaje_global?: number | null;
+  monto_en_riesgo?: number | null;
+  descripcion_base: string | null;
+  moneda?: string | null;
 }
 
-/**
- * Props del componente CasoTestigoCardUI.
- */
 interface CasoTestigoCardProps {
-    caso: CasoTestigoCard;
-    onClick?: () => void;
-    href?: string;
+  caso: CasoTestigoCardUI;
+  onClick?: () => void;
+  href?: string;
+}
+
+export function CasoTestigoCardSkeleton() {
+  return (
+    <Card className="rounded-3xl border-2 border-slate-100 overflow-hidden">
+      <Skeleton className="h-1.5 w-full" />
+      <div className="p-6 space-y-4">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-12 w-12 rounded-2xl" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+        </div>
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-3 w-full" />
+        <Skeleton className="h-3 w-5/6" />
+      </div>
+    </Card>
+  );
 }
 
 /**
- * Card individual de caso testigo para la Pantalla 1B.
- * Muestra: escenario, monto en riesgo, nivel de riesgo, señal principal.
+ * Card individual de caso testigo
  */
 export function CasoTestigoCardUI({ caso, onClick, href }: CasoTestigoCardProps) {
-    const riesgoToken = RIESGO_TOKENS[caso.nivel_riesgo] || RIESGO_TOKENS.Medio;
-    const segmentoColor = SEGMENTO_COLORS[caso.segmento] || "text-slate-500";
+  const riskToken = getRiskToken(caso.nivel_riesgo);
 
-    const CardContent = (
-        <Card
-            className={cn(
-                "relative overflow-hidden rounded-2xl border-2 transition-all duration-300",
-                "shadow-lg hover:shadow-2xl hover:scale-[1.02]",
-                "cursor-pointer group",
-                riesgoToken.bgCard,
-                riesgoToken.border
+  const CardContent = (
+    <Card
+      className={cn(
+        "relative overflow-hidden rounded-3xl border-2 transition-all duration-300 bg-white shadow-lg hover:shadow-2xl hover:scale-[1.01] cursor-pointer group",
+        riskToken.border
+      )}
+      onClick={onClick}
+    >
+      <div className={cn("h-1.5 w-full", riskToken.bg)} />
+      <div className="p-7 space-y-4 min-h-[320px]">
+        <div className="flex flex-col items-center text-center gap-3">
+          <div className="relative h-16 w-16 rounded-full overflow-hidden border border-slate-100 bg-slate-50">
+            {caso.logo_url ? (
+              <Image src={caso.logo_url} alt={caso.cliente_nombre_comercial} fill className="object-cover" sizes="64px" />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center text-xs text-slate-500 font-bold">
+                {caso.cliente_nombre_comercial?.[0] ?? "?"}
+              </div>
             )}
-            onClick={onClick}
-        >
-            {/* Barra de riesgo lateral */}
-            <div className={cn(
-                "absolute left-0 top-0 bottom-0 w-1.5",
-                riesgoToken.bg
-            )} />
+          </div>
+          <p className="text-[15px] font-bold text-slate-900 tracking-tight">
+            {caso.cliente_nombre_comercial}
+          </p>
+        </div>
 
-            <div className="pl-5 pr-5 py-5 space-y-4">
-                {/* Header: Segmento + Nivel de Riesgo */}
-                <div className="flex items-center justify-between gap-2">
-                    <span className={cn(
-                        "text-[10px] font-black uppercase tracking-widest",
-                        segmentoColor
-                    )}>
-                        {caso.segmento}
-                    </span>
-                    <Badge
-                        variant="outline"
-                        className={cn(
-                            "text-[10px] font-black uppercase px-2.5 py-0.5 border",
-                            riesgoToken.badge
-                        )}
-                    >
-                        {caso.nivel_riesgo}
-                    </Badge>
-                </div>
+        <div className="space-y-2 antialiased">
+          <p className="text-[11px] font-black uppercase tracking-[0.14em] text-slate-700">
+            Riesgo: {caso.vertical || "Sin vertical"}
+          </p>
+          <p className="text-[11px] font-black uppercase tracking-[0.1em] text-slate-800">
+            Nivel de Riesgo: {typeof caso.puntaje_global === "number" ? `${caso.puntaje_global}/100` : "N/A"} {riskToken.icon} {riskToken.label}
+          </p>
+          <p className="text-[11px] font-black uppercase tracking-[0.1em] text-slate-800">
+            SEÑAL: {caso.escenario?.replace(/\\s*-\\s*startup\\s*$/i, "")}
+          </p>
+        </div>
 
-                {/* Título del escenario */}
-                <h3 className="text-base font-black text-slate-900 leading-tight line-clamp-2 min-h-[44px] group-hover:text-slate-700 transition-colors">
-                    {caso.escenario}
-                </h3>
+        {typeof caso.monto_en_riesgo === "number" && (
+          <div className="text-[10px] font-semibold tracking-wide px-3 py-1.5 rounded-full bg-slate-50 text-slate-700 border border-slate-100 inline-flex w-fit">
+            Monto: {caso.moneda ? `${caso.moneda} ` : ""}{caso.monto_en_riesgo}
+          </div>
+        )}
+      </div>
+    </Card>
+  );
 
-                {/* Monto en Riesgo */}
-                <div className="flex items-center gap-2">
-                    <DollarSign size={18} className={riesgoToken.icon} strokeWidth={2.5} />
-                    <span className={cn(
-                        "text-xl font-black",
-                        riesgoToken.text
-                    )}>
-                        {formatMonto(caso.monto_en_riesgo, caso.moneda)}
-                    </span>
-                </div>
-
-                {/* Señal Principal */}
-                {caso.senal_principal && (
-                    <div className="flex items-start gap-2 pt-3 border-t border-slate-200/50">
-                        <AlertTriangle size={14} className={cn("mt-0.5 flex-shrink-0", riesgoToken.icon)} />
-                        <p className="text-xs text-slate-600 font-medium leading-relaxed line-clamp-2">
-                            {caso.senal_principal}
-                        </p>
-                    </div>
-                )}
-            </div>
-        </Card>
-    );
-
-    // Si hay href, envolver en Link
-    if (href) {
-        return (
-            <Link href={href} className="block">
-                {CardContent}
-            </Link>
-        );
-    }
-
-    return CardContent;
-}
-
-/**
- * Skeleton loader para una card de caso testigo.
- */
-export function CasoTestigoCardSkeleton() {
+  if (href) {
     return (
-        <Card className="rounded-2xl border-2 border-slate-100 overflow-hidden">
-            <div className="pl-5 pr-5 py-5 space-y-4">
-                <div className="flex justify-between">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-5 w-14 rounded-full" />
-                </div>
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-7 w-28" />
-                <Skeleton className="h-8 w-full" />
-            </div>
-        </Card>
+      <Link href={href} className="block">
+        {CardContent}
+      </Link>
     );
+  }
+
+  return CardContent;
 }
 
 /**
- * Props del grid de casos por segmento.
+ * Props del grid de casos por cliente
  */
-interface CasosTestigoGridProps {
-    casos: CasoTestigoCard[];
-    segmento: string;
-    loading?: boolean;
-    onCasoClick?: (caso: CasoTestigoCard) => void;
-    getHref?: (caso: CasoTestigoCard) => string;
+export interface CasosTestigoGridProps {
+  casos: CasoTestigoCardUI[];
+  segmento: string;
+  loading?: boolean;
+  onCasoClick?: (caso: CasoTestigoCardUI) => void;
+  getHref?: (caso: CasoTestigoCardUI) => string;
 }
 
 /**
- * Grid de cards de casos testigo para un segmento específico.
- * Responsive: 4 columnas en desktop, 2 en tablet, 1 en mobile.
+ * Grid de cards de casos testigo
  */
 export function CasosTestigoGrid({
-    casos,
-    segmento,
-    loading = false,
-    onCasoClick,
-    getHref
+  casos,
+  segmento,
+  loading = false,
+  onCasoClick,
+  getHref
 }: CasosTestigoGridProps) {
-    const segmentoColor = SEGMENTO_COLORS[segmento] || "text-slate-600";
-
-    if (loading) {
-        return (
-            <div className="space-y-4">
-                <h2 className={cn(
-                    "text-sm font-black uppercase tracking-widest",
-                    segmentoColor
-                )}>
-                    {segmento}
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                    {[...Array(4)].map((_, i) => (
-                        <CasoTestigoCardSkeleton key={i} />
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
-    if (casos.length === 0) {
-        return (
-            <div className="space-y-4">
-                <h2 className={cn(
-                    "text-sm font-black uppercase tracking-widest",
-                    segmentoColor
-                )}>
-                    {segmento}
-                </h2>
-                <div className="flex items-center justify-center py-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                    <p className="text-sm text-slate-400 font-medium">
-                        No hay casos testigo para este segmento.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
+  if (loading) {
     return (
-        <div className="space-y-4">
-            <div className="flex items-center gap-3">
-                <h2 className={cn(
-                    "text-sm font-black uppercase tracking-widest",
-                    segmentoColor
-                )}>
-                    {segmento}
-                </h2>
-                <Badge
-                    variant="secondary"
-                    className="text-[10px] font-bold bg-slate-100 text-slate-600"
-                >
-                    {casos.length} casos
-                </Badge>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {casos.map((caso) => (
-                    <CasoTestigoCardUI
-                        key={caso.captura_id}
-                        caso={caso}
-                        onClick={onCasoClick ? () => onCasoClick(caso) : undefined}
-                        href={getHref ? getHref(caso) : undefined}
-                    />
-                ))}
-            </div>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[...Array(4)].map((_, i) => (
+          <CasoTestigoCardSkeleton key={`${segmento}-sk-${i}`} />
+        ))}
+      </div>
     );
+  }
+
+  if (!casos.length) {
+    return (
+      <div className="flex items-center justify-center py-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+        <p className="text-sm text-slate-400 font-medium">
+          No hay casos testigo para este cliente.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {casos.map((caso) => {
+        const href = getHref ? getHref(caso) : undefined;
+        return (
+          <CasoTestigoCardUI
+            key={caso.captura_id}
+            caso={caso}
+            onClick={onCasoClick ? () => onCasoClick(caso) : undefined}
+            href={href}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
 /**
- * Props para el panel completo de casos por todos los segmentos.
+ * Props para el panel completo de casos por cliente
  */
-interface CasosTestigoFullPanelProps {
-    casosBySegmento: Record<string, CasoTestigoCard[]>;
-    loading?: boolean;
-    onCasoClick?: (caso: CasoTestigoCard) => void;
-    getHref?: (caso: CasoTestigoCard) => string;
+interface CasosRiesgoPorClienteProps {
+  casosByCliente: Record<string, CasoTestigoCardUI[]>;
+  loading?: boolean;
+  onCasoClick?: (caso: CasoTestigoCardUI) => void;
+  getHref?: (caso: CasoTestigoCardUI) => string;
 }
 
 /**
- * Panel completo de todos los casos testigo agrupados por segmento.
- * Muestra 4 secciones (Creador, Pyme, Startup, E-commerce) con sus casos.
+ * Panel completo de casos por cliente
+ * Reusa CasosTestigoGrid y CasoTestigoCardUI
  */
-export function CasosTestigoFullPanel({
-    casosBySegmento,
-    loading = false,
-    onCasoClick,
-    getHref
-}: CasosTestigoFullPanelProps) {
-    const segmentos = ['Creador', 'Pyme', 'Startup', 'E-commerce'];
+export default function CasosRiesgoPorCliente({
+  casosByCliente,
+  loading = false,
+  onCasoClick,
+  getHref
+}: CasosRiesgoPorClienteProps) {
+  const clientes = Object.keys(casosByCliente);
 
-    return (
-        <div className="space-y-10">
-            {segmentos.map((seg) => (
-                <CasosTestigoGrid
-                    key={seg}
-                    segmento={seg}
-                    casos={casosBySegmento[seg] || []}
-                    loading={loading}
-                    onCasoClick={onCasoClick}
-                    getHref={getHref}
-                />
-            ))}
-        </div>
-    );
+  return (
+    <div className="space-y-10">
+      {clientes.map((cliente) => {
+        const casos = casosByCliente[cliente] || [];
+
+        return (
+          <div key={cliente} className="space-y-4">
+            <h2 className="text-sm font-black uppercase tracking-widest text-slate-700">
+              {cliente}
+            </h2>
+
+            {loading ? (
+              <CasosTestigoGrid segmento={cliente} casos={[]} loading={true} />
+            ) : casos.length === 0 ? (
+              <div className="flex items-center justify-center py-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+                <p className="text-sm text-slate-400 font-medium">
+                  No hay situaciones de riesgo para este cliente.
+                </p>
+              </div>
+            ) : (
+              <CasosTestigoGrid
+                segmento={cliente}
+                casos={casos}
+                loading={false}
+                onCasoClick={onCasoClick}
+                getHref={getHref}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
-
-export default CasosTestigoGrid;

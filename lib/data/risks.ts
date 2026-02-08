@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-server';
 import { DashboardRisk } from '@/lib/types/dashboard';
 import type { ClienteCard, CasoTestigoCard } from '@/lib/types/welcome';
 
@@ -22,7 +22,7 @@ export type { ClienteCard, CasoTestigoCard };
  * @throws {Error} Si existe un error en la consulta a Supabase.
  */
 export async function getDashboardRisks(): Promise<DashboardRisk[]> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
         .from('vista_dashboard_riesgos_api')
         .select('*')
         .order('puntaje_global', { ascending: false });
@@ -43,7 +43,7 @@ export async function getDashboardRisks(): Promise<DashboardRisk[]> {
  * @returns {Promise<{ success: boolean, id?: string }>} Resultado de la operación.
  */
 export async function saveRiskSnapshot(data: any): Promise<{ success: boolean; id?: string }> {
-    const { data: inserted, error } = await supabase
+    const { data: inserted, error } = await supabaseAdmin
         .from('capturas_riesgo')
         .insert({
             cliente_id: data.client_id,
@@ -76,7 +76,7 @@ export async function saveRiskSnapshot(data: any): Promise<{ success: boolean; i
  * @throws {Error} Si existe un error en la actualización.
  */
 export async function updateRiskActionStatus(capturaId: string, nuevoEstado: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
         .from('capturas_riesgo')
         .update({
             estado_accion: nuevoEstado,
@@ -103,7 +103,7 @@ export async function updateRiskActionStatus(capturaId: string, nuevoEstado: str
  * @returns {Promise<ClienteCard[]>} Lista de clientes en formato crudo.
  */
 export async function getClientes(): Promise<ClienteCard[]> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
         .from('clientes')
         .select('id, nombre_comercial, razon_social, segmento, img_clientes, metadata_negocio')
         .order('nombre_comercial', { ascending: true });
@@ -152,7 +152,7 @@ export async function getCasosTestigoBySegmento(
     // Consulta directa a tablas FV para asegurar consistencia
     // Usamos puntaje_global de capturas_riesgo para ordenar por relevancia
     // MODIFICACION: Usamos Constraints explícitos para asegurar el JOIN correcto
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
         .from('capturas_riesgo')
         .select(`
             id,

@@ -1,268 +1,228 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Send, MoreVertical, CheckCheck, Bot, Signal, Wifi } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { createClient } from "@supabase/supabase-js";
 import { cn } from "@/lib/utils";
-import { getEstadoToken } from "@/lib/ui/risk-tokens";
+import { Send, CheckCheck, MoreVertical, Search, Paperclip, Smile, Mic } from "lucide-react";
 
-// Interfaz local para pasos de mitigación (alineada a español)
-interface MitigationStep {
-  step_number?: string | number;
-  title: string;
-  description: string;
-  estado?: string; // 'Pendiente' | 'En Proceso' | 'Completado' | 'Descartado'
-}
+// Configuración de Supabase
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-interface ChatMessage {
-  id: string;
-  role: "system" | "user";
-  content: string;
-  timestamp: string;
-}
-
-interface NotificationInput {
-  id?: string;
-  message?: string;
-  text?: string;
-  impact?: string;
-  timestamp?: string;
-}
-
-interface WhatsAppChatProps {
-  initialMessages: NotificationInput[];
-  mitigationSteps: MitigationStep[];
+interface WhatsappChatProps {
+  capturaId: string;
   className?: string;
 }
 
-export function WhatsAppChat({ initialMessages, mitigationSteps, className }: WhatsAppChatProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+interface Mensaje {
+  id: string;
+  texto: string;
+  sender: "bot" | "user";
+  timestamp: string;
+  status?: "sent" | "delivered" | "read";
+}
+
+export const WhatsappChat = ({ capturaId, className }: WhatsappChatProps) => {
+  const [data, setData] = useState<any>(null);
+  const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [input, setInput] = useState("");
+  const [botStatus, setBotStatus] = useState("en línea");
+  const [inputValue, setInputValue] = useState("");
+  const [step, setStep] = useState(0); 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Manejo defensivo de datos
-  const safeMessages = initialMessages ?? [];
-  const safeSteps = mitigationSteps ?? [];
+  const getCurrentTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+  // 1. Carga de datos desde la Fuente de la Verdad (Vista API) 
+  useEffect(() => {
+    const loadData = async () => {
+      if (!capturaId) return;
+      const { data: res, error } = await supabase
+        .from("vista_dashboard_riesgos_api")
+        .select("*")
+        .eq("captura_id", capturaId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error cargando captura:", error);
+        return;
+      }
+      if (res) setData(res);
+    };
+    loadData();
+  }, [capturaId]);
+
+  // 2. Auto-scroll al final del chat
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isTyping]);
+  }, [mensajes, isTyping]);
 
-  const getCurrentTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const handleBotResponse = async (userText: string) => {
+  // 3. Orquestador de Mensajes del Bot (Dosis 1-6)
+  const addBotMessage = useCallback((text: string, delay = 1500, nextAction?: () => void) => {
     setIsTyping(true);
-    await new Promise(r => setTimeout(r, 1500));
-
-    let replyContent = "";
-    const cleanInput = userText.trim();
-    const stepNumberToFind = parseInt(cleanInput);
-
-    if (!isNaN(stepNumberToFind) && stepNumberToFind > 0) {
-      const step = safeSteps.find((s, index) => {
-        const explicitNumber = s.step_number ? Number(s.step_number) : null;
-        return explicitNumber === stepNumberToFind || (index + 1) === stepNumberToFind;
-      });
-
-      if (step) {
-        // Usa token centralizado para estado
-        const estadoToken = getEstadoToken(step.estado);
-        replyContent = `🛡️ *PROTOCOLO ${stepNumberToFind}*\n\n*${step.title}*\n\n${step.description}\n\n_Estado actual: ${estadoToken.icon} ${estadoToken.label}_`;
-      } else {
-        replyContent = `⚠️ Lo siento, el protocolo *${stepNumberToFind}* no está en mi base de datos actual. ¿Deseas ver el menú de nuevo?`;
-      }
-    }
-    else if (/(listo|ok|hecho|entendido|gracias|aplicar)/i.test(cleanInput)) {
-      replyContent = `✅ *Excelente.* He marcado la acción como "En Proceso" en el sistema central. El Score de Riesgo se recalculará automáticamente tras la próxima auditoría.`;
-    }
-    else if (/(menu|menú|ayuda|help|opciones)/i.test(cleanInput)) {
-      const menuSteps = safeSteps.map((s, i) => {
-        const num = s.step_number || i + 1;
-        const token = getEstadoToken(s.estado);
-        return `🔹 *${num}* - ${s.title} ${token.icon}`;
-      }).join("\n");
-      replyContent = `📋 *MENÚ DE PROTOCOLOS*\n\n${menuSteps || "_Sin protocolos disponibles_"}\n\nEscribe el *número* para ver detalles.`;
-    }
-    else {
-      replyContent = "No comprendo esa instrucción. Por favor, escribe el *número* de la acción que deseas ejecutar, o escribe *menú* para ver opciones.";
-    }
-
-    const botMsg: ChatMessage = {
-      id: Date.now().toString(),
-      role: "system",
-      content: replyContent,
-      timestamp: getCurrentTime()
-    };
-
-    setMessages(prev => [...prev, botMsg]);
-    setIsTyping(false);
-  };
-
-  useEffect(() => {
-    if (safeMessages.length === 0) return;
-    let isCancelled = false;
-
-    const runSequence = async () => {
-      setMessages([]);
-      const dbNotification = safeMessages[0];
-      const notificationText = dbNotification.message || dbNotification.text || "Alerta de riesgo detectada";
-      const impactText = dbNotification.impact || "Impacto en evaluación";
-
-      await new Promise(r => setTimeout(r, 1000));
-      if (isCancelled) return;
-
-      const msg1: ChatMessage = {
-        id: "sys-1",
-        role: "system",
-        content: `🚨 *ALERTA DE RIESGO*\n\n${notificationText}\n\n📉 Impacto Proyectado: *${impactText}*`,
-        timestamp: getCurrentTime()
-      };
-      setMessages([msg1]);
-
-      setIsTyping(true);
-      await new Promise(r => setTimeout(r, 2000));
-      if (isCancelled) return;
+    setBotStatus("escribiendo...");
+    
+    setTimeout(() => {
       setIsTyping(false);
-
-      const menuSteps = safeSteps.map((s, i) => {
-        const num = s.step_number || i + 1;
-        const token = getEstadoToken(s.estado);
-        return `🔹 *${num}* - ${s.title} ${token.icon}`;
-      }).join("\n");
-
-      const msg2: ChatMessage = {
-        id: "sys-2",
-        role: "system",
-        content: `🤖 *Asistente SmartDash*\n\nHe diseñado un plan de acción inmediato. Selecciona una opción para ver detalles:\n\n${menuSteps || "_Cargando protocolos..._"}\n\n¿Por cuál deseas comenzar?`,
+      setBotStatus("en línea");
+      setMensajes(prev => [...prev, {
+        id: crypto.randomUUID(),
+        texto: text,
+        sender: "bot",
         timestamp: getCurrentTime()
-      };
-      setMessages(prev => [...prev, msg2]);
-    };
+      }]);
+      if (nextAction) nextAction();
+    }, delay);
+  }, []);
 
-    runSequence();
-    return () => { isCancelled = true; };
-  }, [safeMessages, safeSteps]);
+  // Iniciar flujo automáticamente al cargar datos
+  useEffect(() => {
+    if (data && step === 0) {
+      setStep(1);
+      addBotMessage(`🤖 SmartDash IA ha detectado señales críticas para ${data.nombre_cliente}.`, 1000, () => {
+        setTimeout(() => {
+          const signalText = `📊 Señales detectadas:\n🔥 ${data.signals?.detalle || 'Runway crítico'}\n${data.signals?.indicadores?.map((i: string) => `• ${i}`).join("\n")}\n\nOpciones:\n1 → Continuar\n0 → Salir`;
+          addBotMessage(signalText, 1500);
+        }, 800);
+      });
+    }
+  }, [data, step, addBotMessage]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  // 4. Manejo de Interacción del Usuario (Simulación de demo)
+  const handleAction = () => {
+    if (isTyping || step >= 6) return;
 
-    const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      role: "user",
-      content: input,
-      timestamp: getCurrentTime()
-    };
-    setMessages(prev => [...prev, userMsg]);
-    setInput("");
-    handleBotResponse(input);
+    let responseText = "";
+    if (step === 1) responseText = "1 (Continuar)";
+    else if (step === 2) responseText = "1 (Ver Mitigación)";
+    else if (step === 3) responseText = "1 (Ejecutar Plan)";
+    else if (step === 5) responseText = "1 (Sí, generar informe IA)";
+
+    setInputValue(responseText);
+
+    setTimeout(() => {
+      setMensajes(prev => [...prev, {
+        id: crypto.randomUUID(),
+        texto: responseText,
+        sender: "user",
+        timestamp: getCurrentTime(),
+        status: "read"
+      }]);
+      setInputValue("");
+
+      // Lógica de transición de pasos
+      if (step === 1) {
+        setStep(2);
+        setTimeout(() => {
+          const riesgoText = `⚠️ Escenario de Riesgo:\n\n${data.escenario}\nNivel: ${data.nivel_riesgo}\nScore: ${data.puntaje_global}\nMonto en riesgo: ${data.monto_en_riesgo}\n\nOpciones:\n1 → Ver Mitigación\n0 → Salir`;
+          addBotMessage(riesgoText, 1500);
+        }, 800);
+      } else if (step === 2) {
+        setStep(3);
+        setTimeout(() => {
+          addBotMessage(`✅ Plan de Mitigación Sugerido:\n${data.recomendacion}\n\nOpciones:\n1 → Ejecutar plan\n0 → Posponer`, 1800);
+        }, 800);
+      } else if (step === 3) {
+        setStep(5);
+        setTimeout(() => {
+          addBotMessage(`🚀 Plan ejecutado para ${data.nombre_cliente}.`, 1000, () => {
+            setTimeout(() => {
+              addBotMessage(`📩 Reporte enviado al email de contacto.\n\n💡 ¿Quieres que la IA genere un informe profundo con más herramientas de mitigación?\n\n1 → Sí, generar\n0 → No`, 1500);
+            }, 800);
+          });
+        }, 800);
+      } else if (step === 5) {
+        setStep(6);
+        setTimeout(() => {
+          addBotMessage(`📝 Generando informe avanzado para ${data.nombre_cliente}...`, 1000, () => {
+            setIsTyping(true);
+            setBotStatus("procesando...");
+            setTimeout(() => {
+              setIsTyping(false);
+              setBotStatus("en línea");
+              addBotMessage("✅ Informe listo. Revisa tu panel principal.", 0);
+            }, 2500);
+          });
+        }, 800);
+      }
+    }, 400);
   };
+
+  if (!data) return <div className="p-8 text-center text-slate-400 animate-pulse">Sincronizando con Fuente de la Verdad...</div>;
 
   return (
-    <div className={cn("flex h-full items-center justify-center p-4", className)}>
-      <div className="relative w-full max-w-[340px] h-[680px] bg-slate-950 rounded-[3rem] p-3 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] border-[4px] border-slate-800 ring-2 ring-slate-900 overflow-hidden">
-        {/* Notch Cover */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-950 rounded-b-2xl z-50 flex items-center justify-center">
-          <div className="w-1.5 h-1.5 rounded-full bg-slate-800 mr-2" />
-          <div className="w-8 h-1 bg-slate-800 rounded-full" />
-        </div>
-
-        <div className="flex flex-col h-full bg-[#efeae2] relative overflow-hidden font-sans rounded-[2.2rem] z-10 border border-slate-900/10">
-          <div className="absolute inset-0 opacity-[0.05] bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-repeat pointer-events-none" />
-
-          {/* Status Bar */}
-          <div className="bg-white/80 backdrop-blur-md px-6 py-2 flex justify-between items-center text-[10px] font-bold text-slate-900 z-20 pt-6">
-            <span>SmartDash</span>
-            <div className="flex items-center gap-1.5">
-              <Signal size={10} strokeWidth={3} />
-              <Wifi size={10} strokeWidth={3} />
-              <div className="relative w-4 h-2 border border-slate-900 rounded-[1px] flex items-center px-[1px]">
-                <div className="h-full w-[80%] bg-slate-900" />
-                <div className="absolute -right-[2px] w-[2px] h-1 bg-slate-900 rounded-r-full" />
-              </div>
-            </div>
+    <div className={cn("flex flex-col h-full w-full bg-[#efeae2] rounded-[18px] overflow-hidden shadow-2xl border border-gray-300 font-sans relative", className)}>
+      
+      {/* Header WhatsApp */}
+      <div className="bg-[#008069] px-4 py-3 flex items-center justify-between shadow-md z-20 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-white p-0.5 overflow-hidden">
+            <img src={data.logo_url} className="w-full h-full object-contain rounded-full" alt="Logo" />
           </div>
-
-          {/* Header */}
-          <div className="flex items-center justify-between px-3 py-2 bg-white/90 backdrop-blur-sm border-b border-slate-200 z-10">
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Avatar className="h-10 w-10 border-2 border-emerald-100 shadow-sm">
-                  <AvatarFallback className="bg-orange-600 text-white"><Bot size={20} className="fill-current" /></AvatarFallback>
-                </Avatar>
-                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white shadow-sm" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-black text-slate-900 text-xs tracking-tight flex items-center gap-1">
-                  SD Audit Bot <CheckCheck className="text-blue-500 h-3 w-3" />
-                </span>
-                <span className="text-[10px] text-emerald-600 font-black uppercase tracking-widest">
-                  {isTyping ? "Escribiendo..." : "Online"}
-                </span>
-              </div>
-            </div>
-            <Button size="icon" variant="ghost" className="text-slate-400 hover:text-orange-600 h-8 w-8">
-              <MoreVertical size={18} />
-            </Button>
-          </div>
-
-          {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 relative z-10 scroll-smooth no-scrollbar">
-            {messages.map((msg) => (
-              <div key={msg.id} className={cn("flex w-full animate-in fade-in slide-in-from-bottom-2 duration-300", msg.role === "user" ? "justify-end" : "justify-start")}>
-                <div className={cn(
-                  "max-w-[85%] rounded-[1.2rem] px-4 py-2.5 shadow-sm text-[13px] leading-tight relative",
-                  msg.role === "user" ? "bg-[#d9fdd3] text-slate-900 rounded-tr-none" : "bg-white text-slate-900 rounded-tl-none"
-                )}>
-                  <div className="whitespace-pre-wrap font-medium">{msg.content}</div>
-                  <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 mt-1 flex justify-end items-center gap-1">
-                    {msg.timestamp} {msg.role === "user" && <CheckCheck size={12} className="text-blue-500" />}
-                  </div>
-                  {/* Bubble Tail */}
-                  <div className={cn("absolute top-0 w-3 h-3 transition-all",
-                    msg.role === "user" ? "-right-1 bg-[#d9fdd3] [clip-path:polygon(100%_0,0_0,0_100%)]" : "-left-1 bg-white [clip-path:polygon(0_0,100%_0,100%_100%)]")}
-                  />
-                </div>
-              </div>
-            ))}
-            {isTyping && (
-              <div className="flex justify-start animate-in fade-in zoom-in-50">
-                <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm flex gap-1 items-center">
-                  <div className="w-1 h-1 bg-slate-300 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <div className="w-1 h-1 bg-slate-300 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <div className="w-1 h-1 bg-slate-200 rounded-full animate-bounce" />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="bg-white/95 backdrop-blur-md p-3 flex items-center gap-2 z-10 pb-8 border-t border-slate-100">
-            <div className="flex-1 bg-slate-50 rounded-2xl flex items-center px-4 py-2 border border-slate-200 shadow-inner group transition-all focus-within:ring-2 focus-within:ring-orange-500/20">
-              <Input
-                className="border-0 shadow-none focus-visible:ring-0 h-6 px-0 text-[13px] bg-transparent placeholder:text-slate-400 font-medium"
-                placeholder="Responder protocolo..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              />
-            </div>
-            <Button
-              size="icon"
-              className={cn("rounded-full h-10 w-10 transition-all shadow-md shrink-0",
-                input.trim() ? "bg-orange-600 hover:bg-orange-700 text-white rotate-0 scale-100" : "bg-slate-100 text-slate-400 rotate-[-45deg] scale-90")}
-              onClick={handleSend}
-              disabled={!input.trim()}
-            >
-              <Send size={16} className={cn(input.trim() ? "ml-0.5" : "")} />
-            </Button>
+          <div className="flex flex-col text-white">
+            <span className="font-semibold text-[15px] leading-tight">SmartDash IA</span>
+            <span className="text-[11px] opacity-90 leading-tight">{botStatus}</span>
           </div>
         </div>
+        <div className="flex items-center gap-4 text-white/90">
+          <Search size={18} />
+          <MoreVertical size={18} />
+        </div>
+      </div>
+
+      {/* Cuerpo del Chat */}
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-4 space-y-3 relative"
+        style={{ backgroundImage: "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')", backgroundBlendMode: "overlay" }}
+      >
+        {mensajes.map((m) => (
+          <div key={m.id} className={cn("flex w-full", m.sender === "user" ? "justify-end" : "justify-start")}>
+            <div className={cn(
+              "max-w-[85%] px-3 py-1.5 rounded-lg shadow-sm text-[14.2px] leading-[19px] relative",
+              m.sender === "user" ? "bg-[#dcf8c6] rounded-tr-none" : "bg-white rounded-tl-none"
+            )}>
+              <span className={cn("absolute top-0 w-0 h-0 border-[6px] border-transparent", m.sender === "user" ? "-right-1.5 border-t-[#dcf8c6] border-l-[#dcf8c6]" : "-left-1.5 border-t-white border-r-white")}></span>
+              <p className="whitespace-pre-wrap text-slate-800">{m.texto}</p>
+              <div className="flex items-center justify-end gap-1 mt-1 -mb-1 opacity-50">
+                <span className="text-[10px] uppercase">{m.timestamp}</span>
+                {m.sender === "user" && <CheckCheck size={14} className="text-blue-500" />}
+              </div>
+            </div>
+          </div>
+        ))}
+        {isTyping && (
+          <div className="flex justify-start">
+            <div className="bg-white px-4 py-3 rounded-lg rounded-tl-none shadow-sm flex items-center gap-1">
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer / Input */}
+      <div className="bg-[#f0f2f5] px-3 py-2 flex items-center gap-2 border-t border-gray-300 z-20 shrink-0">
+        <Smile size={24} className="text-gray-500 cursor-pointer" />
+        <Paperclip size={22} className="text-gray-500 cursor-pointer" />
+        <div 
+          onClick={handleAction}
+          className="flex-1 bg-white rounded-lg px-4 py-2 text-sm shadow-sm flex items-center h-10 cursor-pointer"
+        >
+          {inputValue ? <span className="text-slate-900">{inputValue}</span> : <span className="text-gray-400">Escribe un mensaje...</span>}
+        </div>
+        <button 
+          onClick={handleAction}
+          disabled={step >= 6 || isTyping}
+          className={cn("p-2.5 rounded-full shadow-sm", (inputValue || step < 6) ? "bg-[#008069] text-white" : "text-gray-500")}
+        >
+          {(inputValue || step < 6) ? <Send size={20} className="ml-0.5" /> : <Mic size={22} />}
+        </button>
       </div>
     </div>
   );
-}
+};
