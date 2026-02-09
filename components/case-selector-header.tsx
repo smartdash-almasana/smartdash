@@ -49,41 +49,30 @@ export function CaseSelectorHeader({
 
   return (
     <header className="sticky top-0 z-[60] bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
-        {/* LADO IZQUIERDO: LOGO CLIENTE */}
-        <div className="flex items-center gap-4">
+      <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+        {/* LADO IZQUIERDO: ACCESO RÁPIDO / HOME */}
+        <div className="flex-1 flex justify-start">
           <Link
-            href="/demo"
-            className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-lg"
+            href="/dashboard"
+            className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-lg hover:bg-orange-600 transition-colors"
           >
             <Target size={20} />
           </Link>
-          <div className="h-8 w-[1px] bg-slate-200 mx-2" />
-          <div className="flex items-center gap-3">
-            <img
-              src={clienteLogo}
-              alt={clienteNombre}
-              className="w-8 h-8 rounded-lg object-contain bg-slate-50 p-1"
-            />
-            <span className="font-black text-slate-900 tracking-tight">
-              {clienteNombre}
-            </span>
-          </div>
         </div>
 
-        {/* CENTRO: SELECTOR DE ESCENARIOS (MEGAMENÚ) */}
-        <div className="relative">
+        {/* CENTRO: SELECTOR DE ESCENARIOS (PROTAGONISTA) */}
+        <div className="relative flex-none">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center gap-2 md:gap-4 px-3 md:px-5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-500 transition-all group"
+            className="flex items-center gap-2 md:gap-4 px-4 md:px-6 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-500 transition-all group shadow-sm"
           >
             <div
               className={cn(
-                "w-2 h-2 rounded-full",
+                "w-2 h-2 rounded-full flex-shrink-0",
                 getRiskStyles(currentCaso.nivel_riesgo),
               )}
             />
-            <span className="text-sm font-bold text-slate-700 truncate max-w-[150px] md:max-w-none">
+            <span className="text-sm font-bold text-slate-700 truncate max-w-[130px] sm:max-w-[200px] md:max-w-none">
               Escenario: {currentCaso.escenario}
             </span>
             <ChevronDown
@@ -94,20 +83,20 @@ export function CaseSelectorHeader({
             />
           </button>
 
-          {/* EL MEGAMENÚ */}
+          {/* EL MEGAMENÚ (RESPONSIVE) */}
           {isOpen && (
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[90vw] md:w-[600px] bg-white rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] border border-slate-100 p-8 animate-in fade-in zoom-in-95 duration-200">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[90vw] md:w-[600px] bg-white rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] border border-slate-100 p-6 md:p-8 animate-in fade-in zoom-in-95 duration-200">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 px-2">
-                Escenarios Detectados para este Cliente
+                Escenarios Detectados
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
                 {casos.map((caso) => {
                   const isActive = caso.captura_id === currentCaso.captura_id;
                   return (
                     <Link
                       key={caso.captura_id}
-                      href={`/demo/casos/${caso.captura_id}`}
+                      href={`/dashboard/casos/${caso.captura_id}`}
                       onClick={() => setIsOpen(false)}
                       className={cn(
                         "p-4 rounded-3xl border transition-all flex flex-col gap-3 group",
@@ -150,13 +139,15 @@ export function CaseSelectorHeader({
           )}
         </div>
 
-        {/* LADO DERECHO: ACCIÓN RÁPIDA */}
-        <Link
-          href="/demo"
-          className="hidden md:block text-xs font-bold text-slate-500 hover:text-orange-600 transition-colors uppercase tracking-widest"
-        >
-          Volver al Panel
-        </Link>
+        {/* LADO DERECHO: ESPACIADOR O BOTÓN CERRAR */}
+        <div className="flex-1 flex justify-end">
+          <Link
+            href="/demo"
+            className="hidden md:block text-[10px] font-black text-slate-400 hover:text-orange-600 transition-colors uppercase tracking-widest"
+          >
+            Volver
+          </Link>
+        </div>
       </div>
 
       {/* OVERLAY PARA CERRAR EL MENÚ */}
