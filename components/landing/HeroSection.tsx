@@ -87,7 +87,7 @@ export default function HeroSection() {
                         <div className="absolute inset-0 bg-[#FF5733]/20 blur-3xl rounded-full opacity-50 scale-110 -z-10"></div>
 
                         <img
-                            src="/assets/hero-final.jpg"
+                            src="/images/vendedor9.webp"
                             alt="Vendedor argentino salvado por alerta WhatsApp de SmartDash"
                             className="relative z-10 w-full max-w-lg lg:max-w-none h-auto object-cover rounded-2xl shadow-2xl border border-white/10 hover:shadow-[#FF5733]/20 transition-shadow duration-500 lg:-mr-8"
                         />
