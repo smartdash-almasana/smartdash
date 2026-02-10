@@ -1,0 +1,21 @@
+name: Test de Motores SmartDash
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  verificar_cuenta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Saludo del Sistema
+        run: |
+          echo "🚀 Iniciando SmartDash en cuenta almasana..."
+          echo "✅ Entorno Linux listo."
+          echo "✅ GitHub Actions desbloqueado."
+
+      - name: Verificar Python
+        run: python --version
