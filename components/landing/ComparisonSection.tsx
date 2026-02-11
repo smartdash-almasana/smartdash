@@ -1,5 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertCircle, CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -9,10 +14,12 @@ export default function ComparisonSection() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-[#002D5E]">
-            Una semana operando a ciegas vs. teniendo un vigilante que cuida tu plata
+            Una semana operando a ciegas vs. teniendo un vigilante que cuida tu
+            capital
           </h2>
           <p className="text-slate-600 max-w-3xl mx-auto text-lg">
-            Esto no es teoría. Es lo que les pasa a miles de vendedores de Mercado Libre todos los meses. Elegí en qué lado querés estar.
+            Esto no es teoría. Es lo que les pasa a miles de vendedores de
+            Mercado Libre todos los meses. Elegí en qué lado querés estar.
           </p>
         </div>
 
@@ -30,34 +37,37 @@ export default function ComparisonSection() {
               <div className="space-y-6">
                 <div className="border-l-4 border-red-600 pl-5">
                   <p className="font-bold text-white text-lg">
-                    Lunes – Quiebre de stock que no viste venir
+                    Lunes – Falta de stock inesperada
                   </p>
                   <p className="text-red-200 text-sm mt-1 mb-2">
-                    El producto que más vendés se agotó el finde. Seguís recibiendo pedidos, los cancelás y la reputación se te va al carajo.
+                    El producto que más vendés se agotó el finde. Seguís
+                    recibiendo pedidos, los cancelás y la reputación se te va al
+                    carajo.
                   </p>
                   <p className="text-red-400 font-bold bg-red-950/50 inline-block px-2 py-1 rounded border border-red-900/50">
-                    💸 Se te fueron $3.200 en ventas + reputación rota
+                    💸 Pérdida de $320.000.- en ventas y reputación
                   </p>
                 </div>
 
                 <div className="border-l-4 border-red-600 pl-5">
                   <p className="font-bold text-white text-lg">
-                    Miércoles – Las ventas que se te escaparon
+                    Miércoles – Pérdida de oportunidades de venta
                   </p>
                   <p className="text-red-200 text-sm mt-1 mb-2">
-                    Bajaron 40% de golpe. Te das cuenta dos semanas después cuando mirás el reporte de Mercado Libre.
+                    Bajaron 40% de golpe. Te das cuenta dos semanas después
+                    cuando mirás el reporte de Mercado Libre.
                   </p>
                   <p className="text-red-400 font-bold bg-red-950/50 inline-block px-2 py-1 rounded border border-red-900/50">
-                    💸 $7.800 que terminaron en el competidor
+                    💸 $780.000 desviados hacia competidores
                   </p>
                 </div>
 
                 <div className="border-l-4 border-red-600 pl-5">
                   <p className="font-bold text-white text-lg">
-                    Viernes – El bloqueo que te arruina el finde
+                    El bloqueo que genera ansiedad
                   </p>
                   <p className="text-red-200 text-sm mt-1 mb-2">
-                    Mercado Libre te suspende la cuenta por reclamos. Te llega el mail justo cuando arrancaba el fin de semana fuerte.
+                    Mercado Libre suspende la cuenta por reclamos acumulados.
                   </p>
                   <p className="text-red-400 font-bold bg-red-950/50 inline-block px-2 py-1 rounded border border-red-900/50">
                     💸 $15.000+ que se evaporaron de un día para el otro
@@ -69,7 +79,8 @@ export default function ComparisonSection() {
                     Todo el fin de semana
                   </p>
                   <p className="text-red-200 text-sm mt-1 mb-2">
-                    Llamados, mails a soporte, estrés total. No pegás un ojo pensando que la próxima factura no entra.
+                    Llamados, mails a soporte, estrés total. No pegás un ojo
+                    pensando que la próxima factura no entra.
                   </p>
                   <p className="text-red-400 font-bold bg-red-950/50 inline-block px-2 py-1 rounded border border-red-900/50">
                     😰 El estrés que nadie te paga
@@ -79,7 +90,8 @@ export default function ComparisonSection() {
 
               <div className="pt-6 border-t border-red-900/50 mt-4">
                 <p className="text-lg font-bold text-red-400 text-center">
-                  Total en una semana: más de $26.000 perdidos + noches sin dormir
+                  Total en una semana: más de $26.000 perdidos + noches sin
+                  dormir
                 </p>
               </div>
             </CardContent>
@@ -98,34 +110,37 @@ export default function ComparisonSection() {
               <div className="space-y-6">
                 <div className="border-l-4 border-emerald-500 pl-5">
                   <p className="font-bold text-white text-lg">
-                    Lunes 9:30 AM – WhatsApp
+                    Lunes 9:30 AM – Alerta por WhatsApp
                   </p>
                   <p className="text-emerald-200 text-sm mt-1 mb-2">
-                    “⚠️ Stock crítico: Auriculares Pro quedan solo 5. Reabastecé hoy para no perder ventas.”
+                    "⚠️ Stock crítico: quedan 5 unidades. Reabastecé para evitar
+                    quiebres."
                   </p>
                   <p className="text-emerald-400 font-bold bg-emerald-950/50 inline-block px-2 py-1 rounded border border-emerald-900/50 flex items-center gap-2">
-                    ✅ Llamás al proveedor y lo resolvés al toque
+                    ✅ Contactás al proveedor y resolvés el faltante
                   </p>
                 </div>
 
                 <div className="border-l-4 border-emerald-500 pl-5">
                   <p className="font-bold text-white text-lg">
-                    Miércoles 2 PM – WhatsApp
+                    Miércoles 2 PM – Notificación por WhatsApp
                   </p>
                   <p className="text-emerald-200 text-sm mt-1 mb-2">
-                    “📉 Ventas bajaron 38% vs lo habitual. Mirá precios o competencia antes de que sea tarde.”
+                    "📉 Ventas bajaron 38% vs lo habitual. Revisá precios y
+                    competencia."
                   </p>
                   <p className="text-emerald-400 font-bold bg-emerald-950/50 inline-block px-2 py-1 rounded border border-emerald-900/50 flex items-center gap-2">
-                    ✅ Bajás precios 10% y recuperás el terreno
+                    ✅ Ajustás precios y recuperás competitividad
                   </p>
                 </div>
 
                 <div className="border-l-4 border-emerald-500 pl-5">
                   <p className="font-bold text-white text-lg">
-                    Viernes 11 AM – WhatsApp
+                    Viernes 11 AM – Notificación por WhatsApp
                   </p>
                   <p className="text-emerald-200 text-sm mt-1 mb-2">
-                    “⚠️ Reclamos al límite. Si sube más, ML te suspende. Mejorá envíos hoy.”
+                    "⚠️ Reclamos al límite. Riesgo de suspensión. Revisión de
+                    envíos recomendada."
                   </p>
                   <p className="text-emerald-400 font-bold bg-emerald-950/50 inline-block px-2 py-1 rounded border border-emerald-900/50 flex items-center gap-2">
                     ✅ Hablás con el courier y evitás el bloqueo
@@ -137,17 +152,18 @@ export default function ComparisonSection() {
                     Todo el fin de semana
                   </p>
                   <p className="text-emerald-200 text-sm mt-1 mb-2">
-                    Tranquilidad total. Sabés que está todo controlado. Salís con la familia sin mirar el celu cada 5 minutos.
+                    Trabajás con tranquilidad, sabiendo que el riesgo está
+                    controlado.
                   </p>
                   <p className="text-emerald-400 font-bold bg-emerald-950/50 inline-block px-2 py-1 rounded border border-emerald-900/50 flex items-center gap-2">
-                    😌 Dormís como un bebé
+                    Dormís tranquilo
                   </p>
                 </div>
               </div>
 
               <div className="pt-6 border-t border-emerald-900/50 mt-4">
                 <p className="text-lg font-bold text-emerald-400 text-center">
-                  Total salvado: más de $26.000 + noches tranquilas
+                  Impacto evitado: $260.000
                 </p>
               </div>
             </CardContent>
@@ -157,7 +173,7 @@ export default function ComparisonSection() {
         {/* ROI + CTA fuerte */}
         <div className="mt-16 p-6 sm:p-10 rounded-2xl bg-slate-900 text-white text-center shadow-2xl">
           <h3 className="text-3xl lg:text-4xl font-bold mb-6">
-            Pagás una miseria y evitás perder miles todos los meses
+            Con una inversión muy baja, evitás pérdidas muy altas.
           </h3>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-8">
             <div>
@@ -172,7 +188,9 @@ export default function ComparisonSection() {
                 Guita que evitás perder
               </p>
               <p className="text-5xl font-bold text-emerald-400">$8.000+</p>
-              <p className="text-sm text-slate-500 mt-1">Promedio mensual de clientes reales</p>
+              <p className="text-sm text-slate-500 mt-1">
+                Promedio mensual de clientes reales
+              </p>
             </div>
             <div>
               <p className="text-slate-400 text-sm mb-2 uppercase tracking-wider font-semibold">
@@ -184,7 +202,8 @@ export default function ComparisonSection() {
           </div>
 
           <p className="text-xl text-slate-300 mb-8 max-w-3xl mx-auto">
-            SmartDash no es un gasto. Es el seguro más barato que vas a tener para tu negocio.
+            SmartDash no es un gasto. Es el seguro más barato que vas a tener
+            para tu negocio.
           </p>
 
           <Link href="/dashboard">

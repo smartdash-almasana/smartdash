@@ -58,7 +58,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-slate-900 selection:bg-[#FF5733]/30">
       <main>
-
         {/* COMPONENTE HERO IMPORTADO */}
         <HeroSection />
         {/* Wizard Form Section */}
@@ -69,12 +68,12 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-6 lg:sticky lg:top-28">
               <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#002D5E]">
-                Diagnóstico GRATIS en 60 segundos:
-                <br />
-                ¿Cuánta plata estás perdiendo sin darte cuenta?
+                Diagnóstico GRATIS en 60 segundos: medí dónde se te va la plata
+                y qué podés ajustar.
               </h2>
               <p className="text-lg text-slate-600">
-                Respondé 4 preguntas rápidas y te muestro exactamente cómo SmartDash blindaría tu negocio.
+                Respondé 4 preguntas rápidas y te muestro cómo SmartDash reduce
+                riesgos en tu operación.
               </p>
 
               <div className="space-y-4 pt-4">
@@ -115,10 +114,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl lg:text-5xl font-bold text-[#002D5E]">
-                +127 vendedores ya protegen su plata con SmartDash
+                +127 vendedores ya gestionan sus riesgos con SmartDash
               </h2>
               <p className="text-xl text-slate-600 mt-4">
-                Esto no es teoría. Son casos reales de PYMEs y sellers de Mercado Libre.
+                Esto no es teoría. Son casos reales de PYMEs y sellers de
+                Mercado Libre.
               </p>
             </div>
 
@@ -144,13 +144,20 @@ export default function Home() {
                   <CardContent className="pt-8">
                     <div className="flex mb-4">
                       {[...Array(testimonial.stars)].map((_, idx) => (
-                        <Star key={idx} className="h-5 w-5 fill-[#FF5733] text-[#FF5733]" />
+                        <Star
+                          key={idx}
+                          className="h-5 w-5 fill-[#FF5733] text-[#FF5733]"
+                        />
                       ))}
                     </div>
-                    <p className="text-slate-700 italic mb-6">"{testimonial.text}"</p>
+                    <p className="text-slate-700 italic mb-6">
+                      "{testimonial.text}"
+                    </p>
                     <div className="flex items-center gap-3">
                       <div className="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12" />
-                      <p className="font-semibold text-[#002D5E]">{testimonial.name}</p>
+                      <p className="font-semibold text-[#002D5E]">
+                        {testimonial.name}
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
