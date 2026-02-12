@@ -1,43 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
-
-function signState(payload: object, secret: string) {
-    const json = JSON.stringify(payload);
-    const b64 = Buffer.from(json).toString("base64url");
-    const sig = crypto.createHmac("sha256", secret).update(b64).digest("base64url");
-    return `${b64}.${sig}`;
-}
+import { generateState, generateCodeVerifier, generateCodeChallenge } from "@/lib/meli-auth";
 
 export async function GET(req: NextRequest) {
     const appId = process.env.MELI_APP_ID;
-    const redirectUrl = process.env.MELI_REDIRECT_URL;
-    const stateSecret = process.env.MELI_OAUTH_STATE_SECRET;
+    const redirectUri = process.env.MELI_REDIRECT_URI;
 
-    if (!appId || !redirectUrl || !stateSecret) {
+    if (!appId || !redirectUri) {
         return NextResponse.json(
-            { error: "Missing MELI_APP_ID / MELI_REDIRECT_URL / MELI_OAUTH_STATE_SECRET" },
+            { error: "Internal Server Error: Missing app configuration" },
             { status: 500 }
         );
     }
 
-    // opcional: a dónde volver después del callback
-    const next = req.nextUrl.searchParams.get("next") || "/";
+    const state = generateState();
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = generateCodeChallenge(codeVerifier);
 
-    const state = signState(
-        {
-            next,
-            nonce: crypto.randomBytes(16).toString("hex"),
-            ts: Date.now(),
-        },
-        stateSecret
-    );
+    const authUrl = new URL("https://auth.mercadolibre.com.ar/authorization");
+    authUrl.searchParams.set("response_type", "code");
+    authUrl.searchParams.set("client_id", appId);
+    authUrl.searchParams.set("redirect_uri", redirectUri);
+    authUrl.searchParams.set("state", state);
+    authUrl.searchParams.set("code_challenge", codeChallenge);
+    authUrl.searchParams.set("code_challenge_method", "S256");
 
-    const authorizeUrl =
-        `https://auth.mercadolibre.com.ar/authorization` +
-        `?response_type=code` +
-        `&client_id=${encodeURIComponent(appId)}` +
-        `&redirect_uri=${encodeURIComponent(redirectUrl)}` +
-        `&state=${encodeURIComponent(state)}`;
+    const response = NextResponse.redirect(authUrl.toString());
 
-    return NextResponse.redirect(authorizeUrl);
+    // Guardar PKCE y state en cookies seguras
+    const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax" as const,
+        path: "/",
+        maxAge: 600, // 10 minutos
+    };
+
+    response.cookies.set("meli_auth_state", state, cookieOptions);
+    response.cookies.set("meli_code_verifier", codeVerifier, cookieOptions);
+
+    return response;
 }
