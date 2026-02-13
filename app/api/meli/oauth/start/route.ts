@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
     authUrl.searchParams.set("state", state);
     authUrl.searchParams.set("code_challenge", codeChallenge);
     authUrl.searchParams.set("code_challenge_method", "S256");
+    authUrl.searchParams.set("scope", "read write offline_access");
 
     const response = NextResponse.redirect(authUrl.toString());
 
