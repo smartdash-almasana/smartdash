@@ -1,0 +1,55 @@
+{
+    "mcpServers": {
+        "repo-local": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "E:/BuenosPasos/smartd-dashb-clean"
+            ],
+            "env": {}
+        },
+        "mercadolibre-mcp": {
+            "url": "https://mcp.mercadolibre.com/mcp",
+            "env": {
+                "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer TU_TOKEN_AQUI\"}"
+            },
+            "disabled": false,
+            "autoApprove": []
+        },
+        "vercel": {
+            "serverUrl": "https://mcp.vercel.com",
+            "disabled": false,
+            "autoApprove": []
+        },
+        "notion-mcp-server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@notionhq/notion-mcp-server"
+            ],
+            "env": {
+                "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer \", \"Notion-Version\": \"2022-06-28\"}"
+            },
+            "disabled": true
+        },
+        "notebooklm": {
+            "command": "python",
+            "args": [
+                "-m",
+                "notebooklm_mcp.server"
+            ],
+            "env": {}
+        },
+        "supabase-mcp-server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@supabase/mcp-server-supabase@latest",
+                "--access-token",
+                "sbp_26ed4b1823d2759db71d5d40ee033562d92865f6"
+            ],
+            "env": {}
+        }
+    }
+}

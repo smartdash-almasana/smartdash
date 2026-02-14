@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { requireEnv } from "@/lib/env";
 
 export interface MeliToken {
   user_id: string;
@@ -46,12 +47,8 @@ export function isExpired(token: MeliToken): boolean {
  * Refresca el token usando la API de Mercado Libre.
  */
 export async function refreshToken(token: MeliToken): Promise<MeliToken> {
-  const appId = process.env.MELI_APP_ID;
-  const clientSecret = process.env.MELI_CLIENT_SECRET;
-
-  if (!appId || !clientSecret) {
-    throw new Error("Missing MELI_APP_ID or MELI_CLIENT_SECRET");
-  }
+  const appId = requireEnv("MELI_APP_ID");
+  const clientSecret = requireEnv("MELI_CLIENT_SECRET");
 
   if (!token.refresh_token) {
     throw new Error("No refresh token available");

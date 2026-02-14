@@ -1,0 +1,16 @@
+[3468] Using specified callback port: 18999
+[3468] Discovering OAuth server configuration...
+[3468] Discovered authorization server: https://mcp.mercadolibre.com
+[3468] [3468] Connecting to remote server: https://mcp.mercadolibre.com/mcp
+[3468] Using transport strategy: http-first
+[3468] 
+Please authorize this client by visiting:
+https://auth.mercadolibre.com/mcp/authorization?response_type=code&client_id=5872145495751409&code_challenge=eMFHsH2v8FW7L9b7akMjnq8MJUp2wpYoN7FniR5okng&code_challenge_method=S256&redirect_uri=http%3A%2F%2Flocalhost%3A18999%2Foauth%2Fcallback&state=64c7b5d5-6136-4972-8670-5a0b8ac086e4&scope=read+write+offline_access&prompt=consent&resource=https%3A%2F%2Fmcp.mercadolibre.com%2Fmcp
+
+[3468] Browser opened automatically.
+[3468] Authentication required. Initializing auth...
+[3468] Initializing auth coordination on-demand
+[3468] OAuth callback server running at http://127.0.0.1:18999
+[3468] Creating lockfile for server 2e74c532f510dd496c87e1d9146d13e7 with process 3468 on port 18999
+[3468] Authentication required. Waiting for authorization...
+[3468] Cleaning up lockfile for server 2e74c532f510dd496c87e1d9146d13e7
