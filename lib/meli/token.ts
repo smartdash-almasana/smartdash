@@ -57,37 +57,35 @@ export async function refreshToken(token: MeliToken): Promise<MeliToken> {
   params.append("client_secret", clientSecret);
   params.append("refresh_token", token.refresh_token);
 
+  let res: Response;
   try {
-    const res = await fetch("https://api.mercadolibre.com/oauth/token", {
+    res = await fetch("https://api.mercadolibre.com/oauth/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString(),
     });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      const errorMsg = data.message || res.statusText;
-      console.error(`[MELI_TOKEN] Refresh failed for user ${token.user_id}: ${errorMsg}`);
-      // Lanza un error manejado como "managed_auth_error" para que el proxy responda 401
-      throw new Error(`REFRESH_FAILED: ${errorMsg}`);
-    }
-
-    const newExpiresAt = new Date(Date.now() + (data.expires_in - 60) * 1000).toISOString();
-
-    return {
-      ...token,
-      access_token: data.access_token,
-      refresh_token: data.refresh_token || token.refresh_token,
-      expires_at: newExpiresAt,
-      raw: data,
-    };
   } catch (error: any) {
-    if (error.message.startsWith("REFRESH_FAILED")) {
-      throw error;
-    }
     throw new Error(`REFRESH_NETWORK_ERROR: ${error.message}`);
   }
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    const bodyPreview = errorText.substring(0, 200);
+    console.error("meli_refresh_failed", { status: res.status, bodyPreview });
+    // Lanzamos error que inicia con REFRESH_FAILED para que el proxy lo maneje como 401
+    throw new Error(`REFRESH_FAILED: ${res.status} - ${bodyPreview}`);
+  }
+
+  const data = await res.json();
+  const newExpiresAt = new Date(Date.now() + (data.expires_in - 60) * 1000).toISOString();
+
+  return {
+    ...token,
+    access_token: data.access_token,
+    refresh_token: data.refresh_token || token.refresh_token,
+    expires_at: newExpiresAt,
+    raw: data,
+  };
 }
 
 /**

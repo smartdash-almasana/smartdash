@@ -1,74 +1,69 @@
 import { NextRequest } from "next/server";
-import { getActiveToken, isExpired } from "@/lib/meli/token";
-import { supabaseAdmin } from "@/lib/supabase-server";
+import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
-  const envStatus = {
-    hasSupabaseUrl: !!process.env.SUPABASE_URL || !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-    hasServiceRole: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-    hasClientId: !!process.env.MELI_CLIENT_ID || !!process.env.MELI_APP_ID,
-    hasClientSecret: !!process.env.MELI_CLIENT_SECRET
+  // CHECK 1: Runtime Envs
+  const envCheck = {
+    has_SUPABASE_URL: !!process.env.SUPABASE_URL,
+    has_NEXT_PUBLIC_SUPABASE_URL: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    has_SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    has_MELI_CLIENT_ID: !!process.env.MELI_CLIENT_ID,
+    has_MELI_APP_ID: !!process.env.MELI_APP_ID,
+    has_MELI_CLIENT_SECRET: !!process.env.MELI_CLIENT_SECRET,
+    has_MELI_REDIRECT_URI: !!process.env.MELI_REDIRECT_URI
   };
 
-  const supabaseStatus: { canInit: boolean; canSelect: boolean; error?: string } = {
-    canInit: false,
-    canSelect: false
-  };
+  // CHECK 2: Supabase Connectivity
+  let supabaseInitOk = false;
+  let supabaseSelectOk = false;
+  let supabaseError: string | null = null;
+  let tokenStatus = "unknown";
 
   try {
-    // If Admin Client is initialized correctly, it means createClient didn't explode
-    supabaseStatus.canInit = true;
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    // Try a simple select to check connectivity
-    // Using maybeSingle() to avoid error if table is empty but exists
-    const { data, error } = await supabaseAdmin.from("meli_oauth_tokens").select("user_id").limit(1).maybeSingle();
+    if (supabaseUrl && supabaseKey) {
+        const sb = createClient(supabaseUrl, supabaseKey);
+        supabaseInitOk = true;
 
-    if (!error) {
-      supabaseStatus.canSelect = true;
+        const { data, error } = await sb.from("meli_oauth_tokens").select("*").limit(1);
+
+        if (error) {
+            supabaseError = error.message.substring(0, 160);
+        } else {
+            supabaseSelectOk = true;
+            if (data && data.length > 0) {
+                tokenStatus = "present";
+            } else {
+                tokenStatus = "missing_in_db";
+            }
+        }
     } else {
-      console.error("[HEALTH] Supabase select failed:", error.message);
-      supabaseStatus.canSelect = false;
-      supabaseStatus.error = error.message;
+        supabaseError = "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY";
     }
   } catch (e: any) {
-    console.error("[HEALTH] Supabase init or select exception:", e);
-    supabaseStatus.canSelect = false;
-    supabaseStatus.error = e.message || String(e);
+    supabaseError = (e.message || String(e)).substring(0, 160);
   }
 
-  // Token status
-  let tokenStatus = "missing";
-  try {
-    if (supabaseStatus.canSelect) {
-      const token = await getActiveToken();
-      
-      if (token) {
-        if (isExpired(token)) {
-          tokenStatus = "expired";
-        } else {
-          tokenStatus = "valid";
-        }
-      } else {
-        tokenStatus = "missing"; 
-      }
-    }
-  } catch (e) {
-    console.error("[HEALTH] Token check exception:", e);
-    tokenStatus = "check_failed";
-  }
-
-  const ok = envStatus.hasSupabaseUrl && envStatus.hasServiceRole && envStatus.hasClientId && envStatus.hasClientSecret && supabaseStatus.canSelect && (tokenStatus === "valid" || tokenStatus === "expired");
-
-  return new Response(JSON.stringify({
-    ok,
-    env: envStatus,
-    supabase: supabaseStatus,
-    tokenStatus,
+  // Construct final response
+  const responseData = {
+    checks: {
+        env: envCheck,
+        supabase: {
+            init: supabaseInitOk,
+            select: supabaseSelectOk,
+            error: supabaseError
+        },
+        token: tokenStatus
+    },
     timestamp: new Date().toISOString()
-  }), {
-    status: ok ? 200 : 503,
+  };
+
+  return new Response(JSON.stringify(responseData, null, 2), {
+    status: supabaseSelectOk ? 200 : 503,
     headers: { "Content-Type": "application/json" }
   });
 }
