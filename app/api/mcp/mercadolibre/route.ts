@@ -34,7 +34,7 @@ async function handleProxy(req: NextRequest) {
       } catch (e: any) {
         console.error(`[MCP_PROXY_${requestId}] Initial refresh failed:`, e);
         if (e.message.startsWith("REFRESH_FAILED")) {
-           return new Response(`Token refresh failed. Your session might be invalid. Error: ${e.message}`, { status: 401 });
+          return new Response(`Token refresh failed. Your session might be invalid. Error: ${e.message}`, { status: 401 });
         }
         return new Response(`Token refresh network error: ${e.message}`, { status: 502 });
       }
@@ -65,7 +65,7 @@ async function handleProxy(req: NextRequest) {
     const doFetch = async (accessToken: string) => {
       const headers = new Headers(requestHeaders);
       headers.set("Authorization", `Bearer ${accessToken}`);
-      
+
       return fetch(MELI_MCP_URL, {
         method: req.method,
         headers: headers,
@@ -84,29 +84,34 @@ async function handleProxy(req: NextRequest) {
       try {
         const newToken = await refreshToken(token);
         await saveRefreshedToken(newToken);
-        
+
         // Reintentamos
         upstreamRes = await doFetch(newToken.access_token);
         console.log(`[MCP_PROXY_${requestId}] Retry Response: ${upstreamRes.status}`);
       } catch (e: any) {
         console.error(`[MCP_PROXY_${requestId}] Retry refresh failed:`, e);
         if (e.message.startsWith("REFRESH_FAILED")) {
-            return new Response(JSON.stringify({ error: "Token refresh failed during retry (credential invalid)", details: e.message }), { 
-                status: 401,
-                headers: { "Content-Type": "application/json" }
-            });
-        }
-        return new Response(JSON.stringify({ error: "Token refresh network failed during retry", details: e.message }), { 
-            status: 502,
+          return new Response(JSON.stringify({ error: "Token refresh failed during retry (credential invalid)", details: e.message }), {
+            status: 401,
             headers: { "Content-Type": "application/json" }
+          });
+        }
+        return new Response(JSON.stringify({ error: "Token refresh network failed during retry", details: e.message }), {
+          status: 502,
+          headers: { "Content-Type": "application/json" }
         });
       }
     }
 
     // 8. Streaming de la respuesta
+    const responseHeaders = new Headers(upstreamRes.headers);
+    responseHeaders.delete("content-encoding");
+    responseHeaders.delete("content-length");
+    responseHeaders.delete("transfer-encoding");
+
     return new Response(upstreamRes.body, {
       status: upstreamRes.status,
-      headers: upstreamRes.headers,
+      headers: responseHeaders,
     });
 
   } catch (error: any) {
