@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { getActiveToken, isExpired, refreshToken, saveRefreshedToken } from "@/lib/meli/token";
-import { v4 as uuidv4 } from 'uuid';
 
 const MELI_MCP_URL = "https://mcp.mercadolibre.com/mcp";
 
@@ -13,7 +12,7 @@ export async function POST(req: NextRequest) {
 }
 
 async function handleProxy(req: NextRequest) {
-  const requestId = uuidv4();
+  const requestId = crypto.randomUUID();
   console.log(`[MCP_PROXY_${requestId}] Request received: ${req.method} ${req.url}`);
 
   try {
