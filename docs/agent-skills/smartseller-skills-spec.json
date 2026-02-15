@@ -1,0 +1,98 @@
+{
+  "project": "SmartSeller",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "name": "smartseller-schema-migrations",
+      "path": ".agent/skills/smartseller-schema-migrations/SKILL.md",
+      "use_cases": [
+        "Propose schema migration for new clinical scenario",
+        "Create database view for overdue questions trend",
+        "Add index/constraint for performance and integrity"
+      ],
+      "trigger_keywords": [
+        "schema migration",
+        "new view",
+        "add column",
+        "DDL",
+        "registry migration"
+      ],
+      "safety_profile": "read_only_except_explicit_migrations"
+    },
+    {
+      "name": "smartseller-webhook-processor",
+      "path": ".agent/skills/smartseller-webhook-processor/SKILL.md",
+      "use_cases": [
+        "Improve webhook idempotency",
+        "Harden worker retries and locking",
+        "Add processor observability"
+      ],
+      "trigger_keywords": [
+        "webhook processor",
+        "idempotency",
+        "retry",
+        "dedupe",
+        "worker lock"
+      ],
+      "safety_profile": "no_ui_no_destructive_sql"
+    },
+    {
+      "name": "smartseller-clinical-taxonomy-scoring",
+      "path": ".agent/skills/smartseller-clinical-taxonomy-scoring/SKILL.md",
+      "use_cases": [
+        "Add clinical event taxonomy",
+        "Recalibrate severity bands",
+        "Adjust impact scoring formulas"
+      ],
+      "trigger_keywords": [
+        "taxonomy",
+        "severity",
+        "clinical scoring",
+        "threshold",
+        "risk impact"
+      ],
+      "safety_profile": "typed_deterministic_no_breaking_keys"
+    },
+    {
+      "name": "smartseller-health-score-analysis",
+      "path": ".agent/skills/smartseller-health-score-analysis/SKILL.md",
+      "use_cases": [
+        "Analyze health score drivers",
+        "Summarize anomalies",
+        "Explain score delta week-over-week"
+      ],
+      "trigger_keywords": [
+        "health score",
+        "anomaly",
+        "driver analysis",
+        "score drop",
+        "diagnostics"
+      ],
+      "safety_profile": "strict_read_only"
+    },
+    {
+      "name": "smartseller-sql-test-generation",
+      "path": ".agent/skills/smartseller-sql-test-generation/SKILL.md",
+      "use_cases": [
+        "Generate SQL to validate snapshot consistency",
+        "Audit-safe SELECT query pack",
+        "Post-migration verification suite"
+      ],
+      "trigger_keywords": [
+        "SQL tests",
+        "validation queries",
+        "audit query",
+        "consistency checks",
+        "verification"
+      ],
+      "safety_profile": "read_only_sql_assertions"
+    }
+  ],
+  "global_safety_constraints": [
+    "No DROP/DELETE/TRUNCATE operations unless explicitly approved",
+    "All SQL read-only except explicit migration scripts",
+    "No UI modifications when using backend/data skills",
+    "Prefer additive and backward-compatible changes",
+    "Always include verification queries for schema/logic changes"
+  ]
+}

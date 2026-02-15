@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartDash - Clinical Diagnosis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF5C35", // The orange from the original landing
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0A0F1D", // Deep navy/black from context
+                        "surface-dark": "#161D2F",
+                        "accent-blue": "#3B82F6",
+                        "accent-red": "#EF4444",
+                        "accent-amber": "#F59E0B",
+                        "accent-green": "#10B981",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .circular-progress {
+            background: conic-gradient(#10B981 82%, #1e293b 0);
+        }
+        .glass-card {
+            background: rgba(22, 29, 47, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<header class="sticky top-0 z-50 px-6 py-4 flex justify-between items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-icons-round text-white text-xl">shield</span>
+</div>
+<h1 class="font-extrabold text-xl tracking-tight">SmartDash</h1>
+</div>
+<button class="w-10 h-10 rounded-full bg-slate-200 dark:bg-surface-dark flex items-center justify-center">
+<span class="material-icons-round text-slate-600 dark:text-slate-400">notifications</span>
+</button>
+</header>
+<main class="px-5 space-y-8">
+<section class="relative pt-6 flex flex-col items-center">
+<div class="relative w-56 h-56 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full circular-progress opacity-20"></div>
+<div class="absolute inset-4 rounded-full bg-background-light dark:bg-background-dark flex flex-col items-center justify-center border-4 border-accent-green shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+<span class="text-xs font-semibold text-accent-green uppercase tracking-widest mb-1">Immunity</span>
+<span class="text-6xl font-black text-slate-900 dark:text-white">82</span>
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">High Health</span>
+</div>
+</div>
+<div class="mt-6 text-center">
+<h2 class="text-2xl font-bold">Clinical Diagnosis</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Operational systems are stable and protected.</p>
+</div>
+</section>
+<section class="space-y-4">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400">Top Risk Drivers</h3>
+<div class="grid grid-cols-3 gap-3">
+<div class="p-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+<span class="material-icons-round text-accent-red mb-2">speed</span>
+<span class="text-[10px] font-bold uppercase text-slate-400">SLA</span>
+<span class="text-sm font-bold">Critical</span>
+</div>
+<div class="p-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+<span class="material-icons-round text-accent-amber mb-2">hourglass_empty</span>
+<span class="text-[10px] font-bold uppercase text-slate-400">Backlog</span>
+<span class="text-sm font-bold">Pending</span>
+</div>
+<div class="p-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+<span class="material-icons-round text-accent-blue mb-2">trending_up</span>
+<span class="text-[10px] font-bold uppercase text-slate-400">Momentum</span>
+<span class="text-sm font-bold">Optimal</span>
+</div>
+</div>
+</section>
+<section class="p-5 rounded-3xl bg-primary/10 border border-primary/20">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-icons-round text-primary">bolt</span>
+<h3 class="font-bold text-lg text-primary">Urgent Action Window</h3>
+</div>
+<p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                Reputation risk detected in <span class="font-bold">Electronics category</span>. Respond to 4 claims within the next 2 hours to maintain "Platinum" status.
+            </p>
+<button class="mt-4 w-full bg-primary text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/30">
+                Fix Now
+            </button>
+</section>
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400">Active Signals</h3>
+<span class="text-xs font-medium text-primary">View all</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800">
+<div class="w-12 h-12 rounded-full bg-accent-red/10 flex items-center justify-center text-accent-red">
+<span class="material-icons-round">report_problem</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Reputation Alert</h4>
+<p class="text-xs text-slate-500">Unusual surge in cancellations</p>
+</div>
+<span class="material-icons-round text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800">
+<div class="w-12 h-12 rounded-full bg-accent-blue/10 flex items-center justify-center text-accent-blue">
+<span class="material-icons-round">inventory_2</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Stock Protection</h4>
+<p class="text-xs text-slate-500">3 SKUs nearing critical level</p>
+</div>
+<span class="material-icons-round text-slate-300">chevron_right</span>
+</div>
+</div>
+</section>
+<section class="space-y-4">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400">Mitigation Plan</h3>
+<div class="space-y-2">
+<div class="flex items-center gap-3 p-1">
+<div class="w-5 h-5 rounded border-2 border-primary flex items-center justify-center">
+<div class="w-2 h-2 bg-primary rounded-sm"></div>
+</div>
+<span class="text-sm font-medium">Verify API connection with Mercado Libre</span>
+<span class="ml-auto text-[10px] font-bold text-primary uppercase">Now</span>
+</div>
+<div class="flex items-center gap-3 p-1">
+<div class="w-5 h-5 rounded border-2 border-slate-300 dark:border-slate-600"></div>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">Audit logistics backlog</span>
+<span class="ml-auto text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Today</span>
+</div>
+<div class="flex items-center gap-3 p-1 opacity-50">
+<div class="w-5 h-5 rounded border-2 border-slate-300 dark:border-slate-600"></div>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400 text-slate-500">Update pricing margins</span>
+<span class="ml-auto text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Week</span>
+</div>
+</div>
+</section>
+<section class="space-y-6 pb-4">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400">Clinical Course</h3>
+<div class="relative pl-6 space-y-8 border-l-2 border-slate-100 dark:border-slate-800 ml-2">
+<div class="relative">
+<div class="absolute -left-[33px] w-4 h-4 rounded-full bg-accent-green border-4 border-background-light dark:border-background-dark"></div>
+<div>
+<span class="text-[10px] font-bold text-slate-400 uppercase">9:41 AM - Today</span>
+<h4 class="font-bold text-sm mt-1">Immunity Rebound</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                            System successfully mitigated a potential shadow-ban by throttling duplicate inventory syncs. No capital lost.
+                        </p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[33px] w-4 h-4 rounded-full bg-accent-amber border-4 border-background-light dark:border-background-dark"></div>
+<div>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Yesterday</span>
+<h4 class="font-bold text-sm mt-1">Mild Inflammation</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                            Late shipping detected in 2 orders. "Vigilante" mode activated: WhatsApp alerts sent to warehouse team.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 px-6 py-4 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-icons-round">medical_services</span>
+<span class="text-[10px] font-bold uppercase">Diagnosis</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">analytics</span>
+<span class="text-[10px] font-bold uppercase">Signals</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">settings_suggest</span>
+<span class="text-[10px] font-bold uppercase">Control</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">account_circle</span>
+<span class="text-[10px] font-bold uppercase">Profile</span>
+</button>
+</nav>
+
+</body></html>

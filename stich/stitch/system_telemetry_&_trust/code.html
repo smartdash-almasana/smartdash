@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System Telemetry &amp; Trust | SmartDash</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#ff5a36",
+              "background-light": "#f8fafc",
+              "background-dark": "#0f172a",
+              "brand-blue": "#0c3b84",
+              "brand-navy": "#061d41",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+            borderRadius: {
+              DEFAULT: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+<style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .metric-value {
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="h-12 w-full bg-brand-navy dark:bg-black"></div>
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-primary text-2xl">shield</span>
+<span class="font-display font-extrabold text-brand-navy dark:text-white text-xl tracking-tight">SmartDash</span>
+</div>
+<button class="p-2 rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-icons-round text-slate-600 dark:text-slate-300">menu</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto pb-24">
+<section class="bg-brand-navy dark:bg-black text-white px-6 py-10">
+<div class="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full mb-4">
+<span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+<span class="text-xs font-semibold uppercase tracking-wider opacity-90">Live Telemetry Active</span>
+</div>
+<h1 class="text-3xl font-display font-bold leading-tight mb-4">
+                Transparencia total en tu <span class="text-primary">Salud Operativa</span>
+</h1>
+<p class="text-slate-300 text-lg leading-relaxed mb-8">
+                El sistema inmune de SmartDash monitorea cada interacción. No es magia, es una auditoría determinística constante.
+            </p>
+<div class="relative flex flex-col items-center justify-center py-6">
+<div class="w-48 h-48 rounded-full border-8 border-slate-800 flex items-center justify-center relative">
+<div class="absolute inset-0 rounded-full border-8 border-primary border-t-transparent -rotate-45"></div>
+<div class="text-center">
+<span class="metric-value text-5xl font-bold">98.4</span>
+<p class="text-xs uppercase tracking-widest text-slate-400 mt-1 font-bold">Immune Score</p>
+</div>
+</div>
+<div class="absolute bottom-0 right-0 bg-white text-brand-navy px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-xl">
+<span class="material-icons-round text-sm text-green-500">verified_user</span>
+<span class="text-xs font-bold uppercase tracking-tighter">Deterministic Audit</span>
+</div>
+</div>
+</section>
+<section class="px-6 -mt-8">
+<div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Technical Data Sheet</h2>
+<span class="material-icons-round text-slate-400">info_outline</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+<div>
+<p class="text-sm font-medium text-slate-600 dark:text-slate-400">Half-life Hours</p>
+<p class="text-xs text-slate-400 mt-1">Operational decay frequency</p>
+</div>
+<div class="text-right">
+<span class="metric-value text-lg font-bold text-brand-navy dark:text-white">74.2h</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+<div>
+<p class="text-sm font-medium text-slate-600 dark:text-slate-400">Floor Factor</p>
+<p class="text-xs text-slate-400 mt-1">Minimum safety threshold</p>
+</div>
+<div class="text-right">
+<span class="metric-value text-lg font-bold text-brand-navy dark:text-white">0.82</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+<div>
+<p class="text-sm font-medium text-slate-600 dark:text-slate-400">Penalties vs Positives</p>
+<p class="text-xs text-slate-400 mt-1">Raw impact ratio</p>
+</div>
+<div class="text-right">
+<div class="flex flex-col items-end">
+<span class="metric-value text-lg font-bold text-red-500">2</span>
+<span class="metric-value text-xs font-bold text-green-500">412</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-sm font-medium text-slate-600 dark:text-slate-400">Sync Latency</p>
+<p class="text-xs text-slate-400 mt-1">Cloud to App bridge</p>
+</div>
+<div class="text-right">
+<span class="metric-value text-lg font-bold text-brand-navy dark:text-white">124ms</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-6 py-10">
+<div class="bg-brand-blue/5 dark:bg-brand-blue/10 rounded-2xl p-6 border border-brand-blue/10">
+<div class="flex items-start gap-4">
+<div class="bg-brand-blue text-white p-2 rounded-lg">
+<span class="material-icons-round">psychology</span>
+</div>
+<div>
+<h3 class="font-bold text-brand-navy dark:text-white mb-2">Lógica de "Sistema Inmune"</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            SmartDash no solo observa; detecta "patógenos" operativos (como quiebres de stock o demoras en envíos) antes de que afecten tu reputación. El algoritmo proyecta el impacto de cada error en tu facturación mensual.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<section class="px-6 space-y-4">
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+<span class="material-icons-round text-primary">security</span>
+<div>
+<h4 class="font-bold text-sm">Privacidad por diseño</h4>
+<p class="text-xs text-slate-500">Tus datos financieros están encriptados AES-256.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+<span class="material-icons-round text-primary">analytics</span>
+<div>
+<h4 class="font-bold text-sm">Modelos Determinísticos</h4>
+<p class="text-xs text-slate-500">Sin predicciones vacías. Resultados basados en data real.</p>
+</div>
+</div>
+</section>
+<section class="px-6 pt-12 text-center">
+<p class="text-slate-500 text-sm mb-6">Protegiendo a +127 vendedores ahora mismo</p>
+<button class="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all active:scale-[0.98] mb-4">
+                MEJORAR MI HEALTH SCORE
+            </button>
+<p class="text-xs text-slate-400 italic">30 días de prueba sin tarjeta • Cancela cuando quieras</p>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-8 py-4 flex justify-between items-center z-50">
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">grid_view</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-icons-round">query_stats</span>
+<span class="text-[10px] font-bold">Telemetry</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">notifications_none</span>
+<span class="text-[10px] font-bold">Alertas</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">settings</span>
+<span class="text-[10px] font-bold">Config</span>
+</div>
+</nav>
+
+</body></html>

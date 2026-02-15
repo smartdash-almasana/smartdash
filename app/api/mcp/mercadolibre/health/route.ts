@@ -4,6 +4,33 @@ import { createClient } from "@supabase/supabase-js";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  const userId =
+    req.nextUrl.searchParams.get("userId") ??
+    req.nextUrl.searchParams.get("user_id") ??
+    req.headers.get("x-meli-user-id");
+
+  if (!userId) {
+    return new Response(JSON.stringify({
+      error: "missing_context_user_id",
+      message: "Provide userId/user_id query param or x-meli-user-id header."
+    }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  const userIdValue = userId.match(/^\d+$/)?.[0] ?? null;
+
+  if (userIdValue === null) {
+    return new Response(JSON.stringify({
+      error: "invalid_context_user_id",
+      message: "userId must be digits only."
+    }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
   // CHECK 1: Runtime Envs
   const envCheck = {
     has_SUPABASE_URL: !!process.env.SUPABASE_URL,
@@ -27,26 +54,35 @@ export async function GET(req: NextRequest) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (supabaseUrl && supabaseKey) {
-        const sb = createClient(supabaseUrl, supabaseKey);
-        supabaseInitOk = true;
+      const sb = createClient(supabaseUrl, supabaseKey);
+      supabaseInitOk = true;
 
-        const { data, error } = await sb.from("meli_oauth_tokens").select("*").limit(1);
+      let data: any[] | null = null;
+      let error: { message: string } | null = null;
 
-        if (error) {
-            supabaseError = error.message.substring(0, 160);
+      const result = await sb
+        .from("meli_oauth_tokens")
+        .select("*")
+        .eq("user_id", userIdValue)
+        .eq("status", "active");
+      data = result.data;
+      error = result.error;
+
+      if (error) {
+        supabaseError = error.message.substring(0, 160);
+      } else {
+        supabaseSelectOk = true;
+        if (data && data.length > 0) {
+          tokenStatus = "present";
+          if (data[0].refresh_token) {
+            hasRefreshToken = true;
+          }
         } else {
-            supabaseSelectOk = true;
-            if (data && data.length > 0) {
-                tokenStatus = "present";
-                if (data[0].refresh_token) {
-                    hasRefreshToken = true;
-                }
-            } else {
-                tokenStatus = "missing_in_db";
-            }
+          tokenStatus = "missing_in_db";
         }
+      }
     } else {
-        supabaseError = "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY";
+      supabaseError = "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY";
     }
   } catch (e: any) {
     supabaseError = (e.message || String(e)).substring(0, 160);
@@ -55,14 +91,18 @@ export async function GET(req: NextRequest) {
   // Construct final response
   const responseData = {
     checks: {
-        env: envCheck,
-        supabase: {
-            init: supabaseInitOk,
-            select: supabaseSelectOk,
-            error: supabaseError
-        },
-        token: tokenStatus,
-        hasRefreshToken
+      env: envCheck,
+      context: {
+        userIdProvided: true,
+        userIdValue: userIdValue
+      },
+      supabase: {
+        init: supabaseInitOk,
+        select: supabaseSelectOk,
+        error: supabaseError
+      },
+      token: tokenStatus,
+      hasRefreshToken
     },
     timestamp: new Date().toISOString()
   };

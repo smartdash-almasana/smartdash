@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartDash - Detalle de Escenario de Riesgo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF5C35", // The orange from the original landing
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#0F172A",
+                        brand: {
+                            navy: "#0E3172",
+                            darkNavy: "#071D49",
+                            alert: "#DC2626",
+                            success: "#10B981"
+                        }
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .ios-blur { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="h-12 w-full bg-brand-navy dark:bg-brand-darkNavy"></div>
+<nav class="sticky top-0 z-50 bg-brand-navy dark:bg-brand-darkNavy text-white px-4 py-3 flex items-center justify-between shadow-md">
+<button class="flex items-center space-x-1">
+<span class="material-icons-round">chevron_left</span>
+<span class="text-sm font-medium">Volver</span>
+</button>
+<div class="text-center">
+<h1 class="text-xs uppercase tracking-widest font-bold opacity-80">Señal de Riesgo</h1>
+<p class="text-sm font-semibold">Stock Crítico Detectado</p>
+</div>
+<button class="p-2 bg-white/10 rounded-full">
+<span class="material-icons-round text-xl">share</span>
+</button>
+</nav>
+<main class="p-4 space-y-4 pb-24">
+<section class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+<div class="flex items-start justify-between mb-4">
+<div class="bg-red-100 dark:bg-red-900/30 p-2 rounded-xl">
+<span class="material-icons-round text-brand-alert">warning</span>
+</div>
+<div class="bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded-full flex items-center space-x-2">
+<span class="material-icons-round text-xs text-brand-alert">timer</span>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-tighter">Acción requerida: 02:14:45</span>
+</div>
+</div>
+<h2 class="text-xl font-bold mb-2">Pérdida inminente por quiebre de stock</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
+                Detectamos que tu producto estrella <span class="font-bold">"Termo Stanley 1.2L"</span> se agotará en las próximas 4 horas debido a un pico de ventas inusual. El tiempo de reposición de tu proveedor es de 48hs.
+            </p>
+<div class="bg-brand-alert/5 border-l-4 border-brand-alert p-3 rounded-r-lg">
+<p class="text-brand-alert text-sm font-bold flex items-center">
+<span class="material-icons-round text-sm mr-1">trending_down</span>
+                    Impacto estimado: -$450.000 en ventas este fin de semana.
+                </p>
+</div>
+</section>
+<section class="space-y-3">
+<h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Evidencia (Datos de API)</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+<span class="text-[10px] uppercase font-bold text-slate-400">Stock Actual</span>
+<div class="flex items-baseline space-x-1">
+<span class="text-2xl font-bold">5</span>
+<span class="text-xs text-slate-500">unidades</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+<span class="text-[10px] uppercase font-bold text-slate-400">Ventas (Hoy)</span>
+<div class="flex items-baseline space-x-1">
+<span class="text-2xl font-bold text-brand-success">+24</span>
+<span class="text-xs text-brand-success">↑ 140%</span>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Flujo de Inventario (Realtime)</span>
+<span class="text-[10px] bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-slate-500">Meli API v2.4</span>
+</div>
+<div class="h-24 w-full flex items-end space-x-1.5 pb-2">
+<div class="flex-1 bg-slate-200 dark:bg-slate-700 rounded-t h-full"></div>
+<div class="flex-1 bg-slate-200 dark:bg-slate-700 rounded-t h-4/5"></div>
+<div class="flex-1 bg-slate-200 dark:bg-slate-700 rounded-t h-3/5"></div>
+<div class="flex-1 bg-slate-200 dark:bg-slate-700 rounded-t h-2/5"></div>
+<div class="flex-1 bg-brand-alert/40 rounded-t h-1/5 animate-pulse"></div>
+<div class="flex-1 bg-brand-alert/60 rounded-t h-0.5"></div>
+</div>
+<div class="flex justify-between text-[10px] font-medium text-slate-400 border-t border-slate-100 dark:border-slate-700 pt-2">
+<span>10:00 AM</span>
+<span>AHORA</span>
+<span>14:00 PM (Agotado)</span>
+</div>
+</div>
+</section>
+<section class="space-y-3">
+<h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1">Plan de Tratamiento</h3>
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+<div class="divide-y divide-slate-100 dark:divide-slate-700">
+<label class="flex items-center p-4 active:bg-slate-50 dark:active:bg-slate-700/50 transition-colors">
+<input class="w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600 text-brand-success focus:ring-brand-success" type="checkbox"/>
+<div class="ml-4">
+<p class="text-sm font-semibold">Aumentar precio +10% temporalmente</p>
+<p class="text-xs text-slate-500">Ralentiza el drenaje de stock y mejora margen.</p>
+</div>
+</label>
+<label class="flex items-center p-4 active:bg-slate-50 dark:active:bg-slate-700/50 transition-colors">
+<input class="w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600 text-brand-success focus:ring-brand-success" type="checkbox"/>
+<div class="ml-4">
+<p class="text-sm font-semibold">Pausar campañas de Ads</p>
+<p class="text-xs text-slate-500">Ahorra presupuesto en un ítem sin stock.</p>
+</div>
+</label>
+<label class="flex items-center p-4 active:bg-slate-50 dark:active:bg-slate-700/50 transition-colors">
+<input class="w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600 text-brand-success focus:ring-brand-success" type="checkbox"/>
+<div class="ml-4">
+<p class="text-sm font-semibold">Notificar a Proveedor (Urgent)</p>
+<p class="text-xs text-slate-500">Solicitar despacho prioritario.</p>
+</div>
+</label>
+</div>
+</div>
+<div class="bg-slate-900 text-white p-5 rounded-2xl space-y-3">
+<div class="flex items-center space-x-2 text-brand-alert">
+<span class="material-icons-round">gpp_maybe</span>
+<span class="text-xs font-bold uppercase tracking-widest">Riesgo por Inacción</span>
+</div>
+<p class="text-sm text-slate-300 italic">
+                    "Si no actúas ahora, tu publicación perderá el posicionamiento de las primeras 5 páginas en los resultados de búsqueda, afectando tus ventas de las próximas 2 semanas incluso después de reponer stock."
+                </p>
+<div class="pt-2 flex items-center justify-between border-t border-white/10">
+<span class="text-xs text-slate-400">Pérdida de Reputación:</span>
+<span class="text-xs font-bold text-brand-alert">MODERADO</span>
+</div>
+</div>
+</section>
+</main>
+<div class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 ios-blur border-t border-slate-200 dark:border-slate-800 p-4 pb-8 flex space-x-3">
+<button class="flex-1 bg-primary hover:bg-orange-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95 flex items-center justify-center space-x-2">
+<span class="material-icons-round">flash_on</span>
+<span>EJECUTAR MITIGACIÓN</span>
+</button>
+</div>
+<div class="fixed bottom-28 left-4 right-4 bg-slate-800 text-white text-xs font-medium py-3 px-4 rounded-lg flex items-center justify-between opacity-0 translate-y-4 pointer-events-none transition-all" id="toast">
+<span class="flex items-center"><span class="material-icons-round text-sm mr-2 text-brand-success">check_circle</span> Acción registrada en el sistema</span>
+<span class="font-bold text-primary">DESHACER</span>
+</div>
+
+</body></html>

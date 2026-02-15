@@ -1,4 +1,6 @@
 import { AIActionPlan } from "@/lib/domain/risk";
+import { createHttpMcpClient } from "@/lib/bridge/http-mcp-client";
+import { runOpenAIToolLoop } from "@/lib/bridge/openai-tool-loop";
 
 interface AIPlanInput {
   id: string;
@@ -31,12 +33,55 @@ export async function generateMitigationPlan(
   input: AIPlanInput,
 ): Promise<AIActionPlan> {
   const apiKey = process.env.OPENAI_API_KEY;
+  const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+  const supabaseMcpUrl = process.env.SUPABASE_MCP_URL;
 
   if (!apiKey) {
     return OFFLINE_PLAN;
   }
 
   try {
+    if (model.startsWith("gpt-5") && supabaseMcpUrl) {
+      const mcpClient = createHttpMcpClient(supabaseMcpUrl);
+      const finalText = await runOpenAIToolLoop({
+        model,
+        mcpClient,
+        messages: [
+          {
+            role: "system",
+            content: `Eres Chief Risk Officer.
+Devuelve EXCLUSIVAMENTE un JSON válido con la siguiente estructura exacta:
+
+{
+  "rationale": "Explicación breve del riesgo detectado",
+  "immediateSteps": ["Paso 1", "Paso 2", "Paso 3"],
+  "expectedImpact": "Impacto esperado",
+  "riskReductionEstimate": número entre 1 y 100,
+  "suggestedMessage": "Mensaje breve para el cliente"
+}
+
+Si necesitas datos, usa herramientas MCP disponibles.`,
+          },
+          {
+            role: "user",
+            content: JSON.stringify({
+              globalScore: input.globalScore,
+              signals: input.signals,
+              financialContext: input.financialContext,
+              scenarioDescription: input.scenarioDescription,
+              recommendationText: input.recommendationText,
+            }),
+          },
+        ],
+      });
+
+      if (!finalText) {
+        return OFFLINE_PLAN;
+      }
+
+      return JSON.parse(finalText) as AIActionPlan;
+    }
+
     const response = await fetch(
       "https://api.openai.com/v1/chat/completions",
       {
@@ -46,7 +91,7 @@ export async function generateMitigationPlan(
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o-mini",
+          model,
           response_format: { type: "json_object" },
           temperature: 0.5,
           messages: [

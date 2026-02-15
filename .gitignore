@@ -14,7 +14,9 @@ out/
 # ===============================
 # Supabase / SQL dumps
 # ===============================
-supabase-sql/
+# (migrations are tracked, only exclude dumps/backups)
+*.sql.bak
+*.dump
 
 # ===============================
 # Demos / prototipos / pantallas
@@ -37,9 +39,21 @@ pnpm-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
-**/.agent/
+.agent/antigravity/mcp_config.json
+mcp_config.json
+**/mcp_config.json
+.codex/
 .groq
 
+# ===============================
+# AGENT / SECRETS (STRICT)
+# ===============================
+.agent/
+docs/*.txt
+**/*secret*
+**/*apikey*
+**/*api_key*
+**/*token*
 
 # ===============================
 # OS / Editor junk
@@ -52,3 +66,4 @@ pnpm-debug.log*
 # ===============================
 tsconfig.tsbuildinfo
 
+.aider*

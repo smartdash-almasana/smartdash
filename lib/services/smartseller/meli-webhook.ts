@@ -22,7 +22,7 @@ export async function storeMeliWebhookEvent(body: any) {
     const applicationId = body.application_id?.toString() || 'unknown';
 
     try {
-        const { error } = await supabaseAdmin
+        const { data, error } = await supabaseAdmin
             .from('webhook_events')
             .insert({
                 dedupe_key: dedupeKey,
@@ -33,10 +33,12 @@ export async function storeMeliWebhookEvent(body: any) {
                 application_id: applicationId,
                 payload: body,
                 status: 'pending'
-            });
+            })
+            .select()
+            .single();
 
         if (error) {
-            // Si es un error de duplicado (23505), lo ignoramos silenciosamente (ya procesado)
+            // Si es un error de duplicado (23505), lo ignoramos silenciosamente
             if (error.code === '23505') {
                 console.log(`[Webhook] Duplicate event ignored: ${dedupeKey}`);
                 return { success: true, duplicate: true };
@@ -44,7 +46,7 @@ export async function storeMeliWebhookEvent(body: any) {
             throw error;
         }
 
-        return { success: true, dedupeKey };
+        return { success: true, dedupeKey, event: data };
     } catch (error) {
         console.error('[Webhook Error] Failed to store event:', error);
         return { success: false, error };

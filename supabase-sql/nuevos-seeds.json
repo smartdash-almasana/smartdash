@@ -1,0 +1,1268 @@
+[
+    {
+        "captura_id": "12bbe369-cea2-45d9-882f-ce09578fd204",
+        "cliente_id": "f119916c-2870-4aa7-97e3-c950f2ab100b",
+        "escenario_id": "800d1b2f-1a03-4c8e-872d-f6a85744ebd2",
+        "nombre_cliente": "FinTech Pro",
+        "segmento": "Startup",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/fintech.png",
+        "vertical": "Financiero",
+        "escenario": "Agotamiento de Runway - Startup",
+        "descripcion_base": "Fondos insuficientes para mantener operaciones sin nueva ronda de inversión",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 94,
+        "monto_en_riesgo": "ARS 382500000",
+        "recomendacion": "No esperes al desastre, actuá ahora: URGENTE: Reducir burn rate 30% recortando gastos no críticos. Iniciar conversaciones con 5 VCs esta semana. Considerar bridge round de $500K para extender runway 8 meses.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Runway restante: 4.5 meses a burn rate actual",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "fuel",
+            "detalle": "Runway restante: 4.5 meses a burn rate actual",
+            "indicadores": [
+                "Burn rate mensual: $85,000 - perdés guita por esto",
+                "Conversaciones con inversores: 0 activas - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 382500,
+            "moneda": "ARS",
+            "etiqueta": "Fondos restantes proyectados"
+        }
+    },
+    {
+        "captura_id": "d6807292-1b3c-49df-9a7b-f59b056a0f2b",
+        "cliente_id": "fee0f8d7-c6b8-4b7c-8230-aef1f2b1dff3",
+        "escenario_id": "4a42f536-a662-454d-b2fb-2757bd3b3653",
+        "nombre_cliente": "ModaClick Store",
+        "segmento": "E-commerce",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/modaclick.png",
+        "vertical": "Operaciones",
+        "escenario": "Falla en Plataforma de Pago - E-commerce",
+        "descripcion_base": "Problemas técnicos en la pasarela de pago que impiden completar transacciones",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 92,
+        "monto_en_riesgo": "ARS 68000000",
+        "recomendacion": "Urgente, no lo dejes para después: Activar pasarela de respaldo inmediatamente. Escalar ticket crítico con proveedor principal. Comunicar a clientes afectados con cupón de compensación del 15%.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! Pasarela de pago rechazando 45% de transacciones",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "credit-card-off",
+            "detalle": "Pasarela de pago rechazando 45% de transacciones",
+            "indicadores": [
+                "Downtime: 6 horas acumuladas - perdés guita por esto",
+                "Quejas de clientes: 127 - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 68000,
+            "moneda": "ARS",
+            "etiqueta": "Ventas perdidas en últimas 24 horas"
+        }
+    },
+    {
+        "captura_id": "35fc9e52-eff1-4e48-a73c-9442c32a3888",
+        "cliente_id": "763110d5-7edc-46a6-bb7f-7b4aeda3d164",
+        "escenario_id": "2cdce981-498f-45b2-ae9d-42f3ed420adc",
+        "nombre_cliente": "Sofía Moda Córdoba",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Sofía+Moda+Córdoba&background=random&color=fff&size=128",
+        "vertical": "Legal",
+        "escenario": "Datos Clientes Expuestos - E-commerce",
+        "descripcion_base": "Brecha de datos en sitio ML integrado",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 90,
+        "monto_en_riesgo": "ARS 2867665",
+        "recomendacion": "Urgente, no lo dejes para después: URGENTE: Activar protocolo de crisis. Congelar gastos no esenciales y convocar comité de emergencia hoy mismo. Revisar cláusulas de salida en contratos afectados.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Situación insostenible detectada en últimas 24h",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "alert-triangle",
+            "detalle": "Situación insostenible detectada en últimas 24h",
+            "indicadores": [
+                "Caída de ingresos: -45% vs mes anterior - perdés guita por esto",
+                "Quejas de clientes: +200% - perdés guita por esto",
+                "Rotura de stock crítica - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 2867665,
+            "moneda": "ARS",
+            "etiqueta": "Pérdida potencial mensual"
+        }
+    },
+    {
+        "captura_id": "d5b86230-714d-4c9a-94fd-bf556c1442fa",
+        "cliente_id": "1125874d-136d-4d40-be9f-79a43a400fca",
+        "escenario_id": "37e0c7e9-ed68-4c50-9163-54262330cd85",
+        "nombre_cliente": "Laura Méndez - Coach Digital",
+        "segmento": "Creador",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/laura.png",
+        "vertical": "Reputación",
+        "escenario": "Polémica Pública - Creador",
+        "descripcion_base": "Controversia viral que daña la imagen personal y relación con sponsors",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 89,
+        "monto_en_riesgo": "ARS 16500000",
+        "recomendacion": "¡Al toque! Publicar video de aclaración en próximas 12 horas con tono empático. Contactar sponsors directamente explicando contexto. Pausar contenido promocional por 1 semana. Contratar asesor de crisis de comunicación.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! Comentario malinterpretado viral: 2.3M impresiones negativas",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "message-circle-warning",
+            "detalle": "Comentario malinterpretado viral: 2.3M impresiones negativas",
+            "indicadores": [
+                "Menciones negativas: +340% - perdés guita por esto",
+                "Unfollows: 8,500 en 48h - perdés guita por esto",
+                "Sponsors preocupados: 2 - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 15000,
+            "moneda": "ARS",
+            "etiqueta": "Contratos publicitarios en riesgo"
+        }
+    },
+    {
+        "captura_id": "9b08b23e-ff03-42d3-8fb9-c7e62e226db7",
+        "cliente_id": "28b62477-6abb-4310-a51b-f767a5d86939",
+        "escenario_id": "9b42aeb0-a6b1-4bb0-89a4-9ad9270f0a21",
+        "nombre_cliente": "Pedro RRHH Consultora",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Pedro+RRHH+Consultora&background=random&color=fff&size=128",
+        "vertical": "Financiero",
+        "escenario": "Flujo Caja Negativo - Vendedor ML",
+        "descripcion_base": "Déficit de flujo por envíos demorados en ML",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 88,
+        "monto_en_riesgo": "ARS 1130152",
+        "recomendacion": "No esperes al desastre, actuá ahora: URGENTE: Activar protocolo de crisis. Congelar gastos no esenciales y convocar comité de emergencia hoy mismo. Revisar cláusulas de salida en contratos afectados.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Situación insostenible detectada en últimas 24h",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "alert-triangle",
+            "detalle": "Situación insostenible detectada en últimas 24h",
+            "indicadores": [
+                "Caída de ingresos: -45% vs mes anterior - perdés guita por esto",
+                "Quejas de clientes: +200% - perdés guita por esto",
+                "Rotura de stock crítica - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 1130152,
+            "moneda": "ARS",
+            "etiqueta": "Pérdida potencial mensual"
+        }
+    },
+    {
+        "captura_id": "df9fea33-4aa6-4a93-bb88-3e2082ae7b6a",
+        "cliente_id": "4deee7b4-dd1b-45b6-a4da-6931faaf3de4",
+        "escenario_id": "72b2361d-ca83-4df1-a75a-2d9730e7335c",
+        "nombre_cliente": "Martín Influencer Fitness",
+        "segmento": "Creador",
+        "logo_url": "https://ui-avatars.com/api/?name=Martín+Influencer+Fitness&background=random&color=fff&size=128",
+        "vertical": "Financiero",
+        "escenario": "Runway Bajo - Startup Arg",
+        "descripcion_base": "Fondos bajos sin inversión nueva",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 87,
+        "monto_en_riesgo": "ARS 2841427",
+        "recomendacion": "Estás perdiendo guita como loco, frenalo ya: URGENTE: Activar protocolo de crisis. Congelar gastos no esenciales y convocar comité de emergencia hoy mismo. Revisar cláusulas de salida en contratos afectados.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Situación insostenible detectada en últimas 24h",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "alert-triangle",
+            "detalle": "Situación insostenible detectada en últimas 24h",
+            "indicadores": [
+                "Caída de ingresos: -45% vs mes anterior - perdés guita por esto",
+                "Quejas de clientes: +200% - perdés guita por esto",
+                "Rotura de stock crítica - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 2841427,
+            "moneda": "ARS",
+            "etiqueta": "Pérdida potencial mensual"
+        }
+    },
+    {
+        "captura_id": "15727582-55bc-4020-b3eb-5d5798c23c09",
+        "cliente_id": "594562ad-f146-44f7-a205-3118562b95e3",
+        "escenario_id": "3369907f-fadf-4a30-b5f4-1115c0169d86",
+        "nombre_cliente": "Distribuidora San Martín",
+        "segmento": "Pyme",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/sanmartin.png",
+        "vertical": "Financiero",
+        "escenario": "Crisis de Liquidez - Pyme",
+        "descripcion_base": "Disminución abrupta del flujo de caja que compromete la operación diaria y el pago a proveedores",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 87,
+        "monto_en_riesgo": "ARS 9000000",
+        "recomendacion": "Urgente, no lo dejes para después: Negociar extensión de plazos con proveedores principales y activar línea de crédito de emergencia. Implementar cobro anticipado con descuento del 5%.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! Flujo de caja negativo por 3 meses consecutivos",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "alert-triangle",
+            "detalle": "Flujo de caja negativo por 3 meses consecutivos",
+            "indicadores": [
+                "Cuentas por cobrar > 90 días: 42% - perdés guita por esto",
+                "Ratio corriente: 0.8 - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 180000,
+            "moneda": "ARS",
+            "etiqueta": "Déficit de flujo acumulado"
+        }
+    },
+    {
+        "captura_id": "0b6f50ba-cab8-4f76-a630-79346831afdc",
+        "cliente_id": "4deee7b4-dd1b-45b6-a4da-6931faaf3de4",
+        "escenario_id": "abd9dd65-3601-4702-a743-5fb4d3c95fd3",
+        "nombre_cliente": "Martín Influencer Fitness",
+        "segmento": "Creador",
+        "logo_url": "https://ui-avatars.com/api/?name=Martín+Influencer+Fitness&background=random&color=fff&size=128",
+        "vertical": "Financiero",
+        "escenario": "Pérdidas por Stock Quiebre - PYME",
+        "descripcion_base": "Quiebre de stock en productos top generando pérdida de guita en ML",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 85,
+        "monto_en_riesgo": "ARS 1824809",
+        "recomendacion": "No esperes al desastre, actuá ahora: URGENTE: Activar protocolo de crisis. Congelar gastos no esenciales y convocar comité de emergencia hoy mismo. Revisar cláusulas de salida en contratos afectados.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Situación insostenible detectada en últimas 24h",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "alert-triangle",
+            "detalle": "Situación insostenible detectada en últimas 24h",
+            "indicadores": [
+                "Caída de ingresos: -45% vs mes anterior - perdés guita por esto",
+                "Quejas de clientes: +200% - perdés guita por esto",
+                "Rotura de stock crítica - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 1824809,
+            "moneda": "ARS",
+            "etiqueta": "Pérdida potencial mensual"
+        }
+    },
+    {
+        "captura_id": "e61e13ff-a62c-4332-a87d-9679cf0df8d6",
+        "cliente_id": "1125874d-136d-4d40-be9f-79a43a400fca",
+        "escenario_id": "f6b17874-8ac8-4dc9-a667-052e8124029f",
+        "nombre_cliente": "Laura Méndez - Coach Digital",
+        "segmento": "Creador",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/laura.png",
+        "vertical": "Financiero",
+        "escenario": "Cancelación de Sponsor Principal - Creador",
+        "descripcion_base": "Marca importante cancela contrato de patrocinio sin previo aviso",
+        "nivel_riesgo": "Crítico",
+        "puntaje_global": 83,
+        "monto_en_riesgo": "ARS 14850000",
+        "recomendacion": "Ojo con esto, te puede fundir: Activar plan de contingencia: Lanzar pitch a 5 marcas alternativas esta semana. Crear media kit actualizado con estadísticas Q4. Ofrecer paquete de contenido con descuento 20% a nuevos sponsors. Aumentar venta de productos digitales propios para compensar 30% del gap.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! Marca principal canceló contrato trimestral sin renovación",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "handshake",
+            "detalle": "Marca principal canceló contrato trimestral sin renovación",
+            "indicadores": [
+                "Razón: Reestructuración presupuesto marketing - perdés guita por esto",
+                "Contrato: $4,500 EUR/mes - perdés guita por esto",
+                "Sin pipeline de reemplazo inmediato - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 13500,
+            "moneda": "ARS",
+            "etiqueta": "Ingresos perdidos proyectados trimestre"
+        }
+    },
+    {
+        "captura_id": "1ea5de16-0f68-479b-9d88-354bd415d27e",
+        "cliente_id": "5e861789-8d9e-4105-8a28-0b874a1be002",
+        "escenario_id": "497bc683-56cb-4d98-9f66-55c5c7c3e5f7",
+        "nombre_cliente": "Lucía Tiktoker Moda",
+        "segmento": "Creador",
+        "logo_url": "https://ui-avatars.com/api/?name=Lucía+Tiktoker+Moda&background=random&color=fff&size=128",
+        "vertical": "Reputación",
+        "escenario": "Viral Negativo - Creador",
+        "descripcion_base": "Polémica viral dañando imagen en TikTok/IG",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 82,
+        "monto_en_riesgo": "ARS 786240",
+        "recomendacion": "No esperes al desastre, actuá ahora: PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 786240,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "5be67f19-c52b-4ab3-b236-8417cd6981e0",
+        "cliente_id": "f119916c-2870-4aa7-97e3-c950f2ab100b",
+        "escenario_id": "a804d395-5dcd-44ed-8821-28348f1ff3e4",
+        "nombre_cliente": "FinTech Pro",
+        "segmento": "Startup",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/fintech.png",
+        "vertical": "Legal",
+        "escenario": "Acuerdo de Vesting Sin Firmar - Startup",
+        "descripcion_base": "Co-fundadores sin acuerdo formal de vesting de equity, riesgo de disputa futura",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 82,
+        "monto_en_riesgo": "ARS 625000000",
+        "recomendacion": "Estás perdiendo guita como loco, frenalo ya: CRÍTICO: Contratar abogado corporativo especializado en startups esta semana. Proponer vesting standard 4 años con cliff de 1 año. Documentar contribuciones de cada fundador previas. Firmar acuerdos antes de próxima ronda de inversión. Considerar mediador si hay resistencia.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! 2 co-fundadores sin acuerdo de vesting firmado desde hace 8 meses",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "file-badge",
+            "detalle": "2 co-fundadores sin acuerdo de vesting firmado desde hace 8 meses",
+            "indicadores": [
+                "Equity asignado: 25% cada uno - perdés guita por esto",
+                "Sin cliff period definido - perdés guita por esto",
+                "Tensión reciente en discusión estratégica - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 625000,
+            "moneda": "ARS",
+            "etiqueta": "Valor equity potencialmente en disputa (25% @ $2.5M valuation)"
+        }
+    },
+    {
+        "captura_id": "224b716b-738a-492e-84a1-ece2884c4494",
+        "cliente_id": "26e3f542-bef3-4954-8066-d2dcfaee792d",
+        "escenario_id": "f986fe5b-5631-4328-9330-55fd8fb4530b",
+        "nombre_cliente": "PYME Servicios Mendoza",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=PYME+Servicios+Mendoza&background=random&color=fff&size=128",
+        "vertical": "Reputación",
+        "escenario": "Cancelación Sponsor - Creador Argentino",
+        "descripcion_base": "Pérdida de sponsor principal por polémica en redes",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 80,
+        "monto_en_riesgo": "ARS 567133",
+        "recomendacion": "¡Al toque! PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 567133,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "7b20b726-3fd5-4ac9-827a-28ffe10c7e41",
+        "cliente_id": "f119916c-2870-4aa7-97e3-c950f2ab100b",
+        "escenario_id": "453aaa5c-8837-4578-be09-1b159285ec32",
+        "nombre_cliente": "FinTech Pro",
+        "segmento": "Startup",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/fintech.png",
+        "vertical": "Operaciones",
+        "escenario": "Escalabilidad Técnica Limitada - Startup",
+        "descripcion_base": "Arquitectura de software no preparada para crecimiento exponencial, cuellos de botella inminentes",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 80,
+        "monto_en_riesgo": "ARS 180000000",
+        "recomendacion": "La concha, esto es serio: Planificar migración a arquitectura de microservicios en 6 meses: priorizar módulos críticos (payments, auth). Implementar caché con Redis. Escalar bases de datos verticalmente a corto plazo. Contratar arquitecto senior para liderar transición.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monolito alcanzando límites: 200ms latencia promedio, picos de 2 segundos",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "server-crash",
+            "detalle": "Monolito alcanzando límites: 200ms latencia promedio, picos de 2 segundos",
+            "indicadores": [
+                "Base de datos al 78% capacidad - perdés guita por esto",
+                "Costos de infra creciendo 15% mensual - perdés guita por esto",
+                "Caídas parciales: 3 en última semana - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 180000,
+            "moneda": "ARS",
+            "etiqueta": "Inversión estimada en re-arquitectura"
+        }
+    },
+    {
+        "captura_id": "27b94048-f19a-4064-a89f-3ce4136d889e",
+        "cliente_id": "26e3f542-bef3-4954-8066-d2dcfaee792d",
+        "escenario_id": "0cc5aace-a670-466c-a013-7b58adb672f2",
+        "nombre_cliente": "PYME Servicios Mendoza",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=PYME+Servicios+Mendoza&background=random&color=fff&size=128",
+        "vertical": "Operaciones",
+        "escenario": "Pérdida Talento - RRHH Creador",
+        "descripcion_base": "Asistente clave renuncia afectando producción",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 79,
+        "monto_en_riesgo": "ARS 889001",
+        "recomendacion": "¡Al toque! PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 889001,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "395e49b4-5d45-4628-8180-56bb5d018a19",
+        "cliente_id": "594562ad-f146-44f7-a205-3118562b95e3",
+        "escenario_id": "25d4c3af-a628-438f-8431-e390b9a2e1e8",
+        "nombre_cliente": "Distribuidora San Martín",
+        "segmento": "Pyme",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/sanmartin.png",
+        "vertical": "Financiero",
+        "escenario": "Concentración de Clientes - Pyme",
+        "descripcion_base": "Más del 60% de ingresos dependen de 3 clientes o menos, generando vulnerabilidad ante la pérdida de uno",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 79,
+        "monto_en_riesgo": "ARS 22500000",
+        "recomendacion": "Urgente, no lo dejes para después: URGENTE: Agendar reunión con tomadores de decisión del cliente en 48h. Preparar propuesta de valor mejorada con beneficios adicionales. Considerar ajuste de precio estratégico máximo 12% descuento si es necesario para retener.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! Cliente principal notificó posible cambio de proveedor",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "alert-circle",
+            "detalle": "Cliente principal notificó posible cambio de proveedor",
+            "indicadores": [
+                "Reunión urgente solicitada - perdés guita por esto",
+                "Quejas recientes sobre precios - perdés guita por esto",
+                "Competidor ofreciendo 18% descuento - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 450000,
+            "moneda": "ARS",
+            "etiqueta": "Facturación mensual del cliente en riesgo"
+        }
+    },
+    {
+        "captura_id": "3a86c75c-b9b0-4229-a6ac-f0535bb79541",
+        "cliente_id": "fee0f8d7-c6b8-4b7c-8230-aef1f2b1dff3",
+        "escenario_id": "14212ecf-2a71-42ea-8561-4d5055e828f5",
+        "nombre_cliente": "ModaClick Store",
+        "segmento": "E-commerce",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/modaclick.png",
+        "vertical": "Financiero",
+        "escenario": "Caída de Conversión de Ventas - E-commerce",
+        "descripcion_base": "Reducción drástica en la tasa de conversión que impacta directamente los ingresos",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 79,
+        "monto_en_riesgo": "ARS 145000000",
+        "recomendacion": "¡Al toque! Optimizar velocidad del sitio con CDN. Revisar UX del checkout. Implementar pop-ups de recuperación de carrito con descuento del 10%.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! Tasa de conversión cayó de 3.2% a 1.8% en 2 semanas",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tasa de conversión cayó de 3.2% a 1.8% en 2 semanas",
+            "indicadores": [
+                "Abandono de carrito: 78% - perdés guita por esto",
+                "Tiempo de carga: +4 segundos - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 145000,
+            "moneda": "ARS",
+            "etiqueta": "Ingresos mensuales en riesgo"
+        }
+    },
+    {
+        "captura_id": "b6d2b8ca-f415-4d53-86fc-3d1199265d17",
+        "cliente_id": "e639d11c-ac5b-4cbf-92a1-1878e439cd04",
+        "escenario_id": "2b439c61-f259-4c67-9a51-7cd42a489c18",
+        "nombre_cliente": "Ferretería El Amigo",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Ferretería+El+Amigo&background=random&color=fff&size=128",
+        "vertical": "Reputación",
+        "escenario": "Reputación Baja en ML - Vendedor",
+        "descripcion_base": "Calificaciones negativas en Mercado Libre bajando ventas",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 78,
+        "monto_en_riesgo": "ARS 318808",
+        "recomendacion": "Estás perdiendo guita como loco, frenalo ya: PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 318808,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "ff0f5174-0670-4974-a957-7523a8bbefcf",
+        "cliente_id": "cb3c9155-edb8-4d8e-851d-6263ec898c14",
+        "escenario_id": "4a1e719d-2461-4ccc-bafa-04537af7fe93",
+        "nombre_cliente": "Agro PYME La Pampa",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Agro+PYME+La+Pampa&background=random&color=fff&size=128",
+        "vertical": "Operaciones",
+        "escenario": "Suministro Interrumpido - Vendedor ML",
+        "descripcion_base": "Proveedor falla afectando stock en ML",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 77,
+        "monto_en_riesgo": "ARS 810579",
+        "recomendacion": "No esperes al desastre, actuá ahora: PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 810579,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "db25d688-869b-4894-ad8b-ffeb9a785eb9",
+        "cliente_id": "fee0f8d7-c6b8-4b7c-8230-aef1f2b1dff3",
+        "escenario_id": "fbbe60cf-e0c4-4d52-9f8a-5432662d7c64",
+        "nombre_cliente": "ModaClick Store",
+        "segmento": "E-commerce",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/modaclick.png",
+        "vertical": "Legal",
+        "escenario": "Incumplimiento de Ley de Protección al Consumidor - E-commerce",
+        "descripcion_base": "Políticas de devolución, garantías o información de productos no cumplen normativa vigente",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 77,
+        "monto_en_riesgo": "ARS 4250000",
+        "recomendacion": "No esperes al desastre, actuá ahora: URGENTE: Contratar asesor legal especializado en e-commerce. Actualizar términos y condiciones y política de devoluciones a 30 días. Revisar compliance en descripciones de productos. Implementar sello de confianza verificado.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Políticas de garantía en sitio web no cumplen con ley vigente",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "scale",
+            "detalle": "Políticas de garantía en sitio web no cumplen con ley vigente",
+            "indicadores": [
+                "Plazo de devolución: 7 días (ley requiere 30) - perdés guita por esto",
+                "Info de garantías incompleta en 45% de productos - perdés guita por esto",
+                "Riesgo de sanción: PROFECO - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 85000,
+            "moneda": "ARS",
+            "etiqueta": "Multa potencial por incumplimiento"
+        }
+    },
+    {
+        "captura_id": "2268b7c1-4b57-42a3-9bac-d45d3d6c4d00",
+        "cliente_id": "1125874d-136d-4d40-be9f-79a43a400fca",
+        "escenario_id": "28334a12-f17b-45af-8da7-1861868966c7",
+        "nombre_cliente": "Laura Méndez - Coach Digital",
+        "segmento": "Creador",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/laura.png",
+        "vertical": "Financiero",
+        "escenario": "Dependencia de Plataforma Única - Creador",
+        "descripcion_base": "Más del 80% de ingresos dependen de una sola plataforma digital",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 77,
+        "monto_en_riesgo": "ARS 6380000",
+        "recomendacion": "Urgente, no lo dejes para después: Diversificar ingresos urgente: Lanzar canal de YouTube en 30 días. Crear newsletter propia con 1000 suscriptores objetivo. Explorar TikTok y LinkedIn.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! 86% de ingresos provienen exclusivamente de Instagram",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "link",
+            "detalle": "86% de ingresos provienen exclusivamente de Instagram",
+            "indicadores": [
+                "Alcance orgánico: -22% vs mes anterior - perdés guita por esto",
+                "Cambios en algoritmo: Alto impacto - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 5800,
+            "moneda": "ARS",
+            "etiqueta": "Ingresos mensuales en riesgo"
+        }
+    },
+    {
+        "captura_id": "431f949e-0e68-458a-8e77-38402f399217",
+        "cliente_id": "6a9dfabd-6c73-481f-8be5-cfe70c321e95",
+        "escenario_id": "13485344-4426-4a80-8247-c77eb30b60c2",
+        "nombre_cliente": "Tienda Deportes GBA",
+        "segmento": "E-commerce",
+        "logo_url": "https://ui-avatars.com/api/?name=Tienda+Deportes+GBA&background=random&color=fff&size=128",
+        "vertical": "Legal",
+        "escenario": "Incumplimiento Laboral - RRHH PYME",
+        "descripcion_base": "Falta de contratos formales generando riesgos legales en RRHH",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 76,
+        "monto_en_riesgo": "ARS 608079",
+        "recomendacion": "Estás perdiendo guita como loco, frenalo ya: PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 608079,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "36630219-74e4-4b08-ab81-dbe311cbb4b4",
+        "cliente_id": "594562ad-f146-44f7-a205-3118562b95e3",
+        "escenario_id": "25d4c3af-a628-438f-8431-e390b9a2e1e8",
+        "nombre_cliente": "Distribuidora San Martín",
+        "segmento": "Pyme",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/sanmartin.png",
+        "vertical": "Financiero",
+        "escenario": "Concentración de Clientes - Pyme",
+        "descripcion_base": "Más del 60% de ingresos dependen de 3 clientes o menos, generando vulnerabilidad ante la pérdida de uno",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 76,
+        "monto_en_riesgo": "ARS 41000000",
+        "recomendacion": "No esperes al desastre, actuá ahora: Desarrollar plan de diversificación comercial urgente: contactar 10 prospectos nuevos de tamaño medio. Ofrecer descuentos de penetración 10-15% a 3 clientes nuevos. Crear incentivos para referidos desde clientes actuales.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! 68% de facturación concentrada en 2 clientes corporativos",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "users-round",
+            "detalle": "68% de facturación concentrada en 2 clientes corporativos",
+            "indicadores": [
+                "Cliente A: 42% de ingresos - perdés guita por esto",
+                "Cliente B: 26% de ingresos - perdés guita por esto",
+                "Renovación Cliente A en 60 días - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 820000,
+            "moneda": "ARS",
+            "etiqueta": "Ingresos anuales en riesgo por concentración"
+        }
+    },
+    {
+        "captura_id": "513ad533-e292-4720-be83-2ed4acf150a5",
+        "cliente_id": "fee0f8d7-c6b8-4b7c-8230-aef1f2b1dff3",
+        "escenario_id": "5d2844ef-161e-4a1a-a22c-2b65ba9cdf0e",
+        "nombre_cliente": "ModaClick Store",
+        "segmento": "E-commerce",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/modaclick.png",
+        "vertical": "Reputación",
+        "escenario": "Reseñas Negativas Masivas - E-commerce",
+        "descripcion_base": "Oleada de calificaciones bajas en Google, Trustpilot o marketplaces que afectan conversión",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 76,
+        "monto_en_riesgo": "ARS 42000000",
+        "recomendacion": "Ojo con esto, te puede fundir: Lanzar campaña de recuperación de reputación: contactar clientes insatisfechos y ofrecer soluciones. Implementar programa de incentivos para reseñas positivas (cupón post-compra). Mejorar control de calidad con proveedor. Responder TODAS las reseñas negativas en 24h con solución concreta.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! Calificación promedio cayó de 4.3 a 3.1 estrellas en Google",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "star-off",
+            "detalle": "Calificación promedio cayó de 4.3 a 3.1 estrellas en Google",
+            "indicadores": [
+                "127 reseñas nuevas negativas en 2 semanas - perdés guita por esto",
+                "Quejas principales: Calidad producto (58%), Atención (32%) - perdés guita por esto",
+                "Tráfico orgánico: -23% - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 42000,
+            "moneda": "ARS",
+            "etiqueta": "Ventas proyectadas perdidas por mala reputación"
+        }
+    },
+    {
+        "captura_id": "28cb939c-0823-4e3a-a0c1-69406c3e6636",
+        "cliente_id": "f9590080-b854-482e-8b96-265db0b9be2a",
+        "escenario_id": "0bc56b74-6803-44e7-aa5d-8de36ef33d2e",
+        "nombre_cliente": "Juan Tech ML",
+        "segmento": "E-commerce",
+        "logo_url": "https://ui-avatars.com/api/?name=Juan+Tech+ML&background=random&color=fff&size=128",
+        "vertical": "Operaciones",
+        "escenario": "Rotación Alta de Personal - RRHH PYME",
+        "descripcion_base": "Pérdida de empleados clave generando costos de reclutamiento y baja productividad",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 75,
+        "monto_en_riesgo": "ARS 639096",
+        "recomendacion": "Urgente, no lo dejes para después: PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 639096,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "938a1e6f-1b73-43bd-870b-e6ceb021b1c4",
+        "cliente_id": "1125874d-136d-4d40-be9f-79a43a400fca",
+        "escenario_id": "eca25bc2-0edd-40f5-bc8a-369ab97f4ec0",
+        "nombre_cliente": "Laura Méndez - Coach Digital",
+        "segmento": "Creador",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/laura.png",
+        "vertical": "Operaciones",
+        "escenario": "Burnout y Agotamiento Creativo - Creador",
+        "descripcion_base": "Incapacidad de mantener ritmo de publicación por agotamiento físico/mental",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 75,
+        "monto_en_riesgo": "ARS 9350000",
+        "recomendacion": "No esperes al desastre, actuá ahora: Reducir frecuencia a contenido sostenible: 8 posts/semana máximo con mejor calidad. Crear batches de contenido un día completo al mes. Delegar edición a freelancer (presupuesto $600 EUR/mes). Tomar semana de descanso comunicada con transparencia a audiencia. Implementar sistemas de automatización.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Ritmo insostenible: 12 posts/semana, 3 stories/día, síntomas de agotamiento",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "battery-low",
+            "detalle": "Ritmo insostenible: 12 posts/semana, 3 stories/día, síntomas de agotamiento",
+            "indicadores": [
+                "Calidad de contenido bajando - perdés guita por esto",
+                "Engagement -18% último mes - perdés guita por esto",
+                "Menciones de cansancio en 4 stories recientes - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 8500,
+            "moneda": "ARS",
+            "etiqueta": "Ingresos en riesgo por pérdida de audiencia"
+        }
+    },
+    {
+        "captura_id": "7325253c-ec27-4adf-a6bd-fa02c0c6f518",
+        "cliente_id": "e6478fcd-4dd8-4c8e-a84b-2df9c8c30f5d",
+        "escenario_id": "1b9c4e95-d34a-4013-bfbe-5f2d84685bf3",
+        "nombre_cliente": "Emprendimiento Libros ML",
+        "segmento": "E-commerce",
+        "logo_url": "https://ui-avatars.com/api/?name=Emprendimiento+Libros+ML&background=random&color=fff&size=128",
+        "vertical": "Financiero",
+        "escenario": "Dependencia Cliente - PYME Arg",
+        "descripcion_base": "Más del 50% guita de 2 clientes",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 74,
+        "monto_en_riesgo": "ARS 332719",
+        "recomendacion": "Estás perdiendo guita como loco, frenalo ya: PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 332719,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "2fafa9ea-d58e-45c1-808b-99e43ccf4a0c",
+        "cliente_id": "fee0f8d7-c6b8-4b7c-8230-aef1f2b1dff3",
+        "escenario_id": "45cf8cb0-22b3-4bc3-bedf-a3ed8b7f4ffa",
+        "nombre_cliente": "ModaClick Store",
+        "segmento": "E-commerce",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/modaclick.png",
+        "vertical": "Financiero",
+        "escenario": "Devoluciones Masivas - E-commerce",
+        "descripcion_base": "Incremento anormal en tasa de devoluciones que impacta márgenes y flujo de caja",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 73,
+        "monto_en_riesgo": "ARS 52000000",
+        "recomendacion": "No esperes al desastre, actuá ahora: Implementar guía de tallas interactiva con medidas reales. Agregar video de modelos usando productos. Ofrecer chat en vivo para asesoría pre-compra. Optimizar política de cambios (no solo devoluciones) para reducir costos logísticos.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tasa de devoluciones aumentó de 8% a 22% en último trimestre",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "package-open",
+            "detalle": "Tasa de devoluciones aumentó de 8% a 22% en último trimestre",
+            "indicadores": [
+                "Categoría más afectada: Ropa (34% devoluciones) - perdés guita por esto",
+                "Motivo principal: Tallas incorrectas (61%) - perdés guita por esto",
+                "Costo logística inversa: +$18K USD - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 52000,
+            "moneda": "ARS",
+            "etiqueta": "Pérdida estimada por devoluciones en Q1"
+        }
+    },
+    {
+        "captura_id": "c883dd44-d936-4895-8d7a-3722f6ded9b7",
+        "cliente_id": "22cc0042-2752-444d-80fb-e1d5675cd632",
+        "escenario_id": "b308f9ef-a847-438d-842b-3c17326c1fca",
+        "nombre_cliente": "Beauty Store ML",
+        "segmento": "E-commerce",
+        "logo_url": "https://ui-avatars.com/api/?name=Beauty+Store+ML&background=random&color=fff&size=128",
+        "vertical": "Financiero",
+        "escenario": "Devoluciones Altas - PYME",
+        "descripcion_base": "Devoluciones masivas bajando márgenes",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 72,
+        "monto_en_riesgo": "ARS 893160",
+        "recomendacion": "Urgente, no lo dejes para después: PRIORIDAD ALTA: Auditar procesos afectados en las próximas 48hs. Reasignar presupuesto de marketing a retención de clientes. Preparar comunicado para stakeholders.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Tendencia negativa confirmada",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Tendencia negativa confirmada",
+            "indicadores": [
+                "Desviación de KPI: 15% - perdés guita por esto",
+                "Alerta de liquidez temprana - perdés guita por esto",
+                "Retrasos en logística > 48h - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 893160,
+            "moneda": "ARS",
+            "etiqueta": "Capital en riesgo operativo"
+        }
+    },
+    {
+        "captura_id": "c43c9dfe-2535-4266-b612-8e6bcf511cac",
+        "cliente_id": "594562ad-f146-44f7-a205-3118562b95e3",
+        "escenario_id": "6277c78e-e2e2-45de-87ce-5c74170cd082",
+        "nombre_cliente": "Distribuidora San Martín",
+        "segmento": "Pyme",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/sanmartin.png",
+        "vertical": "Legal",
+        "escenario": "Incumplimiento Fiscal - Pyme",
+        "descripcion_base": "Retrasos o errores en obligaciones fiscales que pueden generar multas y sanciones",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 72,
+        "monto_en_riesgo": "ARS 625000",
+        "recomendacion": "Urgente, no lo dejes para después: Regularizar declaración de inmediato con asesor fiscal. Evaluar programa de condonación de multas. Implementar calendario automático de obligaciones.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Declaración anual pendiente por 45 días",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "file-warning",
+            "detalle": "Declaración anual pendiente por 45 días",
+            "indicadores": [
+                "Multas acumuladas: $12,500 MXN - perdés guita por esto",
+                "Riesgo de bloqueo fiscal: Medio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 12500,
+            "moneda": "ARS",
+            "etiqueta": "Multas y recargos acumulados"
+        }
+    },
+    {
+        "captura_id": "9a0fc8b5-713b-4cf5-8cb8-9418c23c31d1",
+        "cliente_id": "fee0f8d7-c6b8-4b7c-8230-aef1f2b1dff3",
+        "escenario_id": "e7774664-b82f-408b-9f1b-395436e885e1",
+        "nombre_cliente": "ModaClick Store",
+        "segmento": "E-commerce",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/modaclick.png",
+        "vertical": "Operaciones",
+        "escenario": "Problemas con Logística de Última Milla - E-commerce",
+        "descripcion_base": "Retrasos constantes en entregas y quejas por servicio de courier, afectando experiencia del cliente",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 71,
+        "monto_en_riesgo": "ARS 28000000",
+        "recomendacion": "No esperes al desastre, actuá ahora: Diversificar couriers: contratar 2 proveedores adicionales (99minutos, Estafeta) para cubrir zonas críticas. Implementar tracking en tiempo real visible para clientes. Ofrecer compensación automática (cupón 10%) por retrasos > 3 días.",
+        "estado_accion": "En Proceso",
+        "senal_principal": "¡La puta! 38% de envíos con retraso mayor a 2 días vs promesa",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "truck",
+            "detalle": "38% de envíos con retraso mayor a 2 días vs promesa",
+            "indicadores": [
+                "Courier principal con problemas operativos - perdés guita por esto",
+                "NPS de entrega: 42 (Bajo) - perdés guita por esto",
+                "Quejas en redes: +156% vs mes anterior - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 28000,
+            "moneda": "ARS",
+            "etiqueta": "Ventas perdidas estimadas por mala logística"
+        }
+    },
+    {
+        "captura_id": "a6013a65-63d4-4f46-bca5-d4a73b216bb2",
+        "cliente_id": "311a6048-a7bc-41e6-942a-f9ade542326e",
+        "escenario_id": "f1d3b0f2-25a8-4965-9f33-fe1d35a25f97",
+        "nombre_cliente": "Ana Youtuber Cocina",
+        "segmento": "Creador",
+        "logo_url": "https://ui-avatars.com/api/?name=Ana+Youtuber+Cocina&background=random&color=fff&size=128",
+        "vertical": "Operaciones",
+        "escenario": "Burnout Equipo - RRHH Startup",
+        "descripcion_base": "Agotamiento en equipo generando errores operativos",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 70,
+        "monto_en_riesgo": "ARS 98147",
+        "recomendacion": "La concha, esto es serio: PREVENTIVO: Aumentar frecuencia de monitoreo semanal. Capacitar al equipo en nuevos protocolos de calidad para revertir tendencia.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monitoreo preventivo activo",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "info",
+            "detalle": "Monitoreo preventivo activo",
+            "indicadores": [
+                "Ligera variación en márgenes - perdés guita por esto",
+                "Ausentismo: 5% por encima del promedio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 98147,
+            "moneda": "ARS",
+            "etiqueta": "Costo de oportunidad"
+        }
+    },
+    {
+        "captura_id": "7e3902f4-4c7d-4179-bbaa-36eb538d88ab",
+        "cliente_id": "f9590080-b854-482e-8b96-265db0b9be2a",
+        "escenario_id": "40b50648-023a-4410-bc9b-31744dbfd3e6",
+        "nombre_cliente": "Juan Tech ML",
+        "segmento": "E-commerce",
+        "logo_url": "https://ui-avatars.com/api/?name=Juan+Tech+ML&background=random&color=fff&size=128",
+        "vertical": "Operaciones",
+        "escenario": "Escalabilidad RRHH - Startup",
+        "descripcion_base": "Crecimiento sin plan RRHH generando caos",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 69,
+        "monto_en_riesgo": "ARS 56168",
+        "recomendacion": "Ojo con esto, te puede fundir: PREVENTIVO: Aumentar frecuencia de monitoreo semanal. Capacitar al equipo en nuevos protocolos de calidad para revertir tendencia.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monitoreo preventivo activo",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "info",
+            "detalle": "Monitoreo preventivo activo",
+            "indicadores": [
+                "Ligera variación en márgenes - perdés guita por esto",
+                "Ausentismo: 5% por encima del promedio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 56168,
+            "moneda": "ARS",
+            "etiqueta": "Costo de oportunidad"
+        }
+    },
+    {
+        "captura_id": "5b8de3b1-0a3b-4d10-ac66-e4ef1ebb74ca",
+        "cliente_id": "aeefdeaf-0851-4557-8400-7f8bc84c4c0c",
+        "escenario_id": "87c7bca7-7cb0-4663-978d-2d28f56b6a2a",
+        "nombre_cliente": "Carlos Influencer Tech",
+        "segmento": "Creador",
+        "logo_url": "https://ui-avatars.com/api/?name=Carlos+Influencer+Tech&background=random&color=fff&size=128",
+        "vertical": "Legal",
+        "escenario": "Copyright Infracción - Creador",
+        "descripcion_base": "Uso no autorizado de contenido en videos",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 68,
+        "monto_en_riesgo": "ARS 145745",
+        "recomendacion": "¡Al toque! PREVENTIVO: Aumentar frecuencia de monitoreo semanal. Capacitar al equipo en nuevos protocolos de calidad para revertir tendencia.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monitoreo preventivo activo",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "info",
+            "detalle": "Monitoreo preventivo activo",
+            "indicadores": [
+                "Ligera variación en márgenes - perdés guita por esto",
+                "Ausentismo: 5% por encima del promedio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 145745,
+            "moneda": "ARS",
+            "etiqueta": "Costo de oportunidad"
+        }
+    },
+    {
+        "captura_id": "aa847f6a-f80d-4fb3-8014-379d0cad5635",
+        "cliente_id": "594562ad-f146-44f7-a205-3118562b95e3",
+        "escenario_id": "3c9ca96f-0d47-4af9-b112-7a7c4e2b4335",
+        "nombre_cliente": "Distribuidora San Martín",
+        "segmento": "Pyme",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/sanmartin.png",
+        "vertical": "Operaciones",
+        "escenario": "Ruptura de Cadena de Suministro - Pyme",
+        "descripcion_base": "Interrupción en el abastecimiento de productos clave que afecta la continuidad operativa",
+        "nivel_riesgo": "Alto",
+        "puntaje_global": 68,
+        "monto_en_riesgo": "ARS 4750000",
+        "recomendacion": "¡Al toque! Diversificar proveedores para productos críticos. Contactar 2 proveedores alternativos en la región con capacidad de entrega en 72 horas.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Proveedor principal con retraso de 15 días en entregas",
+        "fecha_deteccion": "2026-02-05 17:33:14.162441+00",
+        "signals": {
+            "icono": "package-x",
+            "detalle": "Proveedor principal con retraso de 15 días en entregas",
+            "indicadores": [
+                "Inventario crítico: 4 productos - perdés guita por esto",
+                "Riesgo de quiebre: 35% - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 95000,
+            "moneda": "ARS",
+            "etiqueta": "Ventas potenciales en riesgo"
+        }
+    },
+    {
+        "captura_id": "2248b8d7-8a3e-4321-ac90-8e9211e3f7da",
+        "cliente_id": "bbccff91-179b-4024-8552-a8309a92f2fa",
+        "escenario_id": "bb767a77-c832-410f-bb27-dbfa0704943c",
+        "nombre_cliente": "Valeria RRHH Agencia",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Valeria+RRHH+Agencia&background=random&color=fff&size=128",
+        "vertical": "Reputación",
+        "escenario": "Reseñas Falsas - E-commerce",
+        "descripcion_base": "Oleada de reseñas negativas falsas en ML",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 66,
+        "monto_en_riesgo": "ARS 58592",
+        "recomendacion": "No esperes al desastre, actuá ahora: PREVENTIVO: Aumentar frecuencia de monitoreo semanal. Capacitar al equipo en nuevos protocolos de calidad para revertir tendencia.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monitoreo preventivo activo",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "info",
+            "detalle": "Monitoreo preventivo activo",
+            "indicadores": [
+                "Ligera variación en márgenes - perdés guita por esto",
+                "Ausentismo: 5% por encima del promedio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 58592,
+            "moneda": "ARS",
+            "etiqueta": "Costo de oportunidad"
+        }
+    },
+    {
+        "captura_id": "63645761-4bd4-44ec-8665-9af0c515f37f",
+        "cliente_id": "f119916c-2870-4aa7-97e3-c950f2ab100b",
+        "escenario_id": "767baa9e-80a9-45fa-83e4-a148997d114f",
+        "nombre_cliente": "FinTech Pro",
+        "segmento": "Startup",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/fintech.png",
+        "vertical": "Financiero",
+        "escenario": "Dilución Excesiva de Equity - Startup",
+        "descripcion_base": "Múltiples rondas con valuaciones planas que diluyen significativamente a fundadores",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 66,
+        "monto_en_riesgo": "ARS 360000000",
+        "recomendacion": "No esperes al desastre, actuá ahora: Enfocarse en generar métricas contundentes (MRR growth >20% MoM) para justificar valuación up-round. Considerar venture debt en lugar de equity para próxima ronda. Explorar revenue-based financing alternativo. Evaluar secondary sale parcial a inversores existentes.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Founders con 18% equity total después de Serie A (valuación plana)",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "trending-down",
+            "detalle": "Founders con 18% equity total después de Serie A (valuación plana)",
+            "indicadores": [
+                "Pre-money flat: $2M - perdés guita por esto",
+                "Dilución acumulada: 82% - perdés guita por esto",
+                "Próxima ronda en 6 meses proyectada - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 360000,
+            "moneda": "ARS",
+            "etiqueta": "Valor actual equity founders"
+        }
+    },
+    {
+        "captura_id": "0c6c5236-12e8-4096-a884-6b5568e398b1",
+        "cliente_id": "763110d5-7edc-46a6-bb7f-7b4aeda3d164",
+        "escenario_id": "2b439c61-f259-4c67-9a51-7cd42a489c18",
+        "nombre_cliente": "Sofía Moda Córdoba",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Sofía+Moda+Córdoba&background=random&color=fff&size=128",
+        "vertical": "Operaciones",
+        "escenario": "Ausentismo Crónico - RRHH Vendedor ML",
+        "descripcion_base": "Ausencias frecuentes que afectan ventas y stock en Mercado Libre",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 65,
+        "monto_en_riesgo": "ARS 86241",
+        "recomendacion": "La concha, esto es serio: PREVENTIVO: Aumentar frecuencia de monitoreo semanal. Capacitar al equipo en nuevos protocolos de calidad para revertir tendencia.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monitoreo preventivo activo",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "info",
+            "detalle": "Monitoreo preventivo activo",
+            "indicadores": [
+                "Ligera variación en márgenes - perdés guita por esto",
+                "Ausentismo: 5% por encima del promedio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 86241,
+            "moneda": "ARS",
+            "etiqueta": "Costo de oportunidad"
+        }
+    },
+    {
+        "captura_id": "da9e5db2-a1b6-42b9-bfe6-d3c7cd0bd8e3",
+        "cliente_id": "594562ad-f146-44f7-a205-3118562b95e3",
+        "escenario_id": "633ca136-9c91-415d-8e69-cfc3c1998c92",
+        "nombre_cliente": "Distribuidora San Martín",
+        "segmento": "Pyme",
+        "logo_url": "https://amygbmnjjwtnyjclghok.supabase.co/storage/v1/object/public/img_clientes/logos-perfil/sanmartin.png",
+        "vertical": "Operaciones",
+        "escenario": "Obsolescencia Tecnológica - Pyme",
+        "descripcion_base": "Sistemas operativos y software crítico desactualizado que compromete eficiencia y seguridad",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 64,
+        "monto_en_riesgo": "ARS 7250000",
+        "recomendacion": "¡Al toque! Cotizar migración a ERP cloud (Odoo, SAP Business One) con implementación gradual en 6 meses. Presupuestar actualización de infraestructura. Capacitar equipo en nuevas herramientas.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Software ERP sin actualizar desde 2018, Windows Server 2012",
+        "fecha_deteccion": "2026-02-05 20:35:34.385696+00",
+        "signals": {
+            "icono": "computer",
+            "detalle": "Software ERP sin actualizar desde 2018, Windows Server 2012",
+            "indicadores": [
+                "Soporte técnico terminó: 2023 - perdés guita por esto",
+                "3 vulnerabilidades críticas detectadas - perdés guita por esto",
+                "Incompatibilidad con proveedores cloud - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 145000,
+            "moneda": "ARS",
+            "etiqueta": "Inversión estimada en modernización"
+        }
+    },
+    {
+        "captura_id": "2145be11-0032-4ca1-84b1-0cbd511599d7",
+        "cliente_id": "e06a4b6f-852d-4006-bd11-b71255eb7bcd",
+        "escenario_id": "0bc56b74-6803-44e7-aa5d-8de36ef33d2e",
+        "nombre_cliente": "Gastronomía PYME Salta",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Gastronomía+PYME+Salta&background=random&color=fff&size=128",
+        "vertical": "Operaciones",
+        "escenario": "Falta Capacitación - RRHH PYME",
+        "descripcion_base": "Equipo sin training generando errores en operaciones",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 62,
+        "monto_en_riesgo": "ARS 56337",
+        "recomendacion": "Ojo con esto, te puede fundir: PREVENTIVO: Aumentar frecuencia de monitoreo semanal. Capacitar al equipo en nuevos protocolos de calidad para revertir tendencia.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monitoreo preventivo activo",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "info",
+            "detalle": "Monitoreo preventivo activo",
+            "indicadores": [
+                "Ligera variación en márgenes - perdés guita por esto",
+                "Ausentismo: 5% por encima del promedio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 56337,
+            "moneda": "ARS",
+            "etiqueta": "Costo de oportunidad"
+        }
+    },
+    {
+        "captura_id": "9045a7c3-8063-4f99-9570-ad4b5d14dded",
+        "cliente_id": "e639d11c-ac5b-4cbf-92a1-1878e439cd04",
+        "escenario_id": "91f97baf-6dd3-4e82-bea8-c6093fd96df6",
+        "nombre_cliente": "Ferretería El Amigo",
+        "segmento": "Pyme",
+        "logo_url": "https://ui-avatars.com/api/?name=Ferretería+El+Amigo&background=random&color=fff&size=128",
+        "vertical": "Reputación",
+        "escenario": "Crisis Empleado - PYME",
+        "descripcion_base": "Ex-empleado hablando mal en redes",
+        "nivel_riesgo": "Medio",
+        "puntaje_global": 60,
+        "monto_en_riesgo": "ARS 52017",
+        "recomendacion": "La concha, esto es serio: PREVENTIVO: Aumentar frecuencia de monitoreo semanal. Capacitar al equipo en nuevos protocolos de calidad para revertir tendencia.",
+        "estado_accion": "Pendiente",
+        "senal_principal": "¡La puta! Monitoreo preventivo activo",
+        "fecha_deteccion": "2026-02-09 14:00:54.240106+00",
+        "signals": {
+            "icono": "info",
+            "detalle": "Monitoreo preventivo activo",
+            "indicadores": [
+                "Ligera variación en márgenes - perdés guita por esto",
+                "Ausentismo: 5% por encima del promedio - perdés guita por esto"
+            ]
+        },
+        "financial_context": {
+            "monto": 52017,
+            "moneda": "ARS",
+            "etiqueta": "Costo de oportunidad"
+        }
+    }
+]

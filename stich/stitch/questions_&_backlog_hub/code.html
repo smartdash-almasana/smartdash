@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Questions &amp; Backlog Hub - SmartDash</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FF5733", // Orange from the screenshot buttons
+              "background-light": "#F8FAFC",
+              "background-dark": "#0F172A",
+              "brand-navy": "#103778",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "12px",
+            },
+          },
+        },
+      };
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<header class="sticky top-0 z-50 bg-brand-navy text-white px-4 py-3 flex items-center justify-between shadow-md">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-primary">security</span>
+<h1 class="font-bold text-lg tracking-tight">SmartDash</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative">
+<span class="material-icons-round">notifications</span>
+<span class="absolute -top-1 -right-1 bg-primary w-2 h-2 rounded-full border-2 border-brand-navy"></span>
+</button>
+<span class="material-icons-round">menu</span>
+</div>
+</header>
+<main class="p-4 space-y-6">
+<div class="space-y-1">
+<h2 class="text-2xl font-bold dark:text-white">Health Check: Preguntas</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Tu "Sistema Inmunológico" operativo en tiempo real.</p>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+<span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Abiertas</span>
+<span class="text-2xl font-bold">24</span>
+</div>
+<div class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+<span class="text-[10px] uppercase font-bold text-red-500 block mb-1">Vencidas &gt;2h</span>
+<span class="text-2xl font-bold text-red-500">8</span>
+</div>
+<div class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+<span class="text-[10px] uppercase font-bold text-primary block mb-1">Backlog</span>
+<span class="text-2xl font-bold">42</span>
+</div>
+</div>
+<section class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+<div class="p-4 border-b border-slate-50 dark:border-slate-700 flex justify-between items-center">
+<h3 class="font-semibold text-slate-700 dark:text-slate-200">Alertas de Atención</h3>
+<span class="text-xs text-primary font-bold">Prioridad Crítica</span>
+</div>
+<div class="divide-y divide-slate-50 dark:divide-slate-700">
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<div class="flex gap-2">
+<span class="w-2 h-2 rounded-full bg-red-500 mt-2"></span>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-slate-100">¿Tienen stock del talle L?</p>
+<p class="text-xs text-slate-400">Publicación #MLA9283...</p>
+</div>
+</div>
+<span class="text-xs font-mono bg-red-50 dark:bg-red-900/20 text-red-600 px-2 py-1 rounded">2h 15m</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-slate-500">Nivel de riesgo: <span class="text-red-500">Venta en peligro</span></span>
+<button class="bg-primary hover:bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-all">
+                            RESPONDER AHORA
+                        </button>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<div class="flex gap-2">
+<span class="w-2 h-2 rounded-full bg-yellow-400 mt-2"></span>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-slate-100">¿Cuándo llega a Córdoba?</p>
+<p class="text-xs text-slate-400">Publicación #MLA1104...</p>
+</div>
+</div>
+<span class="text-xs font-mono bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 px-2 py-1 rounded">45m</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-slate-500">Recomendación: <span class="text-slate-700 dark:text-slate-300">Chequear Full</span></span>
+<button class="bg-primary hover:bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-all">
+                            GESTIONAR
+                        </button>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<div class="flex gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 mt-2"></span>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-slate-100">¿Aceptan mercado pago?</p>
+<p class="text-xs text-slate-400">Publicación #MLA7742...</p>
+</div>
+</div>
+<span class="text-xs font-mono bg-green-50 dark:bg-green-900/20 text-green-600 px-2 py-1 rounded">12m</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-slate-500">SLA: <span class="text-green-500">A tiempo</span></span>
+<button class="bg-primary hover:bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-all">
+                            GESTIONAR
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-brand-navy text-white rounded-2xl p-5 overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-sm font-bold">Backlog Heat Map</h3>
+<p class="text-[10px] text-slate-300">Acumulación de preguntas por hora</p>
+</div>
+<div class="flex items-center gap-1 text-[10px] bg-white/10 px-2 py-1 rounded-md">
+<span class="material-icons-round text-[12px]">trending_up</span>
+<span>+15% vs ayer</span>
+</div>
+</div>
+<div class="flex items-end justify-between h-24 gap-1.5">
+<div class="w-full bg-white/20 rounded-t-sm h-1/4"></div>
+<div class="w-full bg-white/20 rounded-t-sm h-2/4"></div>
+<div class="w-full bg-white/40 rounded-t-sm h-3/4"></div>
+<div class="w-full bg-primary rounded-t-sm h-full relative">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Peak</div>
+</div>
+<div class="w-full bg-white/40 rounded-t-sm h-3/4"></div>
+<div class="w-full bg-white/20 rounded-t-sm h-1/2"></div>
+<div class="w-full bg-white/10 rounded-t-sm h-1/4"></div>
+<div class="w-full bg-white/10 rounded-t-sm h-1/6"></div>
+<div class="w-full bg-white/10 rounded-t-sm h-1/5"></div>
+<div class="w-full bg-white/20 rounded-t-sm h-2/5"></div>
+</div>
+<div class="flex justify-between mt-2 text-[8px] text-slate-400 uppercase tracking-widest font-bold">
+<span>08:00</span>
+<span>12:00</span>
+<span>16:00</span>
+<span>20:00</span>
+<span>00:00</span>
+</div>
+</section>
+<div class="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 rounded-xl p-4 flex items-center gap-4">
+<div class="bg-red-500 text-white p-2 rounded-lg">
+<span class="material-icons-round">warning</span>
+</div>
+<div>
+<p class="text-sm font-bold text-red-900 dark:text-red-200">Alerta de Fatiga Operativa</p>
+<p class="text-xs text-red-700 dark:text-red-400">El backlog supera tu capacidad de respuesta actual en un 20%.</p>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex justify-around items-center py-3 pb-6">
+<div class="flex flex-col items-center gap-1">
+<span class="material-icons-round text-slate-400">dashboard</span>
+<span class="text-[10px]">Dashboard</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-icons-round">question_answer</span>
+<span class="text-[10px] font-bold">Questions</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="material-icons-round text-slate-400">inventory_2</span>
+<span class="text-[10px]">Stock</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="material-icons-round text-slate-400">insights</span>
+<span class="text-[10px]">Stats</span>
+</div>
+</nav>
+<div class="h-24"></div>
+
+</body></html>

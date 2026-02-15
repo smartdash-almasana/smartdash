@@ -81,6 +81,8 @@ export async function GET(req: NextRequest) {
                     user_id: String(tokenJson.user_id),
                     access_token: tokenJson.access_token,
                     refresh_token: tokenJson.refresh_token,
+                    scope: tokenJson.scope,
+                    token_type: tokenJson.token_type,
                     expires_at: expiresAt,
                     raw: tokenJson,
                     updated_at: new Date().toISOString()

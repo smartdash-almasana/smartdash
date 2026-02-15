@@ -116,20 +116,16 @@ export async function loadLatestSnapshots(
         const thirtyDaysAgo = new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString();
         const { data: orders30d } = await supabaseAdmin
             .from('order_snapshots')
-            .select('status, raw_payload')
+            .select('is_late')
             .eq('user_id', sellerId)
             .gt('created_at', thirtyDaysAgo);
 
         const allOrders30d = orders30d || [];
         const total_orders_30d = allOrders30d.length;
 
-        // Heurística: una orden es "late" si su status contiene 'delayed' o
-        // el raw_payload indica shipping late.
+        // Predicado persistido en order_snapshots.is_late.
         const late_orders_30d = allOrders30d.filter(o => {
-            const s = (o.status || '').toLowerCase();
-            const rp = o.raw_payload as any;
-            const shippingStatus = rp?.shipping?.status || '';
-            return s.includes('delayed') || shippingStatus === 'delayed';
+            return o.is_late === true;
         }).length;
 
         if (total_orders_30d > 0) {

@@ -17,6 +17,16 @@ export async function POST(request: NextRequest) {
         // ya que es liviano y crítico para la idempotencia.
         const result = await storeMeliWebhookEvent(body);
 
+        // 3. Cerrar el circuito inmediatamente (Sync/Async hybrid)
+        // Según requerimiento "cerrar el circuito", procesamos inmediatamente si es un evento nuevo.
+        if (result.success && !result.duplicate && result.event) {
+            // Import dinámico o top-level (preferimos top-level pero processWebhookEvent ya está disponible)
+            // Llama al procesador. Si falla, el webhook igual respondió 200 (fire & forget parcial, o await según SLA).
+            // Para asegurar consistencia en pruebas, hacemos await (SLA risk aceptado en fase dev/test).
+            const { processWebhookEvent } = await import('@/lib/engine/smartseller/processor');
+            await processWebhookEvent(result.event);
+        }
+
         const duration = Date.now() - startTime;
         console.log(`[Webhook] ML event received and stored in ${duration}ms. Dedupe: ${result.dedupeKey || 'N/A'}`);
 

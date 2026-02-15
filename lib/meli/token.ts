@@ -9,33 +9,41 @@ export interface MeliToken {
   raw?: any;
 }
 
+export interface ReauthorizationRequiredError {
+  error: "reauthorization_required";
+}
+
+function reauthorizationRequired(): ReauthorizationRequiredError {
+  return { error: "reauthorization_required" };
+}
+
+export function isReauthorizationRequiredError(error: unknown): error is ReauthorizationRequiredError {
+  return !!error && typeof error === "object" && (error as ReauthorizationRequiredError).error === "reauthorization_required";
+}
+
 /**
- * Obtiene el token activo de la base de datos.
+ * Obtiene el token activo para un user_id específico.
  */
-export async function getActiveToken(): Promise<MeliToken | null> {
+export async function getActiveToken(userId: number | string): Promise<MeliToken> {
+  const userIdStr = String(userId);
   const { data, error } = await supabaseAdmin
     .from("meli_oauth_tokens")
     .select("*")
-    .limit(1)
+    .eq("user_id", userIdStr)
+    .eq("status", "active")
     .single();
 
   if (error) {
-    if (error.code === 'PGRST116') { // No rows found
-      return null;
+    if (error.code === "PGRST116") {
+      throw reauthorizationRequired();
     }
-    console.error("[MELI_TOKEN] Error fetching token:", error);
-    return null;
+    throw new Error(`[MELI_TOKEN] Error fetching token for user ${userIdStr}: ${error.message}`);
   }
 
   const token = data as MeliToken;
 
   if (!token.refresh_token) {
-    console.warn(`[MELI_TOKEN] Token for user ${token.user_id} is missing 'refresh_token'. Marking as invalid.`);
-    // Opcional: Podríamos retornar null aquí, pero el usuario pidió "marcarlo como inválido"
-    // Si retornamos el token sin refresh_token, el siguiente paso refreshToken() fallará.
-    // El usuario pidió: "marcarlo como inválido (y NO intentar refresh) y loggear".
-    // Si retornamos null, el proxy devolverá 401 (que es lo deseado).
-    return null; 
+    throw reauthorizationRequired();
   }
 
   return token;
@@ -54,14 +62,14 @@ export function isExpired(token: MeliToken): boolean {
 /**
  * Refresca el token usando la API de Mercado Libre.
  */
-export async function refreshToken(token: MeliToken): Promise<MeliToken> {
+export async function refreshToken(userId: number | string): Promise<MeliToken> {
+  const userIdStr = String(userId);
+  const token = await getActiveToken(userIdStr);
   const clientId = requireEnvAny(["MELI_CLIENT_ID", "MELI_APP_ID"]);
   const clientSecret = requireEnvAny(["MELI_CLIENT_SECRET"]);
 
   if (!token.refresh_token) {
-    // Retornar error manejado 401 JSON {error:"missing_refresh_token"}
-    // Lanzamos error con prefijo REFRESH_FAILED para que el proxy lo capture y devuelva 401
-    throw new Error(`REFRESH_FAILED: missing_refresh_token`);
+    throw reauthorizationRequired();
   }
 
   const params = new URLSearchParams();
@@ -84,45 +92,45 @@ export async function refreshToken(token: MeliToken): Promise<MeliToken> {
   const data = await res.json();
 
   if (!res.ok) {
-    const errorMsg = data.message || res.statusText;
-    const bodyPreview = JSON.stringify(data).substring(0, 200);
-    console.error("meli_refresh_failed", { status: res.status, bodyPreview });
-    // Lanzamos error que inicia con REFRESH_FAILED para que el proxy lo maneje como 401
-    throw new Error(`REFRESH_FAILED: ${res.status} - ${bodyPreview}`);
+    if (res.status === 400 && data?.error === "invalid_grant") {
+      await supabaseAdmin
+        .from("meli_oauth_tokens")
+        .update({
+          status: "invalid",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userIdStr);
+      throw reauthorizationRequired();
+    }
+    throw new Error(`REFRESH_FAILED: ${res.status} - ${JSON.stringify(data).substring(0, 200)}`);
+  }
+
+  if (!data.refresh_token) {
+    throw new Error("REFRESH_FAILED: missing_rotated_refresh_token");
   }
 
   const newExpiresAt = new Date(Date.now() + (data.expires_in - 60) * 1000).toISOString();
+  const { error } = await supabaseAdmin
+    .from("meli_oauth_tokens")
+    .update({
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+      expires_at: newExpiresAt,
+      updated_at: new Date().toISOString(),
+      raw: data,
+      status: "active",
+    })
+    .eq("user_id", userIdStr);
 
-  // Asegurar que el nuevo token tenga refresh_token (ML a veces devuelve uno nuevo, a veces no)
-  // Si no devuelve uno nuevo, mantener el anterior.
-  const newRefreshToken = data.refresh_token || token.refresh_token;
+  if (error) {
+    throw new Error(`Failed to save refreshed token: ${error.message}`);
+  }
 
   return {
     ...token,
     access_token: data.access_token,
-    refresh_token: newRefreshToken,
+    refresh_token: data.refresh_token,
     expires_at: newExpiresAt,
     raw: data,
   };
-}
-
-/**
- * Guarda el token refrescado.
- */
-export async function saveRefreshedToken(token: MeliToken): Promise<void> {
-  const { error } = await supabaseAdmin
-    .from("meli_oauth_tokens")
-    .update({
-      access_token: token.access_token,
-      refresh_token: token.refresh_token,
-      expires_at: token.expires_at,
-      updated_at: new Date().toISOString(),
-      raw: token.raw
-    })
-    .eq("user_id", token.user_id);
-
-  if (error) {
-    console.error("[MELI_TOKEN] Failed to save token:", error);
-    throw new Error(`Failed to save refreshed token: ${error.message}`);
-  }
 }

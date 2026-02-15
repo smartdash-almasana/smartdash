@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Active Signals - SmartDash</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF5C35", // From the screenshot CTA color
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                        "brand-blue": "#113E87", // From the screenshot header
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .severity-glow-high {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+        .severity-glow-medium {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+        }.hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-brand-blue p-1.5 rounded-lg">
+<span class="material-icons-round text-white text-xl">shield</span>
+</div>
+<span class="font-bold text-lg tracking-tight text-brand-blue dark:text-white">SmartDash</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-icons-round text-slate-500">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIUU1fp5Gsp8g5mZUf_g9BmCneBjHC_umn6VZBMstfHdqV8ey6UWsksJtTFS02IUSIdbwDGXW93N_MZ6A-G3VNu_VhW9YqBgnP1QOenpQbLprmDrli4s0wVwx5mjlh-5XMQQBHMsDyT1rPk9pzv06z2m6UMLGG3Gf-D10Tsv_2K27hCtsqju35mMAK5SskL7HS3PNqrebCZQnyWf9NnykmQkqrb5dHr4CGsIxQda_iJIddxug0LABLGDjGD8-6WGoxriAMx-ts2F0C"/>
+</div>
+</div>
+</header>
+<main class="p-4 space-y-6">
+<section>
+<div class="flex items-end justify-between mb-1">
+<h1 class="text-2xl font-bold">Escenarios Clínicos</h1>
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">8 Señales Activas</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Monitoreo de salud operativa en tiempo real.</p>
+</section>
+<section class="space-y-4">
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+<button class="px-4 py-2 rounded-full bg-brand-blue text-white text-sm font-semibold whitespace-nowrap">Todas</button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium whitespace-nowrap">Reputación</button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium whitespace-nowrap">Operaciones</button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium whitespace-nowrap">Pricing</button>
+</div>
+<div class="flex items-center justify-between bg-slate-100 dark:bg-slate-800/50 p-1 rounded-xl">
+<button class="flex-1 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-blue dark:text-blue-400 bg-white dark:bg-slate-700 rounded-lg shadow-sm">Severidad Alta</button>
+<button class="flex-1 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">Media</button>
+<button class="flex-1 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">Baja</button>
+</div>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-white dark:bg-slate-900 border border-red-100 dark:border-red-900/30 rounded-2xl p-4 severity-glow-high relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3">
+<span class="flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+</span>
+</div>
+<div class="flex items-start gap-3 mb-4">
+<div class="bg-red-50 dark:bg-red-900/20 p-2.5 rounded-xl">
+<span class="material-icons-round text-red-600 dark:text-red-400">warning</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white leading-tight">Riesgo de Incumplimiento SLA</h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">Crítico</span>
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">• Activo</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-xs text-slate-500 dark:text-slate-400">Probabilidad de Daño</span>
+<span class="text-lg font-bold text-red-600 dark:text-red-400">92%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
+<div class="bg-red-500 h-1.5 rounded-full" style="width: 92%"></div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed italic">
+                        "7 envíos demorados detectados. Riesgo inminente de caída en reputación."
+                    </p>
+</div>
+<button class="w-full mt-4 py-2.5 bg-brand-blue dark:bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">
+                    Intervenir Ahora
+                    <span class="material-icons-round text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-amber-100 dark:border-amber-900/30 rounded-2xl p-4 severity-glow-medium group">
+<div class="flex items-start gap-3 mb-4">
+<div class="bg-amber-50 dark:bg-amber-900/20 p-2.5 rounded-xl">
+<span class="material-icons-round text-amber-600 dark:text-amber-400">trending_down</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white leading-tight">Pico de Feedback Negativo</h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300">Medio</span>
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">• Monitoreando</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-xs text-slate-500 dark:text-slate-400">Probabilidad de Daño</span>
+<span class="text-lg font-bold text-amber-600 dark:text-amber-400">45%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
+<div class="bg-amber-500 h-1.5 rounded-full" style="width: 45%"></div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Detectamos anomalía en reviews de producto 'X'. Posible falla de lote.
+                    </p>
+</div>
+<button class="w-full mt-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                    Ver Detalles
+                </button>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+<div class="flex items-start gap-3 mb-4">
+<div class="bg-blue-50 dark:bg-blue-900/20 p-2.5 rounded-xl">
+<span class="material-icons-round text-blue-600 dark:text-blue-400">inventory_2</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white leading-tight">Stock Out Inminente</h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">Preventivo</span>
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">• Estable</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-xs text-slate-500 dark:text-slate-400">Probabilidad de Daño</span>
+<span class="text-lg font-bold text-blue-600 dark:text-blue-400">12%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
+<div class="bg-blue-500 h-1.5 rounded-full" style="width: 12%"></div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Ritmo de venta acelerado en 3 SKUs. Sugerencia de reposición enviada.
+                    </p>
+</div>
+<button class="w-full mt-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                    Revisar Stock
+                </button>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+<div class="flex items-start gap-3 mb-4">
+<div class="bg-purple-50 dark:bg-purple-900/20 p-2.5 rounded-xl">
+<span class="material-icons-round text-purple-600 dark:text-purple-400">payments</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white leading-tight">Desvío de Margen Neto</h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">Financiero</span>
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">• Analizando</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-xs text-slate-500 dark:text-slate-400">Probabilidad de Daño</span>
+<span class="text-lg font-bold text-purple-600 dark:text-purple-400">28%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
+<div class="bg-purple-500 h-1.5 rounded-full" style="width: 28%"></div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Aumento de costos logísticos no reflejado en precio de venta final.
+                    </p>
+</div>
+<button class="w-full mt-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                    Ajustar Precios
+                </button>
+</div>
+</section>
+<section class="mt-8 pb-20">
+<div class="bg-brand-blue rounded-2xl p-6 text-center text-white">
+<h4 class="text-lg font-bold mb-2">¿Querés prevenir antes de que pase?</h4>
+<p class="text-blue-100 text-sm mb-6">Activá alertas automáticas vía WhatsApp para todo tu equipo.</p>
+<button class="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-orange-500/30 active:scale-95 transition-transform">
+                    Probar 30 días GRATIS ahora
+                </button>
+<p class="text-[10px] text-blue-300 mt-3">Sin tarjeta • Cancelá cuando quieras</p>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex justify-between items-center pb-8">
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">dashboard</span>
+<span class="text-[10px] font-medium">Panel</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-brand-blue dark:text-blue-400">
+<span class="material-icons-round">sensors</span>
+<span class="text-[10px] font-bold">Señales</span>
+</button>
+<div class="-mt-8">
+<button class="bg-primary p-3.5 rounded-full shadow-lg shadow-orange-500/40 text-white">
+<span class="material-icons-round text-2xl">add</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">insights</span>
+<span class="text-[10px] font-medium">Reportes</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-icons-round">settings</span>
+<span class="text-[10px] font-medium">Ajustes</span>
+</button>
+</nav>
+
+</body></html>
